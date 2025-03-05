@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Bitblox";
+  src: url("/fonts/Bitblox.otf");
+}
+
+@font-face {
+  font-family: "Vcr";
+  src: url("/fonts/Vcr.ttf");
+}
+
+@font-face {
+  font-family: "Manaspace";
+  src: url("/fonts/Manaspace.ttf");
+}
+
+@font-face {
+  font-family: "Abaddon";
+  font-weight: 400;
+  src: url("/fonts/abaddon.ttf");
+}
+
+@font-face {
+  font-family: "Consolas";
+  font-weight: 400;
+  src: url("/fonts/Consolas.ttf");
+}
+
+@font-face {
+  font-family: "Arcadia";
+  font-weight: 400;
+  src: url("/fonts/Arcadia.ttf");
+}
+
+@font-face {
+  font-family: "Nerd Con";
+  font-weight: 400;
+  src: url("/fonts/3270NerdFont-Condensed.ttf");
+}
+
+@font-face {
+  font-family: "Nerd Semi";
+  font-weight: 400;
+  src: url("/fonts/3270NerdFont-SemiCondensed.ttf");
+}

@@ -1,0 +1,14 @@
+{
+  "Home": {
+    "Crear": "Create Workflow",
+    "Workflows": "Workflows",
+    "Cuenta": "Account",
+    "Chat": "Chat",
+    "placeholder": "Got a half-baked workflow idea? Drop it here— the Comfystream agents are listening.",
+    "about": "About Lucidity",
+    "settings": "Account & Settings"
+  },
+  "404": {
+    "nada": "Error 404: This page has been hijacked by rogue NPCs. We are negotiating it's liberation."
+  }
+}

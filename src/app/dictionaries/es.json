@@ -1,0 +1,14 @@
+{
+  "Home": {
+    "Crear": "Crear Flujo de Trabajo",
+    "Workflows": "Flujos de Trabajo",
+    "Cuenta": "Cuenta",
+    "Chat": "Chat",
+    "placeholder": "¿Tienes una idea de workflow medio cocida? Suéltala aquí — los agentes de Comfystream están al loro.",
+    "about": "Info de Lucidity",
+    "settings": "Cuenta y Configuración"
+  },
+  "404": {
+    "nada": "Error 404: La página ha sido secuestrada por NPCs rebeldes. Estamos negociando su liberación."
+  }
+}
