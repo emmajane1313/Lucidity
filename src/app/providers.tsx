@@ -11,6 +11,7 @@ import {
 } from "@lens-protocol/storage-node-client";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { LensConnected } from "./components/Common/types/common.types";
+import { Flujo } from "./components/Modals/types/modals.types";
 
 export const config = createConfig(
   getDefaultConfig({
@@ -35,6 +36,14 @@ export const ModalContext = createContext<
       clienteAlmacenamiento: StorageClient;
       lensConectado: LensConnected | undefined;
       setLensConectado: (e: SetStateAction<LensConnected | undefined>) => void;
+      flujo: Flujo | undefined;
+      setFlujo: (e: SetStateAction<Flujo | undefined>) => void;
+      error: string | undefined;
+      setError: (e: SetStateAction<string | undefined>) => void;
+      setConnect: (e: SetStateAction<boolean>) => void;
+      connect: boolean;
+      setCrearCuenta: (e: SetStateAction<boolean>) => void;
+      crearCuenta: boolean;
     }
   | undefined
 >(undefined);
@@ -43,6 +52,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [clienteLens, setClienteLens] = useState<PublicClient | undefined>();
   const clienteAlmacenamiento = StorageClient.create(storageTestnet);
   const [lensConectado, setLensConectado] = useState<LensConnected>();
+  const [flujo, setFlujo] = useState<Flujo>();
+  const [error, setError] = useState<string | undefined>();
+  const [connect, setConnect] = useState<boolean>(false);
+  const [crearCuenta, setCrearCuenta] = useState<boolean>(false);
 
   useEffect(() => {
     if (!clienteLens) {
@@ -69,6 +82,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               clienteAlmacenamiento,
               lensConectado,
               setLensConectado,
+              flujo,
+              setFlujo,
+              error,
+              setError,
+              connect,
+              setConnect,
+              crearCuenta,
+              setCrearCuenta,
             }}
           >
             {children}

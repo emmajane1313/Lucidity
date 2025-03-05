@@ -1,9 +1,10 @@
-import { FunctionComponent, JSX } from "react";
-import { CambioElementoProps } from "../../Common/types/common.types";
+import { FunctionComponent, JSX, useContext } from "react";
 import useChat from "../hooks/useChat";
 import { Usuario } from "../types/chat.types";
 import Image from "next/legacy/image";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
+import { ModalContext } from "@/app/providers";
+import { CambioElementoProps } from "../../Common/types/common.types";
 
 const Chat: FunctionComponent<CambioElementoProps> = ({
   dict,
@@ -16,6 +17,8 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
     handleSendMessage,
     sendMessageLoading,
   } = useChat();
+  const contexto = useContext(ModalContext);
+
   return (
     <div
       className={`relative w-full pb-10 h-full flex flex-col gap-10 ${
@@ -37,16 +40,64 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                       : "justify-start text-left"
                   }`}
                 >
-                  <div
-                    className={`relative w-fit p-2 rounded-md h-fit flex items-center justify-center  ${
-                      valor?.usuario == Usuario.Humano && "bg-black"
-                    }`}
-                  >
-                    {valor?.contenido}
-                  </div>
+                  {valor?.usuario !== Usuario.Flujos ? (
+                    <div
+                      className={`relative w-fit p-2 rounded-md h-fit flex items-center justify-center  ${
+                        valor?.usuario == Usuario.Humano && "bg-black"
+                      }`}
+                    >
+                      {valor?.contenido}
+                    </div>
+                  ) : (
+                    <div className="relative w-fit h-fit max-w-full flex flex-wrap gap-3">
+                      {valor?.flujos?.map((flujo, indice) => {
+                        return (
+                          <div
+                            key={indice}
+                            className="relative w-fit h-fit flex cursor-pointer"
+                            onClick={() => contexto?.setFlujo(flujo)}
+                          >
+                            <div className="relative w-40 h-40 rounded-md bg-black border border-brillo rounded-md">
+                              <Image
+                                src={`${INFURA_GATEWAY}/ipfs/${
+                                  flujo.cover?.split("ipfs://")?.[1]
+                                }`}
+                                draggable={false}
+                                className="rounded-md"
+                                objectFit="cover"
+                                layout="fill"
+                              />
+                            </div>
+                            <div
+                              className={`absolute top-0 left-0 w-full h-full rounded-md text-white break-all font-nerdS bg-brillo/40 flex hover:opacity-70 items-center justify-center`}
+                            >
+                              <div className="relative w-fit h-fit flex text-center text-sm">
+                                {flujo.name}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               );
             })}
+            {sendMessageLoading && (
+              <div className="relative w-full h-fit flex items-start justify-start pt-4">
+                <div className="relative w-fit h-fit flex">
+                  <div className="relative w-8 h-8 animate-spin flex">
+                    <Image
+                      src={`${INFURA_GATEWAY}/ipfs/QmNcoHPaFjhDciiHjiMNpfTbzwnJwKEZHhNfziFeQrqTkX`}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-full"
+                      draggable={false}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -91,7 +142,6 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                 : "opacity-50"
             }`}
             onClick={() => {
-              if (prompt?.trim() !== "") {
                 setMensajes([
                   ...mensajes,
                   {
@@ -100,7 +150,7 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                   },
                 ]);
                 handleSendMessage();
-              }
+            
             }}
           >
             <div className="relative w-5 h-5 flex">

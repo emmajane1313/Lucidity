@@ -1,12 +1,31 @@
 {
   "Home": {
-    "Crear": "Crear Flujo de Trabajo",
+    "Crear": "Compartir Flujo de Trabajo",
     "Workflows": "Flujos de Trabajo",
     "Cuenta": "Cuenta",
     "Chat": "Chat",
     "placeholder": "¿Tienes una idea de workflow medio cocida? Suéltala aquí — los agentes de Comfystream están al loro.",
-    "about": "Info de Lucidity",
-    "settings": "Cuenta y Configuración"
+    "Info": "Info de Lucidity",
+    "copiar": "Copiar",
+    "copiado": "¡Copiado!",
+    "buscar": "Buscar Flujos de Trabajo",
+    "term": "No flujos encontrados, ¿Intenta buscar de nuevo?",
+    "noFlujos": "Aún no hay flujos de trabajo aquí.",
+    "subir": "Compartir Flujo de Trabajo",
+    "cc0": "Todos los flujos son CC0",
+    "name": "Nombre del Flujo de Trabajo",
+    "description": "Descripción",
+    "etiquetas": "Etiquetas",
+    "flujo": "Flujo de Trabajo",
+    "json": "No es un JSON válido. ¿Inténtalo de nuevo?",
+    "valid": "Comprueba el JSON",
+    "mintear": "Compartir",
+    "cover": "Imagen",
+    "validName": "No es nombre válido.",
+    "validDescription": "No es descripción válida.",
+    "validCover": "No es imagen válida.",
+    "validTags": "No son etiquetas válidas.",
+    "created": "¡Éxito! Tu flujo de trabajo está en el dominio público ahora."
   },
   "404": {
     "nada": "Error 404: La página ha sido secuestrada por NPCs rebeldes. Estamos negociando su liberación."

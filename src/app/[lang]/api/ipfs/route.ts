@@ -31,17 +31,18 @@ export async function POST(req: Request) {
       },
       body,
     });
-
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Error from IPFS:", errorText);
       throw new Error("Failed to upload to IPFS");
     }
-
     const data = await response.json();
     const cid = data?.Hash;
 
-    return NextResponse.json({ cid });
+
+    const res = NextResponse.json({ cid });
+
+    return res;
   } catch (err: any) {
     console.error(err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });

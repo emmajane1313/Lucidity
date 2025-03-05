@@ -5,8 +5,8 @@ import { SetStateAction } from "react";
 export interface LensConnected {
   profile?: Account;
   sessionClient?: SessionClient;
+  address?: `0x${string}`
 }
-
 
 export type LeftBarProps = {
   setAbrirBar: (e: SetStateAction<boolean>) => void;
@@ -27,7 +27,8 @@ export enum Pantalla {
   Workflows = "Workflows",
   Crear = "Crear",
   Chat = "Chat",
-  Cuenta = "Cuenta"
+  Cuenta = "Cuenta",
+  Info = "Info",
 }
 
 export type CambioElementoProps = {

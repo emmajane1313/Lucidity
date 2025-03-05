@@ -12,8 +12,6 @@ export default function Entry({ dict, lang }: { dict: any; lang: string }) {
   const {
     abrirBarIzquierdo,
     setAbrirBarIzquierdo,
-    abrirBarDerecho,
-    setAbrirBarDerecho,
     pantalla,
     setPantalla,
   } = useBar();
@@ -45,7 +43,10 @@ export default function Entry({ dict, lang }: { dict: any; lang: string }) {
           >
             <source src="/videos/moshed.mp4" />
           </video>
-          <Cambio dict={dict} pantalla={pantalla} />
+          <Cambio
+            dict={dict}
+            pantalla={pantalla}
+          />
         </div>
       </div>
     </div>

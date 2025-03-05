@@ -1,12 +1,31 @@
 {
   "Home": {
-    "Crear": "Create Workflow",
+    "Crear": "Share Workflow",
     "Workflows": "Workflows",
     "Cuenta": "Account",
     "Chat": "Chat",
     "placeholder": "Got a half-baked workflow idea? Drop it here— the Comfystream agents are listening.",
-    "about": "About Lucidity",
-    "settings": "Account & Settings"
+    "Info": "About Lucidity",
+    "copiar": "Copy",
+    "copiado": "Copied!",
+    "buscar": "Search Workflows",
+    "term": "No workflows found, try searching again?",
+    "noFlujos": "No Workflows here yet.",
+    "subir": "Share Workflow",
+    "cc0": "All workflows are CC0",
+    "name": "Name of Workflow",
+    "description": "Description",
+    "etiquetas": "Tags",
+    "flujo": "Workflow",
+    "json": "Invalid JSON. Try again?",
+    "valid": "Check JSON",
+    "mintear": "Share",
+    "cover": "Image Cover",
+    "validName": "Invalid name.",
+    "validDescription": "Invalid description.",
+    "validCover": "Invalid cover image.",
+    "validTags": "Invalid tags.",
+    "created": "Success! Your workflow is in the public domain."
   },
   "404": {
     "nada": "Error 404: This page has been hijacked by rogue NPCs. We are negotiating it's liberation."

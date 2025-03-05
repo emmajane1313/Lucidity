@@ -110,24 +110,13 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({
           </div>
         </div>
         {abrirBar && (
-          <div className="relative w-full h-fit flex flex-col gap-2 justify-start items-start text-sm text-left">
-            {[
-              { name: dict?.Home.about, router: () => router.push("/about") },
-              {
-                name: dict?.Home.settings,
-                router: () => router.push("/account"),
-              },
-            ].map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className="relative whitespace-nowrap w-fit h-fit flex text-noche hover:text-brillo font-nerdS cursor-pointer"
-                  onClick={() => item.router()}
-                >
-                  {item.name}
-                </div>
-              );
-            })}
+          <div className="relative w-full h-fit flex justify-start items-start text-sm text-left">
+            <div
+              className="relative whitespace-nowrap w-fit h-fit flex text-noche hover:text-brillo font-nerdS cursor-pointer"
+              onClick={() => setPantalla(Pantalla.Info)}
+            >
+              {dict?.Home[Pantalla.Info]}
+            </div>
           </div>
         )}
       </div>
