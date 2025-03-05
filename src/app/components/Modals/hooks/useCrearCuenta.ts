@@ -13,13 +13,11 @@ import { STORAGE_NODE } from "@/app/lib/constants";
 import pollResult from "@/app/lib/helpers/pollResult";
 
 const useCrearCuenta = (
-  address: `0x${string}` | undefined,
   lensConnected: LensConnected | undefined,
   setLensConnected:
     | ((e: SetStateAction<LensConnected | undefined>) => void)
     | undefined,
   setCreateAccount: (e: SetStateAction<boolean>) => void,
-  setIndexer: (e: SetStateAction<string | undefined>) => void,
   storageClient: StorageClient,
   setNotification: (e: SetStateAction<string | undefined>) => void
 ) => {
@@ -36,13 +34,13 @@ const useCrearCuenta = (
   const [accountLoading, setAccountLoading] = useState<boolean>(false);
 
   const handleCreateAccount = async () => {
-    if (!address || !lensConnected?.sessionClient) return;
+    if (!lensConnected?.address || !lensConnected?.sessionClient) return;
     setAccountLoading(true);
     try {
       const signer = createWalletClient({
         chain: chains.testnet,
         transport: custom(window.ethereum!),
-        account: address,
+        account: lensConnected?.address,
       });
 
       let picture = {};
@@ -126,15 +124,20 @@ const useCrearCuenta = (
 
             if (ownerSigner?.isOk()) {
               let picture = "";
-              const cadena = await fetch(
-                `${STORAGE_NODE}/${
-                  newAcc.value?.metadata?.picture?.split("lens://")?.[1]
-                }`
-              );
 
-              if (cadena) {
-                const json = await cadena.json();
-                picture = json.item;
+              try {
+                const cadena = await fetch(
+                  `${STORAGE_NODE}/${
+                    newAcc.value?.metadata?.picture?.split("lens://")?.[1]
+                  }`
+                );
+
+                if (cadena) {
+                  const json = await cadena.json();
+                  picture = json.item;
+                }
+              } catch (err: any) {
+                console.error(err.message);
               }
 
               setLensConnected?.({
@@ -157,19 +160,19 @@ const useCrearCuenta = (
             }
           } else {
             console.error(accountResponse);
-            setIndexer?.("Error with Fetching New Account");
+            setNotification?.("Error with Fetching New Account");
             setAccountLoading(false);
             return;
           }
         } else {
           console.error(accountResponse);
-          setIndexer?.("Error with Account Creation");
+          setNotification?.("Error with Account Creation");
           setAccountLoading(false);
           return;
         }
       } else {
         console.error(accountResponse);
-        setIndexer?.("Error with Account Creation");
+        setNotification?.("Error with Account Creation");
         setAccountLoading(false);
         return;
       }

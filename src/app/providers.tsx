@@ -44,6 +44,7 @@ export const ModalContext = createContext<
       connect: boolean;
       setCrearCuenta: (e: SetStateAction<boolean>) => void;
       crearCuenta: boolean;
+      storageClient: StorageClient;
     }
   | undefined
 >(undefined);
@@ -56,6 +57,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | undefined>();
   const [connect, setConnect] = useState<boolean>(false);
   const [crearCuenta, setCrearCuenta] = useState<boolean>(false);
+  const storageClient = StorageClient.create(storageTestnet);
 
   useEffect(() => {
     if (!clienteLens) {
@@ -73,7 +75,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <QueryClientProvider client={queryClient}>
         <ConnectKitProvider
           customTheme={{
-            "--ck-font-family": '"Jackey2", cursive',
+            "--ck-font-family": '"Nerd Semi", cursive',
           }}
         >
           <ModalContext.Provider
@@ -90,6 +92,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               setConnect,
               crearCuenta,
               setCrearCuenta,
+              storageClient,
             }}
           >
             {children}

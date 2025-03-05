@@ -103,7 +103,16 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({
                 }`}
               >
                 {lensConectado?.sessionClient
-                  ? lensConectado?.profile?.address?.slice(0, 10) + "..."
+                  ? lensConectado?.profile?.username?.localName
+                    ? Number(
+                        lensConectado?.profile?.username?.localName?.length
+                      ) > 10
+                      ? lensConectado?.profile?.username?.localName?.slice(
+                          0,
+                          10
+                        ) + "..."
+                      : lensConectado?.profile?.username?.localName
+                    : lensConectado?.profile?.address?.slice(0, 10) + "..."
                   : `<< ${dict?.Home.Cuenta} >>`}
               </div>
             )}

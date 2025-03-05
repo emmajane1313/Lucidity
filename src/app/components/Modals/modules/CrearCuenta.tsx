@@ -4,27 +4,24 @@ import { CrearCuentaProps } from "../types/modals.types";
 import useCrearCuenta from "../hooks/useCrearCuenta";
 
 const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
-  address,
   lensConnected,
   setLensConnected,
   setCreateAccount,
-  setIndexer,
   storageClient,
   setNotification,
+  dict
 }): JSX.Element => {
   const { account, accountLoading, setAccount, handleCreateAccount } =
     useCrearCuenta(
-      address,
       lensConnected,
       setLensConnected,
       setCreateAccount,
-      setIndexer,
       storageClient,
       setNotification
     );
   return (
     <div
-      className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden grid grid-flow-col auto-cols-auto w-full h-auto cursor-canP items-center justify-center"
+      className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden grid grid-flow-col auto-cols-auto w-full h-auto cursor-pointer items-center justify-center"
       onClick={() => setCreateAccount(false)}
     >
       <div
@@ -37,7 +34,7 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
         <div className="relative w-full h-fit flex flex-col gap-3 items-center justify-center">
           <div className="relative items-center justify-center flex w-fit h-fit">
             <label
-              className="relative w-20 rounded-full h-20 flex items-center justify-center border border-windows cursor-canP bg-windows"
+              className="relative w-20 rounded-full h-20 flex items-center justify-center border border-windows cursor-pointer bg-windows"
               onClick={(e) => {
                 e.stopPropagation();
               }}
@@ -121,7 +118,7 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
         </div>
         <div
           className={`relative px-3 py-1 flex items-center justify-center rounded-md bg-windows text-viol w-28 h-8 ${
-            !accountLoading && "cursor-canP active:scale-95 hover:opacity-70"
+            !accountLoading && "cursor-pointer active:scale-95 hover:opacity-70"
           }`}
           onClick={() => !accountLoading && handleCreateAccount()}
         >

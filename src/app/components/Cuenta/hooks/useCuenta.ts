@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Flujo } from "../../Modals/types/modals.types";
-import { Account } from "@lens-protocol/client";
 import { getAccountWorkflows } from "../../../../../graphql/queries/getAccountWorkflows";
+import { LensConnected } from "../../Common/types/common.types";
 
-const useCuenta = () => {
-  const [cuentaCargando, setCuentaCargando] = useState<boolean>(false);
+const useCuenta = (lensConectado: LensConnected) => {
   const [flujosCargando, setFlujosCargando] = useState<boolean>(false);
   const [masFlujosCargando, setMasFlujosCargando] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<{ hasMore: boolean; skip: number }>({
@@ -12,29 +11,16 @@ const useCuenta = () => {
     skip: 0,
   });
   const [flujos, setFlujos] = useState<Flujo[]>([]);
-  const [cuenta, setCuenta] = useState<
-    | {
-        perfil: Account;
-        direccion: `0x${string}`;
-      }
-    | undefined
-  >();
-
-  const handleCuenta = async () => {
-    setCuentaCargando(true);
-    try {
-    } catch (err: any) {
-      console.error(err.message);
-    }
-    setCuentaCargando(false);
-  };
 
   const handleMasFlujos = async () => {
-    if (!cuenta?.direccion) return;
+    if (!lensConectado?.address) return;
 
     setMasFlujosCargando(true);
     try {
-      const datos = await getAccountWorkflows(cuenta?.direccion, hasMore.skip);
+      const datos = await getAccountWorkflows(
+        lensConectado?.address,
+        hasMore.skip
+      );
 
       setHasMore({
         hasMore: datos?.data?.workflowCreateds?.length == 20 ? true : false,
@@ -58,11 +44,11 @@ const useCuenta = () => {
   };
 
   const handleFlujos = async () => {
-    if (!cuenta?.direccion) return;
+    if (!lensConectado?.address) return;
 
     setFlujosCargando(true);
     try {
-      const datos = await getAccountWorkflows(cuenta?.direccion, 0);
+      const datos = await getAccountWorkflows(lensConectado?.address, 0);
 
       setHasMore({
         hasMore: datos?.data?.workflowCreateds?.length == 20 ? true : false,
@@ -89,19 +75,14 @@ const useCuenta = () => {
     if (flujos?.length < 1) {
       handleFlujos();
     }
-
-    if (!cuenta) {
-      handleCuenta();
-    }
   }, []);
 
   return {
-    cuentaCargando,
     flujosCargando,
     flujos,
     handleMasFlujos,
     hasMore,
-    masFlujosCargando
+    masFlujosCargando,
   };
 };
 export default useCuenta;
