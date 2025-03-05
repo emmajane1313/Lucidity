@@ -44,6 +44,7 @@ const useChat = () => {
                   tags: string;
                   description: string;
                   cover: string;
+                  setup: string;
                 };
               }) => {
                 if (item.workflowMetadata?.workflow) {
@@ -53,6 +54,7 @@ const useChat = () => {
                     description: item.workflowMetadata?.description,
                     cover: item.workflowMetadata?.cover,
                     workflow: JSON.parse(item.workflowMetadata?.workflow),
+                    setup: item?.workflowMetadata?.setup?.split(", "),
                   };
                 }
                 return item;

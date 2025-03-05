@@ -5,9 +5,10 @@ import { RxCross1 } from "react-icons/rx";
 import { ModalContext } from "@/app/providers";
 import { TbChecklist } from "react-icons/tb";
 import Image from "next/legacy/image";
-import { INFURA_GATEWAY } from "@/app/lib/constants";
+import { INFURA_GATEWAY, SET_UP } from "@/app/lib/constants";
 import { createPublicClient, http } from "viem";
 import { chains } from "@lens-network/sdk/viem";
+import { FaChevronDown } from "react-icons/fa";
 
 const Crear: FunctionComponent<CambioElementoProps> = ({
   dict,
@@ -26,6 +27,8 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
     handleParse,
     valido,
     handleCrear,
+    setupAbierto,
+    setSetupAbierto,
   } = useCrear(
     dict,
     contexto?.setError!,
@@ -35,17 +38,17 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
   );
   return (
     <div
-      className={`relative overflow-y-scroll w-full pb-10 h-full flex flex-col gap-10 text-sm`}
+      className={`relative overflow-y-scroll w-full pb-10 h-full flex flex-col gap-10 text-sm font-nerdS text-white`}
     >
-      <div className="relative w-full h-fit items-center justify-center text-center text-white flex-col flex gap-2">
+      <div className="relative w-full h-fit items-center justify-center text-center flex-col flex gap-2">
         <div className="relative text-3xl w-full h-fit items-center justify-center flex font-nerdC uppercase">
           {dict.Home.subir}
         </div>
-        <div className="flex relative w-fit h-fit items-center justify-center font-nerdS">
+        <div className="flex relative w-fit h-fit items-center justify-center">
           {dict.Home.cc0}
         </div>
       </div>
-      <div className="relative flex-col text-white flex w-full h-fit items-start justify-between gap-4">
+      <div className="relative flex-col flex w-full h-fit items-start justify-between gap-4">
         <div className="relative w-full h-fit flex flex-col gap-2 items-center justify-center pb-4">
           <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
             {dict.Home.cover}
@@ -100,7 +103,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   name: e.target.value,
                 })
               }
-              className="font-nerdS text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10"
+              className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10"
             />
           </div>
           <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
@@ -121,14 +124,14 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   });
                 }
               }}
-              className="font-nerdS text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10"
+              className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10"
             />
             <div className="relative w-full h-fit flex flex-wrap gap-2 items-start justify-start">
               {detalles?.tags?.map((etiqueta, indice) => {
                 return (
                   <div
                     key={indice}
-                    className="relative flex items-center justify-between text-center font-nerdS px-2.5 py-1 border border-brillo rounded-full flex-row gap-2 cursor-pointer"
+                    className="relative flex items-center justify-between text-center px-2.5 py-1 border border-brillo rounded-full flex-row gap-2 cursor-pointer"
                     onClick={() =>
                       setDetalles({
                         ...detalles!,
@@ -148,6 +151,63 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
         </div>
         <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
           <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
+            {dict.Home.setup}
+          </div>
+          <div className="relative w-full h-fit flex flex-row gap-2 items-center justify-between min-h-10 bg-black rounded-md px-2 py-1">
+            <div className="relative w-full h-fit flex flex-wrap gap-1.5 items-center justify-start">
+              {detalles?.setup?.map((ajustes, indice) => {
+                return (
+                  <div
+                    key={indice}
+                    className="relative flex items-center justify-between text-center px-2.5 py-1 border border-brillo text-ama text-xs rounded-full flex-row gap-2 cursor-pointer"
+                    onClick={() => {
+                      setSetupAbierto(false);
+                      setDetalles({
+                        ...detalles!,
+                        setup: detalles.setup?.filter((tag) => tag !== ajustes),
+                      });
+                    }}
+                  >
+                    <div className="relative w-fit h-fit flex items-center justify-center">
+                      {ajustes}
+                    </div>
+                    <RxCross1 color="white" size={10} />
+                  </div>
+                );
+              })}
+            </div>
+            <FaChevronDown
+              color="white"
+              size={15}
+              className="cursor-pointer"
+              onClick={() => setSetupAbierto(!setupAbierto)}
+            />
+          </div>
+          {setupAbierto && (
+            <div className="absolute bg-black w-fit right-0 -bottom-64 flex items-center justify-start flex flex-col gap-2 border border-brillo rounded-md z-20 p-2">
+              {SET_UP.map((set, indice) => {
+                return (
+                  <div
+                    className="relative flex cursor-pointer hover:opacity-70 items-center justify-center w-fit h-fit"
+                    key={indice}
+                    onClick={() =>
+                      setDetalles({
+                        ...detalles!,
+                        setup: !(detalles?.setup || [])?.includes(set)
+                          ? [...(detalles?.setup || []), set]
+                          : detalles?.setup || [],
+                      })
+                    }
+                  >
+                    {set}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+        <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
+          <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
             {dict.Home.description}
           </div>
           <textarea
@@ -157,7 +217,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                 description: e.target.value,
               })
             }
-            className="font-nerdS text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-40 overflow-y-scroll"
+            className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-40 overflow-y-scroll"
             style={{
               resize: "none",
             }}
@@ -169,11 +229,12 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
           </div>
           <div className="relative w-full h-fit flex items-start justify-start">
             <div className="relative w-full flex flex-row gap-3 items-start justify-between h-[25rem]">
-              <div className="relative flex-col text-white flex w-full h-full items-start justify-between gap-4">
+              <div className="relative flex-col flex w-full h-full items-start justify-between gap-4">
                 <textarea
-                  className="relative w-full h-full flex items-start justify-start overflow-scroll break-all bg-gris border border-ligero rounded-md p-2"
+                  className="relative w-full h-full flex items-start justify-start overflow-auto break-all bg-gris border border-ligero rounded-md p-2 focus:outline-none"
                   style={{
                     resize: "none",
+                    whiteSpace: "pre",
                   }}
                   value={detalles?.workflow}
                   onChange={(e) =>
@@ -184,15 +245,21 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   }
                 ></textarea>
               </div>
-              <div className="relative w-full h-full flex items-start justify-start overflow-scroll bg-gris border border-ligero rounded-md p-2">
-                <div className="relative w-full h-full text-sm">
+              <div className="relative w-full h-full flex items-start justify-start overflow-y-scroll bg-gris border border-ligero rounded-md p-2 ">
+                <div className="relative w-full h-full text-sm overfl">
                   <pre className="flex relative h-full">
-                    <code className="language-json">{detalles?.workflow}</code>
+                    <code className="language-json whitespace-pre-wrap flex flex-wrap">
+                      {JSON.stringify(
+                        JSON.parse(detalles?.workflow || "{}"),
+                        null,
+                        2
+                      )}
+                    </code>
                   </pre>
                   <div className="absolute bottom-0 right-0 w-fit h-fit flex">
                     <div
-                      className={`relative w-fit h-fit flex items-center justify-between px-2.5 py-1 font-nerdS flex-row gap-2 rounded-md cursor-pointer border border-white ${
-                        valido ? "bg-brillo text-black" : "bg-black text-white"
+                      className={`relative w-fit h-fit flex items-center justify-between px-2.5 py-1 flex-row gap-2 rounded-md cursor-pointer border border-white ${
+                        valido ? "bg-brillo text-black" : "bg-black"
                       }`}
                       onClick={() => handleParse()}
                     >
@@ -212,7 +279,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
           </div>
         </div>
       </div>
-      <div className="relative w-full h-fit items-center justify-center text-center text-white flex-col flex gap-2">
+      <div className="relative w-full h-fit items-center justify-center text-center contextoflex-col flex gap-2">
         <div
           className={`relative text-xl w-fit h-fit items-center justify-center flex font-nerdC uppercase border border-white rounded-md`}
         >

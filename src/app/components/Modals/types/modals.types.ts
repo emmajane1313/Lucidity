@@ -15,6 +15,7 @@ export interface Flujo {
   description: string;
   name: string;
   tags: string[];
+  setup: string;
 }
 
 export type ErrorProps = {

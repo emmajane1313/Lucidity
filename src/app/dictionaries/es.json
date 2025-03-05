@@ -26,7 +26,8 @@
     "validCover": "No es imagen válida.",
     "validTags": "No son etiquetas válidas.",
     "created": "¡Éxito! Tu flujo de trabajo está en el dominio público ahora.",
-    "connect": "Conéctate"
+    "connect": "Conéctate",
+    "setup": "Ajustes"
   },
   "404": {
     "nada": "Error 404: La página ha sido secuestrada por NPCs rebeldes. Estamos negociando su liberación."

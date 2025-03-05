@@ -26,7 +26,8 @@
     "validCover": "Invalid cover image.",
     "validTags": "Invalid tags.",
     "created": "Success! Your workflow is in the public domain.",
-    "connect": "Connect"
+    "connect": "Connect",
+    "setup": "Setup"
   },
   "404": {
     "nada": "Error 404: This page has been hijacked by rogue NPCs. We are negotiating it's liberation."

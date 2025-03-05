@@ -12,12 +12,14 @@ const useCrear = (
   publicClient: PublicClient
 ) => {
   const [crearCargando, setCrearCargando] = useState<boolean>(false);
+  const [setupAbierto, setSetupAbierto] = useState<boolean>(false);
   const [detalles, setDetalles] = useState<{
     workflow?: string;
     cover?: File;
     description?: string;
     name?: string;
     tags?: string[];
+    setup?: string[];
   }>();
   const [etiqueta, setEtiqueta] = useState<string>("");
   const [valido, setValido] = useState<boolean>(false);
@@ -86,6 +88,9 @@ const useCrear = (
           ...detalles,
           cover: "ipfs://" + cover?.cid,
           tags: detalles?.tags?.join(","),
+          setup: detalles?.setup
+            ?.filter((set) => set?.trim() !== "")
+            ?.join(","),
         }),
       });
       const metadata = await responseDetalles.json();
@@ -125,6 +130,8 @@ const useCrear = (
     handleCrear,
     handleParse,
     valido,
+    setupAbierto,
+    setSetupAbierto,
   };
 };
 

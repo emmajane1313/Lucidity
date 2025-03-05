@@ -46,6 +46,7 @@ const useFlujos = () => {
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
+          setup: flujo?.workflowMetadata?.setup?.split(", "),
         }))
       );
     } catch (err: any) {
@@ -73,6 +74,7 @@ const useFlujos = () => {
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
+          setup: flujo?.workflowMetadata?.setup?.split(", "),
         })),
       ]);
     } catch (err: any) {
@@ -98,6 +100,7 @@ const useFlujos = () => {
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
+          setup: flujo?.workflowMetadata?.setup?.split(", "),
         }))
       );
     } catch (err: any) {
