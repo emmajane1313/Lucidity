@@ -4,12 +4,14 @@ import { FlujoProps } from "../types/modals.types";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
 import useFlujo from "../hooks/useFlujo";
 import { IoMdDownload } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 const Flujo: FunctionComponent<FlujoProps> = ({
   setFlujo,
   flujo,
   dict,
 }): JSX.Element => {
+  const router = useRouter();
   const { copiar, copiarFlujo, descargar } = useFlujo();
   return (
     <div className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden grid grid-flow-col auto-cols-auto w-full h-auto items-center justify-center text-white font-nerd">
@@ -24,6 +26,44 @@ const Flujo: FunctionComponent<FlujoProps> = ({
           <div className="relative w-fit h-fit flex items-center justify-center">
             {flujo.name}
           </div>
+          {flujo?.profile ? (
+            <div
+              className="relative w-fit h-fit flex flex-row gap-2 items-center justify-center cursor-pointer"
+              onClick={() => {
+                setFlujo(undefined);
+                router.push(`/creator/${flujo?.creator}`);
+              }}
+            >
+              {flujo?.profile?.metadata?.picture && (
+                <div className="relative flex w-fit h-fit">
+                  <div className={`relative flex w-8 h-8 rounded-full`}>
+                    <Image
+                      draggable={false}
+                      layout="fill"
+                      className="rounded-full"
+                      objectFit="cover"
+                      src={`${INFURA_GATEWAY}/ipfs/${
+                        flujo?.profile?.metadata?.picture?.split("ipfs://")?.[1]
+                      }`}
+                    />
+                  </div>
+                </div>
+              )}
+              <div className="relative flex w-fit h-fit text-xs">
+                {flujo?.profile?.username?.localName}
+              </div>
+            </div>
+          ) : (
+            <div
+              className="relative flex w-fit h-fit text-xs cursor-pointer"
+              onClick={() => {
+                setFlujo(undefined);
+                router.push(`/creator/${flujo?.creator}`);
+              }}
+            >
+              {flujo?.creator?.slice(0, 20) + "..."}
+            </div>
+          )}
           {flujo.cover && (
             <div className="relative w-fit h-fit flex items-center justify-center">
               <div className="relative border border-white rounded-md w-20 h-20 flex items-center justify-center">
@@ -59,11 +99,11 @@ const Flujo: FunctionComponent<FlujoProps> = ({
               onClick={() => copiarFlujo(flujo.workflow)}
               className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md items-center justify-center text-center transition-colors h-8 flex w-fit cursor-pointer"
             >
-              {copiar ? dict.Home.copiado : dict.Home.copiar}
+              {copiar ? dict?.Home?.copiado : dict?.Home?.copiar}
             </div>
             <IoMdDownload
               className="h-8 flex w-fit bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition-colors cursor-pointer"
-              onClick={() => descargar(flujo.workflow)}
+              onClick={() => descargar(flujo.workflow, flujo.name)}
               color="white"
             />
           </div>

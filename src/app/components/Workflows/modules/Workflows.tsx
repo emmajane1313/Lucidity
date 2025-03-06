@@ -9,6 +9,7 @@ import Flujos from "./Flujos";
 const Workflows: FunctionComponent<CambioElementoProps> = ({
   dict,
 }): JSX.Element => {
+  const contexto = useContext(ModalContext);
   const {
     flujos,
     flujosCargando,
@@ -19,8 +20,7 @@ const Workflows: FunctionComponent<CambioElementoProps> = ({
     masFlujosCargando,
     handleMasFlujos,
     hasMore,
-  } = useFlujos();
-  const contexto = useContext(ModalContext);
+  } = useFlujos(contexto?.lensConectado!, contexto?.clienteLens!);
   return (
     <div
       className={`relative w-full pb-10 h-full flex flex-col gap-10 items-start justify-between`}
@@ -62,7 +62,7 @@ const Workflows: FunctionComponent<CambioElementoProps> = ({
         hasMore={hasMore}
         flujos={flujos}
         setFlujo={contexto?.setFlujo!}
-        texto={dict.Home.term}
+        texto={dict?.Home?.term}
         otroCargando={buscarCargando}
         flujosCargando={flujosCargando}
       />

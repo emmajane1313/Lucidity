@@ -5,10 +5,14 @@ import Image from "next/legacy/image";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
 import { ModalContext } from "@/app/providers";
 import { CambioElementoProps } from "../../Common/types/common.types";
+import useFlujo from "../../Modals/hooks/useFlujo";
+import { IoMdDownload } from "react-icons/io";
 
 const Chat: FunctionComponent<CambioElementoProps> = ({
   dict,
 }): JSX.Element => {
+  const contexto = useContext(ModalContext);
+  const { copiar, copiarFlujo, descargar } = useFlujo();
   const {
     mensajes,
     prompt,
@@ -16,12 +20,11 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
     setMensajes,
     handleSendMessage,
     sendMessageLoading,
-  } = useChat();
-  const contexto = useContext(ModalContext);
+  } = useChat(contexto?.lensConectado!, contexto?.clienteLens!);
 
   return (
     <div
-      className={`relative w-full pb-10 h-full flex flex-col gap-10 ${
+      className={`relative w-full pb-10 h-full min-h-screen flex flex-col gap-10 ${
         mensajes?.length > 0 || sendMessageLoading
           ? "justify-between items-start"
           : "items-center justify-center"
@@ -40,15 +43,23 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                       : "justify-start text-left"
                   }`}
                 >
-                  {valor?.usuario !== Usuario.Flujos ? (
-                    <div
-                      className={`relative w-fit p-2 rounded-md h-fit flex items-center justify-center  ${
-                        valor?.usuario == Usuario.Humano && "bg-black"
-                      }`}
-                    >
-                      {valor?.contenido}
+                  {valor?.usuario !== Usuario.Flujos &&
+                  valor?.usuario !== Usuario.NewFlujo ? (
+                    <div className="relative w-fit flex h-fit flex-col gap-2 items-start justify-start">
+                      <div
+                        className={`relative w-fit p-2 rounded-md h-fit flex items-center justify-center  ${
+                          valor?.usuario == Usuario.Humano && "bg-black"
+                        }`}
+                      >
+                        {valor?.contenido}
+                      </div>
+                      {valor?.action && (
+                        <div className="relative text-xxs w-fit h-fit flex px-2.5 items-center justify-center rounded-full bg-ligero">
+                          {valor?.action}
+                        </div>
+                      )}
                     </div>
-                  ) : (
+                  ) : valor?.usuario == Usuario.Flujos ? (
                     <div className="relative w-fit h-fit max-w-full flex flex-wrap gap-3">
                       {valor?.flujos?.map((flujo, indice) => {
                         return (
@@ -78,6 +89,31 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                           </div>
                         );
                       })}
+                    </div>
+                  ) : (
+                    <div className="relative w-fit h-fit max-w-full flex flex-col gap-3 pb-4">
+                      <div className="relative flex items-end justify-end w-full h-fit flex-row gap-2">
+                        <div
+                          onClick={() => copiarFlujo(valor?.flujo!)}
+                          className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md items-center justify-center text-center transition-colors h-8 flex w-fit cursor-pointer"
+                        >
+                          {copiar ? dict?.Home?.copiado : dict?.Home?.copiar}
+                        </div>
+                        <IoMdDownload
+                          className="h-8 flex w-fit bg-green-600 hover:bg-green-700 text-white p-2 rounded-md transition-colors cursor-pointer"
+                          onClick={() => descargar(valor?.flujo!)}
+                          color="white"
+                        />
+                      </div>
+                      <div className="relative w-full h-fit flex items-start justify-start overflow-y-scroll overflow-x-auto bg-gris border border-ligero rounded-md p-2">
+                        <div className="relative w-full h-96 text-sm">
+                          <pre className="flex relative">
+                            <code className="language-json">
+                              {JSON.stringify(valor?.flujo, null, 2)}
+                            </code>
+                          </pre>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -142,15 +178,14 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                 : "opacity-50"
             }`}
             onClick={() => {
-                setMensajes([
-                  ...mensajes,
-                  {
-                    contenido: prompt,
-                    usuario: Usuario.Humano,
-                  },
-                ]);
-                handleSendMessage();
-            
+              setMensajes([
+                ...mensajes,
+                {
+                  contenido: prompt,
+                  usuario: Usuario.Humano,
+                },
+              ]);
+              handleSendMessage();
             }}
           >
             <div className="relative w-5 h-5 flex">

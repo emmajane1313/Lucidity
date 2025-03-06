@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { Flujo } from "../../Modals/types/modals.types";
 import { getAllWorkflows } from "../../../../../graphql/queries/getAllWorkflows";
 import { getWorkflows } from "../../../../../graphql/queries/getWorkflows";
+import { STORAGE_NODE } from "@/app/lib/constants";
+import { LensConnected } from "../../Common/types/common.types";
+import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
+import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 
-const useFlujos = () => {
+const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
   const [flujosCargando, setFlujosCargando] = useState<boolean>(false);
   const [masFlujosCargando, setMasFlujosCargando] = useState<boolean>(false);
   const [flujos, setFlujos] = useState<Flujo[]>([]);
@@ -13,6 +17,7 @@ const useFlujos = () => {
     hasMore: true,
     skip: 0,
   });
+  const profileCache = new Map<string, Account>();
 
   const handleBuscar = async () => {
     setBuscarCargando(true);
@@ -40,14 +45,55 @@ const useFlujos = () => {
       }
 
       setFlujos(
-        datos?.data?.workflowCreateds?.map((flujo: any) => ({
-          tags: flujo?.workflowMetadata?.tags?.split(", "),
-          name: flujo?.workflowMetadata?.name,
-          description: flujo?.workflowMetadata?.description,
-          cover: flujo?.workflowMetadata?.cover,
-          workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
-          setup: flujo?.workflowMetadata?.setup?.split(", "),
-        }))
+        await Promise.all(
+          datos?.data?.workflowCreateds?.map(async (flujo: any) => {
+            if (!profileCache.get(flujo?.creator)) {
+              const result = await fetchAccountsAvailable(
+                lensConectado?.sessionClient ?? lensClient,
+                {
+                  managedBy: evmAddress(flujo?.creator),
+                  includeOwned: true,
+                }
+              );
+
+
+              if (result.isErr()) {
+                setBuscarCargando(false);
+
+                return;
+              }
+
+              const profile = result?.value.items[0]?.account as Account;
+              let picture = "";
+              if (profile?.metadata?.picture) {
+                const pictureKey =
+                  profile.metadata.picture.split("lens://")?.[1];
+                const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
+                const json = await cadena.json();
+                picture = json.item;
+              }
+
+              profileCache.set(flujo?.creator, {
+                ...profile,
+                metadata: {
+                  ...profile?.metadata!,
+                  picture,
+                },
+              });
+            }
+
+            return {
+              tags: flujo?.workflowMetadata?.tags?.split(", "),
+              name: flujo?.workflowMetadata?.name,
+              creator: flujo?.creator,
+              description: flujo?.workflowMetadata?.description,
+              cover: flujo?.workflowMetadata?.cover,
+              workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
+              setup: flujo?.workflowMetadata?.setup?.split(", "),
+              profile: profileCache.get(flujo?.creator),
+            };
+          })
+        )
       );
     } catch (err: any) {
       console.error(err.message);
@@ -68,14 +114,53 @@ const useFlujos = () => {
 
       setFlujos([
         ...flujos,
-        ...datos?.data?.workflowCreateds?.map((flujo: any) => ({
-          tags: flujo?.workflowMetadata?.tags?.split(", "),
-          name: flujo?.workflowMetadata?.name,
-          description: flujo?.workflowMetadata?.description,
-          cover: flujo?.workflowMetadata?.cover,
-          workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
-          setup: flujo?.workflowMetadata?.setup?.split(", "),
-        })),
+        ...(await Promise.all(
+          datos?.data?.workflowCreateds?.map(async (flujo: any) => {
+            if (!profileCache.get(flujo?.creator)) {
+              const result = await fetchAccountsAvailable(
+                lensConectado?.sessionClient ?? lensClient,
+                {
+                  managedBy: evmAddress(flujo?.creator),
+                  includeOwned: true,
+                }
+              );
+
+              if (result.isErr()) {
+                setMasFlujosCargando(false);
+                return;
+              }
+
+              const profile = result?.value.items[0]?.account as Account;
+              let picture = "";
+              if (profile?.metadata?.picture) {
+                const pictureKey =
+                  profile.metadata.picture.split("lens://")?.[1];
+                const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
+                const json = await cadena.json();
+                picture = json.item;
+              }
+
+              profileCache.set(flujo?.creator, {
+                ...profile,
+                metadata: {
+                  ...profile?.metadata!,
+                  picture,
+                },
+              });
+            }
+
+            return {
+              tags: flujo?.workflowMetadata?.tags?.split(", "),
+              name: flujo?.workflowMetadata?.name,
+              creator: flujo?.creator,
+              description: flujo?.workflowMetadata?.description,
+              cover: flujo?.workflowMetadata?.cover,
+              workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
+              setup: flujo?.workflowMetadata?.setup?.split(", "),
+              profile: profileCache.get(flujo?.creator),
+            };
+          })
+        )),
       ]);
     } catch (err: any) {
       console.error(err.message);
@@ -94,14 +179,56 @@ const useFlujos = () => {
       });
 
       setFlujos(
-        datos?.data?.workflowCreateds?.map((flujo: any) => ({
-          tags: flujo?.workflowMetadata?.tags?.split(", "),
-          name: flujo?.workflowMetadata?.name,
-          description: flujo?.workflowMetadata?.description,
-          cover: flujo?.workflowMetadata?.cover,
-          workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
-          setup: flujo?.workflowMetadata?.setup?.split(", "),
-        }))
+        await Promise.all(
+          datos?.data?.workflowCreateds?.map(async (flujo: any) => {
+            if (
+              !profileCache.get(flujo?.creator) &&
+              lensConectado?.sessionClient
+            ) {
+              const result = await fetchAccountsAvailable(
+                lensConectado?.sessionClient,
+                {
+                  managedBy: evmAddress(flujo?.creator),
+                  includeOwned: true,
+                }
+              );
+
+              if (result.isErr()) {
+                setMasFlujosCargando(false);
+                return;
+              }
+
+              const profile = result?.value.items[0]?.account as Account;
+              let picture = "";
+              if (profile?.metadata?.picture) {
+                const pictureKey =
+                  profile.metadata.picture.split("lens://")?.[1];
+                const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
+                const json = await cadena.json();
+                picture = json.item;
+              }
+
+              profileCache.set(flujo?.creator, {
+                ...profile,
+                metadata: {
+                  ...profile?.metadata!,
+                  picture,
+                },
+              });
+            }
+
+            return {
+              tags: flujo?.workflowMetadata?.tags?.split(", "),
+              name: flujo?.workflowMetadata?.name,
+              creator: flujo?.creator,
+              description: flujo?.workflowMetadata?.description,
+              cover: flujo?.workflowMetadata?.cover,
+              workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
+              setup: flujo?.workflowMetadata?.setup?.split(", "),
+              profile: profileCache.get(flujo?.creator),
+            };
+          })
+        )
       );
     } catch (err: any) {
       console.error(err.message);

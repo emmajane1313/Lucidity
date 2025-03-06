@@ -22,7 +22,7 @@ export default {
         noche: "#96A9B6",
         brillo: "#5DD567",
         masa: "#06B4D1",
-        naranja: "#FBAB39"
+        naranja: "#FBAB39",
       },
       fontFamily: {
         vcr: "Vcr",
@@ -33,6 +33,9 @@ export default {
         arc: "Arcadia",
         nerdS: "Nerd Semi",
         nerdC: "Nerd Con",
+      },
+      fontSize: {
+        xxs: "0.6rem",
       },
     },
   },

@@ -1,15 +1,88 @@
-import { useEffect, useState } from "react";
-import { Pantalla } from "../types/common.types";
+import { SetStateAction, useEffect, useState } from "react";
+import { LensConnected, Pantalla } from "../types/common.types";
+import { evmAddress, PublicClient } from "@lens-protocol/client";
+import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
+import { STORAGE_NODE } from "@/app/lib/constants";
 
-const useBar = () => {
-  const [pantalla, setPantalla] = useState<Pantalla>(Pantalla.Chat);
-  const [abrirBarIzquierdo, setAbrirBarIzquierdo] = useState<boolean>(false);
+const useBar = (
+  lensConectado: LensConnected,
+  lensClient: PublicClient,
+  setLensConectado: (e: SetStateAction<LensConnected | undefined>) => void,
+  isConnected: boolean,
+  address?: `0x${string}` | undefined
+) => {
+  const [abrirBar, setAbrirBar] = useState<boolean>(false);
+
+  const resumeLensSession = async () => {
+    try {
+      const resumed = await lensClient?.resumeSession();
+
+      if (resumed?.isOk()) {
+        const accounts = await fetchAccountsAvailable(lensClient!, {
+          managedBy: evmAddress(lensConectado?.address!),
+          includeOwned: true,
+        });
+
+        if (accounts.isErr()) {
+          return;
+        }
+
+        let picture = "";
+
+        try {
+          const cadena = await fetch(
+            `${STORAGE_NODE}/${
+              accounts.value.items?.[0]?.account?.metadata?.picture?.split(
+                "lens://"
+              )?.[1]
+            }`
+          );
+
+          if (cadena) {
+            const json = await cadena.json();
+            picture = json.item;
+          }
+        } catch (err: any) {
+          console.error(err.message);
+        }
+
+        setLensConectado?.({
+          ...lensConectado,
+
+          profile: {
+            ...accounts.value.items?.[0]?.account,
+            metadata: {
+              ...accounts.value.items?.[0]?.account?.metadata!,
+              picture,
+            },
+          },
+          sessionClient: resumed?.value,
+        });
+      }
+    } catch (err) {
+      console.error("Error al reanudar la sesión:", err);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    if (isConnected && !lensConectado?.address && address) {
+      setLensConectado({
+        ...lensConectado,
+        address: address,
+      });
+    }
+  }, [isConnected, address]);
+
+  useEffect(() => {
+    if (lensConectado?.address && lensClient && !lensConectado?.profile) {
+      resumeLensSession();
+    }
+  }, [lensConectado?.address, lensClient]);
 
   return {
-    abrirBarIzquierdo,
-    setAbrirBarIzquierdo,
-    pantalla,
-    setPantalla,
+    abrirBar,
+    setAbrirBar,
   };
 };
 

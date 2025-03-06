@@ -1,4 +1,4 @@
-import { FunctionComponent, JSX, useContext, useState } from "react";
+import { FunctionComponent, JSX, useContext } from "react";
 import { CambioElementoProps } from "../../Common/types/common.types";
 import { ModalContext } from "@/app/providers";
 import Flujos from "../../Workflows/modules/Flujos";
@@ -71,7 +71,7 @@ const Cuenta: FunctionComponent<CambioElementoProps> = ({
                 className={`relative w-24 h-8 flex items-center justify-center cursor-pointer`}
                 onClick={() => contexto?.setConnect(true)}
               >
-                {dict.Home.connect}
+                {dict?.Home?.connect}
               </div>
             </div>
         </div>
@@ -82,7 +82,7 @@ const Cuenta: FunctionComponent<CambioElementoProps> = ({
         hasMore={hasMore}
         flujos={flujos}
         setFlujo={contexto?.setFlujo!}
-        texto={dict.Home.noFlujos}
+        texto={dict?.Home?.noFlujos}
         flujosCargando={flujosCargando}
       />
     </div>

@@ -38,10 +38,10 @@ const useCrear = (
 
         return true;
       } else {
-        setError(dict.Home.json);
+        setError(dict?.Home?.json);
       }
     } catch (err: any) {
-      setError(dict.Home.json);
+      setError(dict?.Home?.json);
     }
 
     return false;
@@ -54,19 +54,19 @@ const useCrear = (
     }
     if (!handleParse()) return;
     if (detalles?.name?.trim() == "" || !detalles?.name) {
-      setError(dict.Home.validName);
+      setError(dict?.Home?.validName);
       return;
     } else if (detalles?.description?.trim() == "" || !detalles?.description) {
-      setError(dict.Home.validDescription);
+      setError(dict?.Home?.validDescription);
       return;
     } else if (!detalles?.cover) {
-      setError(dict.Home.validCover);
+      setError(dict?.Home?.validCover);
       return;
     } else if (
       Number(detalles?.tags?.filter((tag) => tag.trim() !== "").length) < 1 ||
       !detalles?.tags
     ) {
-      setError(dict.Home.validTags);
+      setError(dict?.Home?.validTags);
       return;
     }
 
@@ -114,7 +114,7 @@ const useCrear = (
         hash: res,
       });
 
-      setError(dict.Home.created);
+      setError(dict?.Home?.created);
     } catch (err: any) {
       console.error(err.message);
     }

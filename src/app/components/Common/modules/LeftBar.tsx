@@ -1,21 +1,29 @@
-import { FunctionComponent } from "react";
+"use client";
+
+import { FunctionComponent, useContext } from "react";
 import { JSX } from "react/jsx-runtime";
-import { LeftBarProps, Pantalla } from "../types/common.types";
+import { Pantalla } from "../types/common.types";
 import Image from "next/legacy/image";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
+import useBar from "../hooks/useBar";
+import { useAccount } from "wagmi";
+import { ModalContext } from "@/app/providers";
+import { useRouter } from "next/navigation";
 
-const LeftBar: FunctionComponent<LeftBarProps> = ({
-  setAbrirBar,
-  router,
-  abrirBar,
-  setPantalla,
-  pantalla,
-  dict,
-  lensConectado,
-}): JSX.Element => {
+const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
+  const contexto = useContext(ModalContext);
+  const { isConnected, address } = useAccount();
+  const { abrirBar, setAbrirBar } = useBar(
+    contexto?.lensConectado!,
+    contexto?.clienteLens!,
+    contexto?.setLensConectado!,
+    isConnected,
+    address
+  );
+  const router = useRouter();
   return (
     <div
-      className={`absolute bg-black top-0 z-10 left-0 h-full flex justify-between items-center flex-col py-4 ${
+      className={`absolute bg-black top-0 z-10 left-0 h-full flex justify-between items-center flex-col py-4 min-h-screen ${
         abrirBar ? "w-[calc(100vw-3.5rem)] sm:w-fit pl-2 pr-3" : "w-10 px-2"
       }`}
     >
@@ -46,7 +54,8 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({
                 key={indice}
                 className="relative w-fit h-fit flex flex-row gap-3 items-center justify-center cursor-pointer hover:opacity-70"
                 onClick={() => {
-                  setPantalla(elemento);
+                  router.push("/");
+                  contexto?.setPantalla(elemento);
                   setAbrirBar(false);
                 }}
                 title={dict?.Home[elemento]}
@@ -54,7 +63,9 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({
                 {abrirBar && (
                   <div
                     className={`relative uppercase text-sm w-full h-fit flex items-center font-nerdS justify-center text-center hover:text-brillo ${
-                      pantalla == elemento ? "text-brillo" : "text-white"
+                      contexto?.pantalla == elemento
+                        ? "text-brillo"
+                        : "text-white"
                     }`}
                   >
                     {`<< ${dict?.Home[elemento]} >>`}
@@ -70,7 +81,7 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({
         <div className="relative w-fit h-fit flex items-center justify-center">
           <div
             className="relative w-fit hover:opacity-70 flex-row gap-3 h-fit flex items-center justify-center cursor-pointer"
-            onClick={() => setPantalla(Pantalla.Cuenta)}
+            onClick={() =>{ router.push("/"); contexto?.setPantalla(Pantalla.Cuenta)}}
             title={dict?.Home.Cuenta}
           >
             <div className="relative flex w-fit h-fit">
@@ -81,8 +92,8 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({
                   className="rounded-xl"
                   objectFit="cover"
                   src={`${INFURA_GATEWAY}/ipfs/${
-                    lensConectado?.profile?.metadata?.picture
-                      ? lensConectado?.profile?.metadata?.picture?.split(
+                    contexto?.lensConectado?.profile?.metadata?.picture
+                      ? contexto?.lensConectado?.profile?.metadata?.picture?.split(
                           "ipfs://"
                         )?.[1]
                       : "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW"
@@ -99,20 +110,24 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({
             {abrirBar && (
               <div
                 className={`relative text-sm font-nerdS w-fit h-fit flex items-center justify-center text-left uppercase hover:text-brillo ${
-                  pantalla == Pantalla.Cuenta ? "text-brillo" : "text-white"
+                  contexto?.pantalla == Pantalla.Cuenta
+                    ? "text-brillo"
+                    : "text-white"
                 }`}
               >
-                {lensConectado?.sessionClient
-                  ? lensConectado?.profile?.username?.localName
+                {contexto?.lensConectado?.sessionClient
+                  ? contexto?.lensConectado?.profile?.username?.localName
                     ? Number(
-                        lensConectado?.profile?.username?.localName?.length
+                        contexto?.lensConectado?.profile?.username?.localName
+                          ?.length
                       ) > 10
-                      ? lensConectado?.profile?.username?.localName?.slice(
+                      ? contexto?.lensConectado?.profile?.username?.localName?.slice(
                           0,
                           10
                         ) + "..."
-                      : lensConectado?.profile?.username?.localName
-                    : lensConectado?.profile?.address?.slice(0, 10) + "..."
+                      : contexto?.lensConectado?.profile?.username?.localName
+                    : contexto?.lensConectado?.profile?.address?.slice(0, 10) +
+                      "..."
                   : `<< ${dict?.Home.Cuenta} >>`}
               </div>
             )}
@@ -122,7 +137,7 @@ const LeftBar: FunctionComponent<LeftBarProps> = ({
           <div className="relative w-full h-fit flex justify-start items-start text-sm text-left">
             <div
               className="relative whitespace-nowrap w-fit h-fit flex text-noche hover:text-brillo font-nerdS cursor-pointer"
-              onClick={() => setPantalla(Pantalla.Info)}
+              onClick={() => contexto?.setPantalla(Pantalla.Info)}
             >
               {dict?.Home[Pantalla.Info]}
             </div>

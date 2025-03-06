@@ -42,16 +42,16 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
     >
       <div className="relative w-full h-fit items-center justify-center text-center flex-col flex gap-2">
         <div className="relative text-3xl w-full h-fit items-center justify-center flex font-nerdC uppercase">
-          {dict.Home.subir}
+          {dict?.Home?.subir}
         </div>
         <div className="flex relative w-fit h-fit items-center justify-center">
-          {dict.Home.cc0}
+          {dict?.Home?.cc0}
         </div>
       </div>
       <div className="relative flex-col flex w-full h-fit items-start justify-between gap-4">
         <div className="relative w-full h-fit flex flex-col gap-2 items-center justify-center pb-4">
           <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
-            {dict.Home.cover}
+            {dict?.Home?.cover}
           </div>
           <div className="relative items-center justify-center flex w-fit h-fit">
             <label
@@ -94,7 +94,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
         <div className="relative w-full h-fit flex items-start justify-between gap-3 flex-row">
           <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
             <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
-              {dict.Home.name}
+              {dict?.Home?.name}
             </div>
             <input
               onChange={(e) =>
@@ -108,7 +108,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
           </div>
           <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
             <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
-              {dict.Home.etiquetas}
+              {dict?.Home?.etiquetas}
             </div>
             <input
               onChange={(e) => setEtiqueta(e.target.value.trim())}
@@ -151,7 +151,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
         </div>
         <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
           <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
-            {dict.Home.setup}
+            {dict?.Home?.setup}
           </div>
           <div className="relative w-full h-fit flex flex-row gap-2 items-center justify-between min-h-10 bg-black rounded-md px-2 py-1">
             <div className="relative w-full h-fit flex flex-wrap gap-1.5 items-center justify-start">
@@ -208,7 +208,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
         </div>
         <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
           <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
-            {dict.Home.description}
+            {dict?.Home?.description}
           </div>
           <textarea
             onChange={(e) =>
@@ -225,7 +225,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
         </div>
         <div className="relative w-full h-fit flex flex-col items-start justify-start gap-3">
           <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
-            {dict.Home.flujo}
+            {dict?.Home?.flujo}
           </div>
           <div className="relative w-full h-fit flex items-start justify-start">
             <div className="relative w-full flex flex-row gap-3 items-start justify-between h-[25rem]">
@@ -264,7 +264,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                       onClick={() => handleParse()}
                     >
                       <div className="relative w-fit h-fit flex text-center items-center justify-center">
-                        {dict.Home.valid}
+                        {dict?.Home?.valid}
                       </div>
                       <TbChecklist
                         size={10}
@@ -302,7 +302,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                 </div>
               </div>
             ) : (
-              dict.Home.mintear
+              dict?.Home?.mintear
             )}
           </div>
         </div>

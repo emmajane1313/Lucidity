@@ -1,12 +1,13 @@
 "use client";
+
 import { ModalContext } from "@/app/providers";
-import { FunctionComponent, JSX, useContext } from "react";
+import { useContext } from "react";
 import Flujo from "./Flujo";
-import Error from "./Error";
 import Connect from "./Connect";
 import CrearCuenta from "./CrearCuenta";
+import Error from "./Error";
 
-const Modals: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
+export default function Modals({ dict }: { dict: any }) {
   const contexto = useContext(ModalContext);
   return (
     <>
@@ -43,6 +44,4 @@ const Modals: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
       )}
     </>
   );
-};
-
-export default Modals;
+}

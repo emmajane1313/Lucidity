@@ -23,9 +23,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
     setError!,
     setLensConectado!,
     setCrearCuenta!,
-    setConnect!,
-    isConnected,
-    address
+    setConnect!
   );
   return (
     <div
@@ -37,7 +35,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative w-fit pb-3 h-fit flex items-center justify-center">
-          {dict.Home.connect}
+          {dict?.Home?.connect}
         </div>
         {lensConectado?.profile?.username?.localName ? (
           <div className="relative w-full h-fit flex items-center justify-center text-left">

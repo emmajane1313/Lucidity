@@ -1,9 +1,12 @@
+import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
 import { useEffect, useState } from "react";
 import { Flujo } from "../../Modals/types/modals.types";
 import { getAccountWorkflows } from "../../../../../graphql/queries/getAccountWorkflows";
-import { LensConnected } from "../../Common/types/common.types";
+import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
+import { STORAGE_NODE } from "@/app/lib/constants";
 
-const useCuenta = (lensConectado: LensConnected) => {
+const useCreator = (creator: string, lensClient: PublicClient) => {
+  const [creadorCargando, setCreadorCargando] = useState<boolean>(false);
   const [flujosCargando, setFlujosCargando] = useState<boolean>(false);
   const [masFlujosCargando, setMasFlujosCargando] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<{ hasMore: boolean; skip: number }>({
@@ -11,16 +14,65 @@ const useCuenta = (lensConectado: LensConnected) => {
     skip: 0,
   });
   const [flujos, setFlujos] = useState<Flujo[]>([]);
+  const [creador, setCreador] = useState<
+    Account & {
+      creador: string;
+    }
+  >();
+
+  const handleCreador = async () => {
+    setCreadorCargando(true);
+    try {
+      const accounts = await fetchAccountsAvailable(lensClient!, {
+        managedBy: evmAddress(creator),
+        includeOwned: true,
+      });
+
+      if (accounts.isErr()) {
+        setCreadorCargando(false);
+
+        return;
+      }
+
+      let picture = "";
+
+      if (accounts.value.items?.[0]?.account?.metadata?.picture) {
+        const cadena = await fetch(
+          `${STORAGE_NODE}/${
+            accounts.value.items?.[0]?.account?.metadata?.picture?.split(
+              "lens://"
+            )?.[1]
+          }`
+        );
+
+        if (cadena) {
+          const json = await cadena.json();
+          picture = json.item;
+        }
+      }
+
+      setCreador?.({
+        ...{
+          ...accounts.value.items?.[0]?.account,
+          metadata: {
+            ...accounts.value.items?.[0]?.account?.metadata!,
+            picture,
+          },
+        },
+        creador: creator,
+      });
+    } catch (err: any) {
+      console.error(err.message);
+    }
+    setCreadorCargando(false);
+  };
 
   const handleMasFlujos = async () => {
-    if (!lensConectado?.address) return;
+    if (!creador?.creador) return;
 
     setMasFlujosCargando(true);
     try {
-      const datos = await getAccountWorkflows(
-        lensConectado?.address,
-        hasMore.skip
-      );
+      const datos = await getAccountWorkflows(creador?.creador, hasMore.skip);
 
       setHasMore({
         hasMore: datos?.data?.workflowCreateds?.length == 20 ? true : false,
@@ -37,7 +89,7 @@ const useCuenta = (lensConectado: LensConnected) => {
           cover: flujo?.workflowMetadata?.cover,
           setup: flujo?.workflowMetadata?.setup?.split(", "),
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
-          profile: lensConectado?.profile,
+          profile: creador,
         })),
       ]);
     } catch (err: any) {
@@ -47,11 +99,11 @@ const useCuenta = (lensConectado: LensConnected) => {
   };
 
   const handleFlujos = async () => {
-    if (!lensConectado?.address) return;
+    if (!creador?.creador) return;
 
     setFlujosCargando(true);
     try {
-      const datos = await getAccountWorkflows(lensConectado?.address, 0);
+      const datos = await getAccountWorkflows(creador?.creador, 0);
 
       setHasMore({
         hasMore: datos?.data?.workflowCreateds?.length == 20 ? true : false,
@@ -67,7 +119,7 @@ const useCuenta = (lensConectado: LensConnected) => {
           cover: flujo?.workflowMetadata?.cover,
           setup: flujo?.workflowMetadata?.setup?.split(", "),
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
-          profile: lensConectado?.profile,
+          profile: creador,
         }))
       );
     } catch (err: any) {
@@ -78,17 +130,26 @@ const useCuenta = (lensConectado: LensConnected) => {
   };
 
   useEffect(() => {
-    if (flujos?.length < 1) {
+    if (!creador && creator && lensClient) {
+      handleCreador();
+    }
+  }, [creator, lensClient]);
+
+  useEffect(() => {
+    if (flujos?.length < 1 && creador) {
       handleFlujos();
     }
-  }, []);
+  }, [creador]);
 
   return {
-    flujosCargando,
-    flujos,
-    handleMasFlujos,
+    creadorCargando,
     hasMore,
+    flujos,
+    flujosCargando,
+    handleMasFlujos,
     masFlujosCargando,
+    creador,
   };
 };
-export default useCuenta;
+
+export default useCreator;

@@ -10,7 +10,7 @@ import {
   testnet as storageTestnet,
 } from "@lens-protocol/storage-node-client";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
-import { LensConnected } from "./components/Common/types/common.types";
+import { LensConnected, Pantalla } from "./components/Common/types/common.types";
 import { Flujo } from "./components/Modals/types/modals.types";
 
 export const config = createConfig(
@@ -45,6 +45,8 @@ export const ModalContext = createContext<
       setCrearCuenta: (e: SetStateAction<boolean>) => void;
       crearCuenta: boolean;
       storageClient: StorageClient;
+      pantalla: Pantalla;
+      setPantalla: (e: SetStateAction<Pantalla>) => void
     }
   | undefined
 >(undefined);
@@ -57,6 +59,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | undefined>();
   const [connect, setConnect] = useState<boolean>(false);
   const [crearCuenta, setCrearCuenta] = useState<boolean>(false);
+  const [pantalla, setPantalla] = useState<Pantalla>(Pantalla.Chat);
+
   const storageClient = StorageClient.create(storageTestnet);
 
   useEffect(() => {
@@ -93,6 +97,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               crearCuenta,
               setCrearCuenta,
               storageClient,
+              pantalla,
+              setPantalla
             }}
           >
             {children}
