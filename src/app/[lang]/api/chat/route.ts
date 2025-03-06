@@ -13,10 +13,10 @@ export async function POST(req: Request) {
     const res = await fetch(RENDER_URL, {
       method: "POST",
       body: forwardData,
-      
+      headers: {
+        "x-api-key": process.env.RENDER_API_KEY!,
+      },
     });
-
-
 
     if (!res.ok) {
       const errorText = await res.text();
@@ -25,7 +25,6 @@ export async function POST(req: Request) {
     }
 
     let data = await res.json();
-
 
     return NextResponse.json({ data });
   } catch (err: any) {
