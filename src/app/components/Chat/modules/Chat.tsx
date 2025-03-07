@@ -16,14 +16,17 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
   const {
     prompt,
     setPrompt,
-    setMensajes,
     handleSendMessage,
     sendMessageLoading,
+    messagesEndRef,
+    typedMessage,
   } = useChat(
     contexto?.lensConectado!,
     contexto?.clienteLens!,
     contexto?.setMensajes!,
-    contexto?.mensajes!
+    contexto?.mensajes!,
+    contexto?.setAgente!,
+    contexto?.agente!
   );
 
   return (
@@ -35,7 +38,7 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
       }`}
     >
       {(Number(contexto?.mensajes?.length) > 0 || sendMessageLoading) && (
-        <div className="relative w-full h-full overflow-y-scroll flex justify-end items-end py-3 px-1.5">
+        <div className="relative w-full h-full overflow-y-scroll flex justify-start items-start py-3 px-1.5">
           <div className="relative w-full h-fit items-start justify-end flex flex-col gap-3 font-nerdC text-lg">
             {contexto?.mensajes?.map((valor, indice) => {
               return (
@@ -46,6 +49,11 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                       ? "justify-end text-right"
                       : "justify-start text-left"
                   }`}
+                  ref={
+                    indice == contexto?.mensajes?.length - 1
+                      ? messagesEndRef
+                      : null
+                  }
                 >
                   {valor?.usuario !== Usuario.Flujos &&
                   valor?.usuario !== Usuario.NewFlujo ? (
@@ -56,7 +64,10 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                           "bg-black border border-white"
                         }`}
                       >
-                        {valor?.contenido}
+                        {indice === contexto?.mensajes?.length - 1 &&
+                        valor?.usuario == Usuario.Maquina
+                          ? typedMessage
+                          : valor?.contenido}
                       </div>
                       {valor?.action && (
                         <div className="relative text-xxs w-fit h-fit flex px-2.5 items-center justify-center rounded-full bg-ligero">
@@ -110,10 +121,10 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                           color="white"
                         />
                       </div>
-                      <div className="relative w-full h-fit flex items-start justify-start overflow-y-scroll overflow-x-auto bg-gris border border-ligero rounded-md p-2">
-                        <div className="relative w-full h-96 text-sm">
-                          <pre className="flex relative">
-                            <code className="language-json">
+                      <div className="relative w-full h-fit flex items-start justify-start overflow-y-scroll bg-gris border border-ligero rounded-md p-2">
+                        <div className="relative w-[50vw] h-96 text-sm">
+                          <pre className="flex relative w-full h-full">
+                            <code className="language-json flex w-full h-full">
                               {JSON.stringify(valor?.flujo, null, 2)}
                             </code>
                           </pre>
@@ -164,15 +175,25 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
             placeholder={dict?.Home.placeholder}
             onKeyDown={(e) => {
               if (e.key == "Enter" && prompt?.trim() !== "") {
-                setMensajes([
-                  ...(contexto?.mensajes || []),
+                contexto?.setMensajes([
+                  ...(contexto?.mensajes || [])?.filter(
+                    (mensaje) => mensaje !== undefined && mensaje !== null
+                  ),
                   {
                     contenido: prompt,
                     usuario: Usuario.Humano,
                   },
                 ]);
 
-                handleSendMessage();
+                handleSendMessage([
+                  ...(contexto?.mensajes || [])?.filter(
+                    (mensaje) => mensaje !== undefined && mensaje !== null
+                  ),
+                  {
+                    contenido: prompt,
+                    usuario: Usuario.Humano,
+                  },
+                ]);
               }
             }}
           />
@@ -183,14 +204,24 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                 : "opacity-50"
             }`}
             onClick={() => {
-              setMensajes([
-                ...(contexto?.mensajes || []),
+              contexto?.setMensajes([
+                ...(contexto?.mensajes || [])?.filter(
+                  (mensaje) => mensaje !== undefined && mensaje !== null
+                ),
                 {
                   contenido: prompt,
                   usuario: Usuario.Humano,
                 },
               ]);
-              handleSendMessage();
+              handleSendMessage([
+                ...(contexto?.mensajes || [])?.filter(
+                  (mensaje) => mensaje !== undefined && mensaje !== null
+                ),
+                {
+                  contenido: prompt,
+                  usuario: Usuario.Humano,
+                },
+              ]);
             }}
           >
             <div className="relative w-5 h-5 flex">

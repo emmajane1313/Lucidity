@@ -84,7 +84,7 @@ export default function Flujo({ dict }: { dict: any }) {
           <div className="relative w-fit text-xs h-fit flex text-center max-h-40 overflow-y-scroll">
             {flujo?.description}
           </div>
-          <div className="relative w-full flex flex-wrap text-xs h-fit gap-3 items-center justify-between pb-3">
+          <div className="relative w-full flex flex-wrap text-xs h-fit gap-3 items-center justify-center pb-3">
             {flujo?.tags?.map((etiqueta, indice) => {
               return (
                 <div
@@ -96,6 +96,21 @@ export default function Flujo({ dict }: { dict: any }) {
               );
             })}
           </div>
+          {Number(flujo?.links?.length) > 0 && (
+            <div className="relative w-full flex flex-wrap text-xs h-fit gap-3 items-center justify-center pb-3">
+              {flujo?.links?.map((enlace, indice) => {
+                return (
+                  <div
+                    key={indice}
+                    className="relative flex items-center break-all justify-center text-center cursor-pointer text-[#0000FF] w-fit h-fit"
+                    onClick={() => window.open(enlace)}
+                  >
+                    {enlace.length > 20 ? enlace.slice(0, 20) + "..." : enlace}
+                  </div>
+                );
+              })}
+            </div>
+          )}
           <div className="relative flex items-end justify-end w-full h-fit flex-row gap-2">
             <div
               onClick={() => copiarFlujo(flujo?.workflow!)}

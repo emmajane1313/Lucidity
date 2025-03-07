@@ -4,7 +4,7 @@ export const STORAGE_NODE: string = "https://storage-api.testnet.lens.dev";
 
 export const IPFS_REGEX: RegExp = /\b(Qm[1-9A-Za-z]{44}|ba[A-Za-z2-7]{57})\b/;
 export const RENDER_URL: string =
-  "http://localhost:3002/e51f224d-70d3-0f8c-90d5-e456b6ab9822/message";
+  "https://eliza-plugins.onrender.com:5000";
 
 export const LUCIDITY_WORKFLOWS_CONTRACT: `0x${string}` =
   "0xc2843882596aAFeA78434544C8bf25688a7162eB";

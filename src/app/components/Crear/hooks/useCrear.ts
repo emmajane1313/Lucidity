@@ -20,7 +20,13 @@ const useCrear = (
     name?: string;
     tags?: string[];
     setup?: string[];
-  }>();
+    links?: string[];
+  }>({
+    links: [
+      "https://civitai.com/models/125907?modelVersionId=686204",
+      "https://huggingface.co/Kijai/sam2-safetensors/tree/main",
+    ],
+  });
   const [etiqueta, setEtiqueta] = useState<string>("");
   const [valido, setValido] = useState<boolean>(false);
 
@@ -31,10 +37,6 @@ const useCrear = (
       if (contenidoLimpiado) {
         JSON.parse(contenidoLimpiado);
         setValido(true);
-
-        setTimeout(() => {
-          setValido(false);
-        }, 2000);
 
         return true;
       } else {
@@ -68,6 +70,9 @@ const useCrear = (
     ) {
       setError(dict?.Home?.validTags);
       return;
+    } else if (detalles?.links?.filter((link) => !link.includes("https://"))) {
+      setError(dict?.Home?.validEnlaces);
+      return;
     }
 
     setCrearCargando(true);
@@ -91,6 +96,9 @@ const useCrear = (
           setup: detalles?.setup
             ?.filter((set) => set?.trim() !== "")
             ?.join(","),
+          links: detalles?.links?.filter(
+            (link) => link !== undefined && link !== null && link?.trim() !== ""
+          ),
         }),
       });
       const metadata = await responseDetalles.json();
@@ -132,6 +140,7 @@ const useCrear = (
     valido,
     setupAbierto,
     setSetupAbierto,
+    setValido
   };
 };
 

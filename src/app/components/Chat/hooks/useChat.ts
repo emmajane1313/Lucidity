@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { Usuario } from "../types/chat.types";
 import { Flujo } from "../../Modals/types/modals.types";
 import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
@@ -26,30 +26,45 @@ const useChat = (
     flujos?: Flujo[];
     flujo?: object;
     action?: string;
-  }[]
+  }[],
+  setAgente: (
+    e: SetStateAction<{ puerto: number; id: string } | undefined>
+  ) => void,
+  agente: { puerto: number; id: string } | undefined
 ) => {
   const [sendMessageLoading, setSendMessageLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<string>("");
+  const [typedMessage, setTypedMessage] = useState("");
   const profileCache = new Map<string, Account>();
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const handleSendMessage = async () => {
-    if (prompt?.trim() == "") return;
+  const handleSendMessage = async (
+    mensajes: {
+      contenido: string;
+      usuario: Usuario;
+      flujos?: Flujo[];
+      flujo?: object;
+      action?: string;
+    }[]
+  ) => {
+    if (prompt?.trim() == "" || !agente) return;
     setSendMessageLoading(true);
     try {
       const formData = new FormData();
       formData.append("text", prompt);
       formData.append("user", "user");
       setPrompt("");
-      const chat = await fetch(`/api/chat`, {
-        method: "POST",
-        body: formData,
-      });
+      const chat = await fetch(
+        `/api/chat?port=${agente?.puerto}&sessionId=${agente?.id}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const res = await chat.json();
 
       if (res?.data?.length > 0) {
-        let arr = [...mensajes];
-
         let cleanedArray = null;
 
         if (res?.data?.[0]?.action && res?.data?.[0]?.text) {
@@ -67,6 +82,7 @@ const useChat = (
                     description: string;
                     cover: string;
                     setup: string;
+                    links: string[];
                   };
                 }) => {
                   if (item.workflowMetadata?.workflow) {
@@ -115,6 +131,7 @@ const useChat = (
                       cover: item.workflowMetadata?.cover,
                       workflow: JSON.parse(item.workflowMetadata?.workflow),
                       setup: item?.workflowMetadata?.setup?.split(", "),
+                      links: item?.workflowMetadata?.links,
                       profile: profileCache.get(item?.creator),
                     };
                   }
@@ -136,29 +153,32 @@ const useChat = (
             }));
           }
         }
-
-        setMensajes([
-          ...arr,
-          {
-            contenido: res.data?.[0]?.text,
-            usuario: Usuario.Maquina,
-            action: res.data?.[0]?.action,
-          },
-          res?.data?.[1]?.text && {
-            contenido: res?.data?.[1]?.text?.split("\n\n")?.[0]?.trim(),
-            usuario: Usuario.Maquina,
-          },
-          cleanedArray &&
-            (res?.data?.[0]?.action == "GET_WORKFLOW"
-              ? {
-                  flujos: cleanedArray,
-                  usuario: Usuario.Flujos,
-                }
-              : {
-                  flujo: cleanedArray,
-                  usuario: Usuario.NewFlujo,
-                }),
-        ]);
+        setMensajes(
+          [
+            ...mensajes?.filter(
+              (mensaje) => mensaje !== undefined && mensaje !== null
+            ),
+            {
+              contenido: res.data?.[0]?.text,
+              usuario: Usuario.Maquina,
+              action: res.data?.[0]?.action,
+            },
+            res?.data?.[1]?.text && {
+              contenido: res?.data?.[1]?.text?.split("\n\n")?.[0]?.trim(),
+              usuario: Usuario.Maquina,
+            },
+            cleanedArray &&
+              (res?.data?.[0]?.action == "GET_WORKFLOW"
+                ? {
+                    flujos: cleanedArray,
+                    usuario: Usuario.Flujos,
+                  }
+                : {
+                    flujo: cleanedArray,
+                    usuario: Usuario.NewFlujo,
+                  }),
+          ]?.filter((mensaje) => mensaje !== undefined && mensaje !== null)
+        );
       }
     } catch (err: any) {
       console.error(err.message);
@@ -166,13 +186,94 @@ const useChat = (
     setSendMessageLoading(false);
   };
 
+  const conectarAgente = async () => {
+    try {
+      const connect = await fetch(`/api/connect`, {
+        method: "GET",
+      });
+      const res = await connect.json();
+
+      setAgente({
+        id: res?.sessionId,
+        puerto: res?.port,
+      });
+    } catch (err: any) {
+      console.error(err.message);
+    }
+  };
+
+  const disconnectAgent = async () => {
+    if (!agente) return;
+    try {
+      await fetch("/api/disconnect", {
+        method: "POST",
+        body: JSON.stringify({ sessionId: agente.id }),
+        headers: { "Content-Type": "application/json" },
+      });
+      console.log(`❌ Disconnected agent ${agente.id}`);
+    } catch (err) {
+      console.error("Disconnect error:", err);
+    }
+  };
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+
+    const mensajesLimpiados = mensajes?.filter(
+      (mensaje) => mensaje !== undefined && mensaje !== null
+    );
+
+    if (
+      mensajesLimpiados?.length > 0 &&
+      mensajesLimpiados[mensajesLimpiados?.length - 1]?.usuario ==
+        Usuario.Maquina &&
+      mensajesLimpiados[mensajesLimpiados?.length - 1]?.contenido &&
+      typedMessage.trim() == ""
+    ) {
+      const ultimoMensaje =
+        mensajesLimpiados[mensajesLimpiados?.length - 1]?.contenido;
+      let i: number = 0;
+      let mensajeEscribiendo = "";
+      setTypedMessage("");
+
+      const interval = setInterval(() => {
+        if (i < ultimoMensaje.length) {
+          mensajeEscribiendo += ultimoMensaje[i];
+          setTypedMessage(mensajeEscribiendo);
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 30);
+
+      return () => clearInterval(interval);
+    }
+  }, [mensajes]);
+
+  useEffect(() => {
+    if (!agente) {
+      conectarAgente();
+
+      const cleanup = () => disconnectAgent();
+      window.addEventListener("beforeunload", cleanup);
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) disconnectAgent();
+      });
+
+      return () => {
+        window.removeEventListener("beforeunload", cleanup);
+        document.removeEventListener("visibilitychange", cleanup);
+      };
+    }
+  }, [agente]);
+
   return {
-    mensajes,
     prompt,
     setPrompt,
-    setMensajes,
     handleSendMessage,
     sendMessageLoading,
+    messagesEndRef,
+    typedMessage,
   };
 };
 

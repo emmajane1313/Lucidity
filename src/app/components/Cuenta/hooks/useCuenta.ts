@@ -37,6 +37,7 @@ const useCuenta = (lensConectado: LensConnected) => {
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,
           setup: flujo?.workflowMetadata?.setup?.split(", "),
+          links: flujo?.workflowMetadata?.links,
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
           profile: lensConectado?.profile,
         })),
@@ -68,6 +69,7 @@ const useCuenta = (lensConectado: LensConnected) => {
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,
           setup: flujo?.workflowMetadata?.setup?.split(", "),
+          links: flujo?.workflowMetadata?.links,
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
           profile: lensConectado?.profile,
         }))

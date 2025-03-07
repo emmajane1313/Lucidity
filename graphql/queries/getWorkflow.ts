@@ -10,6 +10,7 @@ const WORKFLOW = gql`
         name
         description
         setup
+        links
       }
       creator
       uri

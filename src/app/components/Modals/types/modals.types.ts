@@ -15,7 +15,8 @@ export interface Flujo {
   description: string;
   name: string;
   tags: string[];
-  setup: string;
+  setup: string[];
+  links: string[];
   creator: string;
   profile?: Account;
   counter: string;

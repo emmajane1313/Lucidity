@@ -56,7 +56,6 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
                 }
               );
 
-
               if (result.isErr()) {
                 setBuscarCargando(false);
 
@@ -91,6 +90,7 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
               cover: flujo?.workflowMetadata?.cover,
               workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
               setup: flujo?.workflowMetadata?.setup?.split(", "),
+              links: flujo?.workflowMetadata?.links,
               profile: profileCache.get(flujo?.creator),
             };
           })
@@ -159,6 +159,7 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
               cover: flujo?.workflowMetadata?.cover,
               workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
               setup: flujo?.workflowMetadata?.setup?.split(", "),
+              links: flujo?.workflowMetadata?.links,
               profile: profileCache.get(flujo?.creator),
             };
           })
@@ -228,6 +229,7 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
               cover: flujo?.workflowMetadata?.cover,
               workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
               setup: flujo?.workflowMetadata?.setup?.split(", "),
+              links: flujo?.workflowMetadata?.links,
               profile: profileCache.get(flujo?.creator),
             };
           })

@@ -89,6 +89,7 @@ const useCreator = (creator: string, lensClient: PublicClient) => {
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,
           setup: flujo?.workflowMetadata?.setup?.split(", "),
+          links: flujo?.workflowMetadata?.links,
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
           profile: creador,
         })),
@@ -120,6 +121,7 @@ const useCreator = (creator: string, lensClient: PublicClient) => {
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,
           setup: flujo?.workflowMetadata?.setup?.split(", "),
+          links: flujo?.workflowMetadata?.links,
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
           profile: creador,
         }))

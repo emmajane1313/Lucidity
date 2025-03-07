@@ -21,7 +21,7 @@ const Flujo: FunctionComponent<FlujoProps> = ({
         onClick={() => setFlujo(undefined)}
       >
         <div
-          className="relative w-3/5 border border-brillo flex rounded-md bg-black p-3 cursor-default h-fit flex-col gap-6 items-center justify-start"
+          className="relative w-3/5 border border-brillo flex rounded-md bg-black p-3 cursor-default h-fit max-h-96 overflow-y-scroll flex-col gap-6 items-center justify-start"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="relative w-full h-fit items-end justify-end flex">
@@ -91,10 +91,12 @@ const Flujo: FunctionComponent<FlujoProps> = ({
               </div>
             </div>
           )}
-          <div className="relative w-fit text-xs h-fit flex text-center max-h-40 overflow-y-scroll">
-            {flujo.description}
+          <div className="relative w-full h-fit flex">
+            <div className="relative w-full text-xs h-fit flex text-center max-h-40 overflow-y-scroll">
+              {flujo.description}
+            </div>
           </div>
-          <div className="relative w-full flex flex-wrap text-xs h-fit gap-3 items-center justify-between pb-3">
+          <div className="relative w-full flex flex-wrap text-xs h-fit gap-3 items-center justify-center pb-3">
             {flujo.tags?.map((etiqueta, indice) => {
               return (
                 <div
@@ -106,6 +108,21 @@ const Flujo: FunctionComponent<FlujoProps> = ({
               );
             })}
           </div>
+          {flujo.links?.length > 0 && (
+            <div className="relative w-full flex flex-wrap text-xs h-fit gap-3 items-center justify-center pb-3">
+              {flujo.links?.map((enlace, indice) => {
+                return (
+                  <div
+                    key={indice}
+                    className="relative flex items-center break-all justify-center text-center cursor-pointer text-[#0000FF] w-fit h-fit"
+                    onClick={() => window.open(enlace)}
+                  >
+                    {enlace.length > 20 ? enlace.slice(0, 20) + "..." : enlace}
+                  </div>
+                );
+              })}
+            </div>
+          )}
           <div className="relative flex items-end justify-end w-full h-fit flex-row gap-2">
             <div
               onClick={() => copiarFlujo(flujo.workflow)}
@@ -119,10 +136,10 @@ const Flujo: FunctionComponent<FlujoProps> = ({
               color="white"
             />
           </div>
-          <div className="relative w-full h-fit flex items-start justify-start overflow-y-scroll overflow-x-auto bg-gris border border-ligero rounded-md p-2">
-            <div className="relative w-full h-96 text-sm">
-              <pre className="flex relative">
-                <code className="language-json">
+          <div className="relative w-full h-fit flex items-start justify-start bg-gris border border-ligero rounded-md p-2">
+            <div className="relative w-full h-96 text-sm flex overflow-y-scroll">
+              <pre className="flex relative w-full h-full">
+                <code className="language-json flex w-full h-full">
                   {JSON.stringify(flujo.workflow, null, 2)}
                 </code>
               </pre>

@@ -9,6 +9,7 @@ import { INFURA_GATEWAY, SET_UP } from "@/app/lib/constants";
 import { createPublicClient, http } from "viem";
 import { chains } from "@lens-network/sdk/viem";
 import { FaChevronDown } from "react-icons/fa";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
 const Crear: FunctionComponent<CambioElementoProps> = ({
   dict,
@@ -29,6 +30,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
     handleCrear,
     setupAbierto,
     setSetupAbierto,
+    setValido,
   } = useCrear(
     dict,
     contexto?.setError!,
@@ -82,7 +84,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   e.stopPropagation();
                   if (!e.target.files || e.target.files.length === 0) return;
                   setDetalles({
-                    ...detalles,
+                    ...detalles!,
                     cover: e?.target?.files?.[0],
                   });
                 }}
@@ -90,7 +92,6 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
             </label>
           </div>
         </div>
-
         <div className="relative w-full h-fit flex items-start justify-between gap-3 flex-row">
           <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
             <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
@@ -103,7 +104,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   name: e.target.value,
                 })
               }
-              className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10"
+              className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10 px-2 py-1"
             />
           </div>
           <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
@@ -124,7 +125,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   });
                 }
               }}
-              className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10"
+              className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10 px-2 py-1"
             />
             <div className="relative w-full h-fit flex flex-wrap gap-2 items-start justify-start">
               {detalles?.tags?.map((etiqueta, indice) => {
@@ -217,7 +218,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                 description: e.target.value,
               })
             }
-            className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-40 overflow-y-scroll"
+            className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-40 overflow-y-scroll px-2 py-1"
             style={{
               resize: "none",
             }}
@@ -237,23 +238,25 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                     whiteSpace: "pre",
                   }}
                   value={detalles?.workflow}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    setValido(false);
                     setDetalles({
                       ...detalles!,
                       workflow: e.target.value?.replace(/\\"/g, '"'),
-                    })
-                  }
+                    });
+                  }}
                 ></textarea>
               </div>
               <div className="relative w-full h-full flex items-start justify-start overflow-y-scroll bg-gris border border-ligero rounded-md p-2 ">
                 <div className="relative w-full h-full text-sm overfl">
                   <pre className="flex relative h-full">
                     <code className="language-json whitespace-pre-wrap flex flex-wrap">
-                      {JSON.stringify(
-                        JSON.parse(detalles?.workflow || "{}"),
-                        null,
-                        2
-                      )}
+                      {valido &&
+                        JSON.stringify(
+                          JSON.parse(detalles?.workflow || "{}"),
+                          null,
+                          2
+                        )}
                     </code>
                   </pre>
                   <div className="absolute bottom-0 right-0 w-fit h-fit flex">
@@ -277,6 +280,65 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
               </div>
             </div>
           </div>
+        </div>
+        <div className="relative w-full h-fit flex flex-col items-start justify-start gap-3">
+          <div className="relative w-fit h-fit flex flex-row gap-2 items-center justify-center">
+            <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
+              {dict?.Home?.enlaces}
+            </div>
+            <IoIosAddCircleOutline
+              color="white"
+              size={15}
+              className="cursor-pointer"
+              onClick={() =>
+                setDetalles({
+                  ...detalles,
+                  links: [...(detalles?.links || []), ""],
+                })
+              }
+            />
+          </div>
+          {detalles?.links?.map((link, indice) => {
+            return (
+              <div
+                className="relative w-full h-fit flex flex-row gap-3 items-center justify-between"
+                key={indice}
+              >
+                <div className="relative flex w-full h-fit">
+                  <input
+                    className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10 px-2 py-1"
+                    value={link}
+                    onChange={(e) =>
+                      setDetalles((prev) => {
+                        const det = { ...prev };
+                        let links = [...(det?.links || [])];
+                        links[indice] = e.target.value;
+
+                        det.links = links;
+
+                        return det;
+                      })
+                    }
+                  />
+                </div>
+                <RxCross1
+                  color="white"
+                  size={10}
+                  className="cursor-pointer"
+                  onClick={() =>
+                    setDetalles((prev) => {
+                      const det = { ...prev };
+                      let links = [...(det?.links || [])];
+
+                      det.links = links.filter((_, ind) => ind !== indice);
+
+                      return det;
+                    })
+                  }
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
       <div className="relative w-full h-fit items-center justify-center text-center contextoflex-col flex gap-2">

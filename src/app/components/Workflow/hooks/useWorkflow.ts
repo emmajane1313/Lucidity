@@ -47,7 +47,6 @@ const useWorkflow = (counter: string, lensClient: PublicClient) => {
         };
       }
 
-
       setFlujo({
         tags: data?.data?.workflowCreateds?.[0]?.workflowMetadata?.tags?.split(
           ", "
@@ -62,6 +61,7 @@ const useWorkflow = (counter: string, lensClient: PublicClient) => {
           data?.data?.workflowCreateds?.[0]?.workflowMetadata?.setup?.split(
             ", "
           ),
+        links: data?.data?.workflowCreateds?.[0]?.workflowMetadata?.links,
         workflow: JSON.parse(
           data?.data?.workflowCreateds?.[0]?.workflowMetadata?.workflow
         ),
