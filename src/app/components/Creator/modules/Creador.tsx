@@ -24,6 +24,16 @@ export default function Creador({ dict }: { dict: any }) {
   return (
     <div className="relative w-full flex p-2 sm:p-4 md:p-8 bg-black overflow-none h-[calc(100vh-0.5rem)] h-[calc(100vh-1rem)] h-[calc(100vh-2rem)]">
       <div className="relative w-full h-full flex items-start justify-center pt-5 pb-3 px-1 sm:px-6 bg-oscuro/20 border border-brillo rounded-md">
+        <div className="absolute flex w-full h-full top-0 right-0 rounded-md">
+          <Image
+            src={`${INFURA_GATEWAY}/ipfs/QmdDmGpnz28h8YXS2dzVaQmxsnzHbvUU4AqVNuGe9wR15i`}
+            layout="fill"
+            objectFit="cover"
+            draggable={false}
+            className="rounded-md"
+          />
+        </div>
+        <div className="absolute flex w-full h-full top-0 right-0 rounded-md bg-gris/70"></div>
         <div
           className={`relative w-full pb-10 h-full flex flex-col gap-10 font-nerdC text-white`}
         >

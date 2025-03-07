@@ -23,7 +23,8 @@ const Connect: FunctionComponent<ConnectProps> = ({
     setError!,
     setLensConectado!,
     setCrearCuenta!,
-    setConnect!
+    setConnect!,
+    dict
   );
   return (
     <div
@@ -59,7 +60,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
                 : openOnboarding?.()
             }
           >
-            {isConnected ? "Disconnect" : "Connect"}
+            {isConnected ? dict.Home.disconnect : dict.Home.connect}
           </div>
           <div
             className={`relative flex w-full h-10  border border-brillo rounded-md items-center justify-center text-center text-sm hover:opacity-80 ${
@@ -86,9 +87,9 @@ const Connect: FunctionComponent<ConnectProps> = ({
                 </div>
               </div>
             ) : lensConectado?.profile && address ? (
-              "Log Out Lens"
+              dict.Home.lensOut
             ) : (
-              "Lens Sign In"
+              dict.Home.lensSign
             )}
           </div>
         </div>

@@ -15,9 +15,11 @@ export const getWorkflows = async (
             tags
             name
             description
+            setup
           }
           creator
           uri
+          counter
         }
       }
     `),

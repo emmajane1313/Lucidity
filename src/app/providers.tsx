@@ -10,8 +10,12 @@ import {
   testnet as storageTestnet,
 } from "@lens-protocol/storage-node-client";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
-import { LensConnected, Pantalla } from "./components/Common/types/common.types";
+import {
+  LensConnected,
+  Pantalla,
+} from "./components/Common/types/common.types";
 import { Flujo } from "./components/Modals/types/modals.types";
+import { Usuario } from "./components/Chat/types/chat.types";
 
 export const config = createConfig(
   getDefaultConfig({
@@ -46,7 +50,27 @@ export const ModalContext = createContext<
       crearCuenta: boolean;
       storageClient: StorageClient;
       pantalla: Pantalla;
-      setPantalla: (e: SetStateAction<Pantalla>) => void
+      setPantalla: (e: SetStateAction<Pantalla>) => void;
+      signless: boolean;
+      setSignless: (e: SetStateAction<boolean>) => void;
+      setMensajes: (
+        e: SetStateAction<
+          {
+            contenido: string;
+            usuario: Usuario;
+            flujos?: Flujo[];
+            flujo?: object;
+            action?: string;
+          }[]
+        >
+      ) => void;
+      mensajes: {
+        contenido: string;
+        usuario: Usuario;
+        flujos?: Flujo[];
+        flujo?: object;
+        action?: string;
+      }[];
     }
   | undefined
 >(undefined);
@@ -55,11 +79,21 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [clienteLens, setClienteLens] = useState<PublicClient | undefined>();
   const clienteAlmacenamiento = StorageClient.create(storageTestnet);
   const [lensConectado, setLensConectado] = useState<LensConnected>();
+  const [signless, setSignless] = useState<boolean>(false);
   const [flujo, setFlujo] = useState<Flujo>();
   const [error, setError] = useState<string | undefined>();
   const [connect, setConnect] = useState<boolean>(false);
   const [crearCuenta, setCrearCuenta] = useState<boolean>(false);
   const [pantalla, setPantalla] = useState<Pantalla>(Pantalla.Chat);
+  const [mensajes, setMensajes] = useState<
+    {
+      contenido: string;
+      usuario: Usuario;
+      flujos?: Flujo[];
+      flujo?: object;
+      action?: string;
+    }[]
+  >([]);
 
   const storageClient = StorageClient.create(storageTestnet);
 
@@ -98,7 +132,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               setCrearCuenta,
               storageClient,
               pantalla,
-              setPantalla
+              setPantalla,
+              signless,
+              setSignless,
+              mensajes,
+              setMensajes,
             }}
           >
             {children}

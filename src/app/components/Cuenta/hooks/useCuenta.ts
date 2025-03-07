@@ -32,6 +32,7 @@ const useCuenta = (lensConectado: LensConnected) => {
         ...datos?.data?.workflowCreateds?.map((flujo: any) => ({
           tags: flujo?.workflowMetadata?.tags?.split(", "),
           creator: flujo?.creator,
+          counter: flujo?.counter,
           name: flujo?.workflowMetadata?.name,
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,
@@ -62,6 +63,7 @@ const useCuenta = (lensConectado: LensConnected) => {
         datos?.data?.workflowCreateds?.map((flujo: any) => ({
           tags: flujo?.workflowMetadata?.tags?.split(", "),
           creator: flujo?.creator,
+          counter: flujo?.counter,
           name: flujo?.workflowMetadata?.name,
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,

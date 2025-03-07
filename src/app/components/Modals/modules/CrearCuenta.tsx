@@ -25,16 +25,16 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
       onClick={() => setCreateAccount(false)}
     >
       <div
-        className="pixel-border-5 rounded-md text-windows bg-viol w-96 h-fit text-sm flex items-center justify-start p-3 cursor-default flex-col gap-6 font-nerd"
+        className="rounded-md text-white bg-black border border-brillo w-96 h-fit text-sm flex items-center justify-start p-3 cursor-default flex-col gap-6 font-nerdS"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative w-fit pb-3 h-fit flex items-center justify-center">
-          Create Lens Account
+          {dict.Home.createLens}
         </div>
         <div className="relative w-full h-fit flex flex-col gap-3 items-center justify-center">
           <div className="relative items-center justify-center flex w-fit h-fit">
             <label
-              className="relative w-20 rounded-full h-20 flex items-center justify-center border border-windows cursor-pointer bg-windows"
+              className="relative w-20 rounded-full h-20 flex items-center justify-center border border-brillo cursor-pointer bg-black"
               onClick={(e) => {
                 e.stopPropagation();
               }}
@@ -70,7 +70,7 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
           </div>
           <div className="relative w-full h-fit flex items-start justify-between flex-row gap-3">
             <div className="relative w-full h-fit flex flex-col gap-1.5 items-start justify-start">
-              <div className="relative w-fit h-fit flex">Username</div>
+              <div className="relative w-fit h-fit flex"> {dict.Home.username}</div>
               <input
                 disabled={accountLoading}
                 onChange={(e) =>
@@ -79,12 +79,12 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
                     username: e.target.value,
                   })
                 }
-                className="relative w-full text-viol bg-windows h-8 border border-windows focus:outline-none p-1"
+                className="relative w-full bg-black h-8 border border-brillo focus:outline-none p-1"
                 value={account?.username}
               />
             </div>
             <div className="relative w-full h-fit flex flex-col gap-1.5 items-start justify-start">
-              <div className="relative w-fit h-fit flex">Local Name</div>
+              <div className="relative w-fit h-fit flex">{dict.Home.localname}</div>
               <input
                 disabled={accountLoading}
                 onChange={(e) =>
@@ -93,7 +93,7 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
                     localname: e.target.value,
                   })
                 }
-                className="relative w-full text-viol bg-windows h-8 border border-windows focus:outline-none p-1"
+                className="relative w-full bg-black h-8 border border-brillo focus:outline-none p-1"
                 value={account?.localname}
               />
             </div>
@@ -108,7 +108,7 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
                   bio: e.target.value,
                 })
               }
-              className="relative w-full text-viol bg-windows h-14 overflow-y-scroll border border-windows focus:outline-none p-1"
+              className="relative w-full bg-black h-14 overflow-y-scroll border border-brillo focus:outline-none p-1"
               value={account?.bio}
               style={{
                 resize: "none",
@@ -117,7 +117,7 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
           </div>
         </div>
         <div
-          className={`relative px-3 py-1 flex items-center justify-center rounded-md bg-windows text-viol w-28 h-8 ${
+          className={`relative px-3 py-1 flex items-center justify-center rounded-md bg-black border border-brillo w-28 h-8 ${
             !accountLoading && "cursor-pointer active:scale-95 hover:opacity-70"
           }`}
           onClick={() => !accountLoading && handleCreateAccount()}
@@ -135,7 +135,7 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
               />{" "}
             </svg>
           ) : (
-            "Create"
+            dict.Home.create
           )}
         </div>
       </div>

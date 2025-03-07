@@ -6,6 +6,7 @@ import Flujo from "./Flujo";
 import Connect from "./Connect";
 import CrearCuenta from "./CrearCuenta";
 import Error from "./Error";
+import Signless from "./Signless";
 
 export default function Modals({ dict }: { dict: any }) {
   const contexto = useContext(ModalContext);
@@ -37,6 +38,13 @@ export default function Modals({ dict }: { dict: any }) {
           lensConnected={contexto?.lensConectado}
           storageClient={contexto?.storageClient}
           setNotification={contexto?.setError}
+        />
+      )}
+      {contexto?.signless && (
+        <Signless
+          setSignless={contexto?.setSignless}
+          lensConnected={contexto?.lensConectado}
+          dict={dict}
         />
       )}
       {contexto?.error && (

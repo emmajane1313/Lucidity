@@ -9,9 +9,11 @@ const ACCOUNT_WORKFLOWS = gql`
         tags
         name
         description
+        setup
       }
       creator
       uri
+      counter
     }
   }
 `;

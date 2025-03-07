@@ -14,26 +14,30 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
   const contexto = useContext(ModalContext);
   const { copiar, copiarFlujo, descargar } = useFlujo();
   const {
-    mensajes,
     prompt,
     setPrompt,
     setMensajes,
     handleSendMessage,
     sendMessageLoading,
-  } = useChat(contexto?.lensConectado!, contexto?.clienteLens!);
+  } = useChat(
+    contexto?.lensConectado!,
+    contexto?.clienteLens!,
+    contexto?.setMensajes!,
+    contexto?.mensajes!
+  );
 
   return (
     <div
-      className={`relative w-full pb-10 h-full min-h-screen flex flex-col gap-10 ${
-        mensajes?.length > 0 || sendMessageLoading
+      className={`relative w-full pb-3 h-full flex flex-col gap-10 ${
+        Number(contexto?.mensajes?.length) > 0 || sendMessageLoading
           ? "justify-between items-start"
           : "items-center justify-center"
       }`}
     >
-      {(mensajes?.length > 0 || sendMessageLoading) && (
-        <div className="relative w-full h-full overflow-y-scroll flex justify-end items-end">
+      {(Number(contexto?.mensajes?.length) > 0 || sendMessageLoading) && (
+        <div className="relative w-full h-full overflow-y-scroll flex justify-end items-end py-3 px-1.5">
           <div className="relative w-full h-fit items-start justify-end flex flex-col gap-3 font-nerdC text-lg">
-            {mensajes?.map((valor, indice) => {
+            {contexto?.mensajes?.map((valor, indice) => {
               return (
                 <div
                   key={indice}
@@ -48,7 +52,8 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                     <div className="relative w-fit flex h-fit flex-col gap-2 items-start justify-start">
                       <div
                         className={`relative w-fit p-2 rounded-md h-fit flex items-center justify-center  ${
-                          valor?.usuario == Usuario.Humano && "bg-black"
+                          valor?.usuario == Usuario.Humano &&
+                          "bg-black border border-white"
                         }`}
                       >
                         {valor?.contenido}
@@ -140,14 +145,14 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
 
       <div
         className={`relative w-full h-fit flex ${
-          mensajes?.length > 0 || sendMessageLoading
+          Number(contexto?.mensajes?.length) > 0 || sendMessageLoading
             ? "items-start justify-start"
             : "items-center justify-center"
         } `}
       >
         <div
           className={`relative flex flex-row gap-2 items-start justify-start rounded-md bg-black h-10 px-2 py-1 ${
-            mensajes?.length > 0 || sendMessageLoading
+            Number(contexto?.mensajes?.length) > 0 || sendMessageLoading
               ? "w-full"
               : "w-full sm:w-3/4 lg:w-1/2"
           }`}
@@ -160,7 +165,7 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
             onKeyDown={(e) => {
               if (e.key == "Enter" && prompt?.trim() !== "") {
                 setMensajes([
-                  ...mensajes,
+                  ...(contexto?.mensajes || []),
                   {
                     contenido: prompt,
                     usuario: Usuario.Humano,
@@ -179,7 +184,7 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
             }`}
             onClick={() => {
               setMensajes([
-                ...mensajes,
+                ...(contexto?.mensajes || []),
                 {
                   contenido: prompt,
                   usuario: Usuario.Humano,

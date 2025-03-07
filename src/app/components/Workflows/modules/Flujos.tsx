@@ -18,7 +18,7 @@ const Flujos: FunctionComponent<FlujosProps> = ({
   return (
     <div className="relative w-full h-full overflow-y-scroll items-start justify-between flex">
       {!flujosCargando && flujos?.length < 1 ? (
-        <div className="relative w-full h-full flex items-center justify-center text-sm text-center text-white font-nerd">
+        <div className="relative w-full h-full flex items-center justify-center text-sm text-center text-white font-nerdS">
           {texto}
         </div>
       ) : flujosCargando || otroCargando ? (

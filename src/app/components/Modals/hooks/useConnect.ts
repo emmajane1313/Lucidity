@@ -15,7 +15,8 @@ const useConnect = (
   setError: (e: SetStateAction<string | undefined>) => void,
   setLensConectado: (e: SetStateAction<LensConnected | undefined>) => void,
   setCrearCuenta: (e: SetStateAction<boolean>) => void,
-  setConnect: (e: SetStateAction<boolean>) => void
+  setConnect: (e: SetStateAction<boolean>) => void,
+  dict: any
 ) => {
   const [lensCargando, setLensCargando] = useState<boolean>(false);
 
@@ -49,7 +50,7 @@ const useConnect = (
 
         if (authenticated.isErr()) {
           console.error(authenticated.error);
-          setError?.("Error Authenticating");
+          setError?.(dict.Home.auth);
           setLensCargando(false);
           return;
         }
@@ -97,7 +98,7 @@ const useConnect = (
 
         if (authenticatedOnboarding.isErr()) {
           console.error(authenticatedOnboarding.error);
-          setError?.("Error Onboarding");
+          setError?.(dict.Home.onboard);
 
           setLensCargando(false);
           return;
@@ -139,13 +140,11 @@ const useConnect = (
     setLensCargando(false);
   };
 
-
   useEffect(() => {
     if (!lensConectado?.address && lensConectado?.profile && lensClient) {
       salir();
     }
   }, [lensConectado?.address]);
-
 
   return {
     lensCargando,

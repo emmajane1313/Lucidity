@@ -27,11 +27,25 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
         abrirBar ? "w-[calc(100vw-3.5rem)] sm:w-fit pl-2 pr-3" : "w-10 px-2"
       }`}
     >
+      <div className="absolute top-0 left-0 w-full h-full flex">
+        <Image
+          draggable={false}
+          layout="fill"
+          objectFit="cover"
+          src={`${INFURA_GATEWAY}/ipfs/QmRtdnvSVDVC8oAd9MHaHz55m1uXUEWBMVW8eFfBnqKPjW`}
+        />
+      </div>
+      <div
+        className={`absolute top-0 left-0 w-full h-full flex ${
+          abrirBar ? "bg-black/70" : "bg-black/20"
+        }`}
+      ></div>
       <div className="relative w-fit h-fit flex items-center justify-center flex-col gap-2">
         <div
           className="relative w-fit h-fit flex items-center justify-center cursor-pointer font-arc text-lg uppercase text-center text-white"
           onClick={() => {
             router.push("/");
+            contexto?.setPantalla(Pantalla.Chat);
             setAbrirBar(false);
           }}
         >
@@ -81,7 +95,10 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
         <div className="relative w-fit h-fit flex items-center justify-center">
           <div
             className="relative w-fit hover:opacity-70 flex-row gap-3 h-fit flex items-center justify-center cursor-pointer"
-            onClick={() =>{ router.push("/"); contexto?.setPantalla(Pantalla.Cuenta)}}
+            onClick={() => {
+              router.push("/");
+              contexto?.setPantalla(Pantalla.Cuenta);
+            }}
             title={dict?.Home.Cuenta}
           >
             <div className="relative flex w-fit h-fit">
@@ -137,7 +154,10 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
           <div className="relative w-full h-fit flex justify-start items-start text-sm text-left">
             <div
               className="relative whitespace-nowrap w-fit h-fit flex text-noche hover:text-brillo font-nerdS cursor-pointer"
-              onClick={() => contexto?.setPantalla(Pantalla.Info)}
+              onClick={() => {
+                contexto?.setPantalla(Pantalla.Info);
+                router.push("/info");
+              }}
             >
               {dict?.Home[Pantalla.Info]}
             </div>

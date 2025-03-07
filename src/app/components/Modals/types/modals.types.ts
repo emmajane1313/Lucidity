@@ -18,6 +18,7 @@ export interface Flujo {
   setup: string;
   creator: string;
   profile?: Account;
+  counter: string;
 }
 
 export type ErrorProps = {
@@ -45,5 +46,11 @@ export type CrearCuentaProps = {
   setCreateAccount: (e: SetStateAction<boolean>) => void;
   setNotification: (e: SetStateAction<string | undefined>) => void;
   storageClient: StorageClient;
+  dict: any;
+};
+
+export type SignlessProps = {
+  lensConnected: LensConnected | undefined;
+  setSignless: (e: SetStateAction<boolean>) => void;
   dict: any;
 };

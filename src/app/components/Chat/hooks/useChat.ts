@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { Usuario } from "../types/chat.types";
 import { Flujo } from "../../Modals/types/modals.types";
 import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
@@ -6,16 +6,28 @@ import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { LensConnected } from "../../Common/types/common.types";
 import { STORAGE_NODE } from "@/app/lib/constants";
 
-const useChat = (lensConnected: LensConnected, lensClient: PublicClient) => {
-  const [mensajes, setMensajes] = useState<
-    {
-      contenido: string;
-      usuario: Usuario;
-      flujos?: Flujo[];
-      flujo?: object;
-      action?: string;
-    }[]
-  >([]);
+const useChat = (
+  lensConnected: LensConnected,
+  lensClient: PublicClient,
+  setMensajes: (
+    e: SetStateAction<
+      {
+        contenido: string;
+        usuario: Usuario;
+        flujos?: Flujo[];
+        flujo?: object;
+        action?: string;
+      }[]
+    >
+  ) => void,
+  mensajes: {
+    contenido: string;
+    usuario: Usuario;
+    flujos?: Flujo[];
+    flujo?: object;
+    action?: string;
+  }[]
+) => {
   const [sendMessageLoading, setSendMessageLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<string>("");
   const profileCache = new Map<string, Account>();
@@ -35,8 +47,6 @@ const useChat = (lensConnected: LensConnected, lensClient: PublicClient) => {
 
       const res = await chat.json();
 
-      console.log({ res });
-
       if (res?.data?.length > 0) {
         let arr = [...mensajes];
 
@@ -49,6 +59,7 @@ const useChat = (lensConnected: LensConnected, lensClient: PublicClient) => {
               JSON.parse(match[1].trim()).map(
                 async (item: {
                   creator: string;
+                  counter: string;
                   workflowMetadata: {
                     workflow: string;
                     name: string;
@@ -97,6 +108,7 @@ const useChat = (lensConnected: LensConnected, lensClient: PublicClient) => {
 
                     return {
                       creator: item.creator,
+                      counter: item.counter,
                       tags: item.workflowMetadata?.tags?.split(", "),
                       name: item.workflowMetadata?.name,
                       description: item.workflowMetadata?.description,
@@ -124,8 +136,6 @@ const useChat = (lensConnected: LensConnected, lensClient: PublicClient) => {
             }));
           }
         }
-
-        console.log(cleanedArray)
 
         setMensajes([
           ...arr,

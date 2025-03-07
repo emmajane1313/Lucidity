@@ -5,6 +5,7 @@ import { INFURA_GATEWAY } from "@/app/lib/constants";
 import useFlujo from "../hooks/useFlujo";
 import { IoMdDownload } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import { PiArrowsOutSimpleDuotone } from "react-icons/pi";
 
 const Flujo: FunctionComponent<FlujoProps> = ({
   setFlujo,
@@ -14,7 +15,7 @@ const Flujo: FunctionComponent<FlujoProps> = ({
   const router = useRouter();
   const { copiar, copiarFlujo, descargar } = useFlujo();
   return (
-    <div className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden grid grid-flow-col auto-cols-auto w-full h-auto items-center justify-center text-white font-nerd">
+    <div className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden grid grid-flow-col auto-cols-auto w-full h-auto items-center justify-center text-white font-nerdS">
       <div
         className="w-full h-screen text-sm flex items-center justify-center cursor-pointer"
         onClick={() => setFlujo(undefined)}
@@ -23,6 +24,17 @@ const Flujo: FunctionComponent<FlujoProps> = ({
           className="relative w-3/5 border border-brillo flex rounded-md bg-black p-3 cursor-default h-fit flex-col gap-6 items-center justify-start"
           onClick={(e) => e.stopPropagation()}
         >
+          <div className="relative w-full h-fit items-end justify-end flex">
+            <PiArrowsOutSimpleDuotone
+              onClick={() => {
+                setFlujo(undefined);
+                router.push(`/workflow/${flujo.counter}`);
+              }}
+              className="relative flex w-fit h-fit cursor-pointer"
+              color="white"
+              size={20}
+            />
+          </div>
           <div className="relative w-fit h-fit flex items-center justify-center">
             {flujo.name}
           </div>
