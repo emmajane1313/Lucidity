@@ -5,9 +5,8 @@ export async function POST(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const port = searchParams.get("port");
-    const sessionId = searchParams.get("sessionId");
 
-    if (!port || !sessionId) {
+    if (!port) {
       return NextResponse.json(
         { error: "⛔ Falta el puerto o sessionId" },
         { status: 400 }
@@ -31,6 +30,7 @@ export async function POST(req: Request) {
         },
       }
     );
+
 
     if (!res.ok) {
       const errorText = await res.text();

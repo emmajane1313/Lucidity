@@ -59,7 +59,7 @@ const useConnect = (
 
         let picture = "";
 
-        try {
+        if (accounts.value.items?.[0]?.account?.metadata?.picture) {
           const cadena = await fetch(
             `${STORAGE_NODE}/${
               accounts.value.items?.[0]?.account?.metadata?.picture?.split(
@@ -72,8 +72,6 @@ const useConnect = (
             const json = await cadena.json();
             picture = json.item;
           }
-        } catch (err: any) {
-          console.error(err.message);
         }
 
         setLensConectado?.({

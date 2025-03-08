@@ -125,7 +125,7 @@ const useCrearCuenta = (
             if (ownerSigner?.isOk()) {
               let picture = "";
 
-              try {
+              if (newAcc.value?.metadata?.picture) {
                 const cadena = await fetch(
                   `${STORAGE_NODE}/${
                     newAcc.value?.metadata?.picture?.split("lens://")?.[1]
@@ -136,8 +136,6 @@ const useCrearCuenta = (
                   const json = await cadena.json();
                   picture = json.item;
                 }
-              } catch (err: any) {
-                console.error(err.message);
               }
 
               setLensConnected?.({

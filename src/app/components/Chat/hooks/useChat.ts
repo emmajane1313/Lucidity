@@ -54,24 +54,21 @@ const useChat = (
       formData.append("text", prompt);
       formData.append("user", "user");
       setPrompt("");
-      const chat = await fetch(
-        `/api/chat?port=${agente?.puerto}&sessionId=${agente?.id}`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
+      const chat = await fetch(`/api/chat?port=${agente?.puerto}`, {
+        method: "POST",
+        body: formData,
+      });
+      setTypedMessage("");
       const res = await chat.json();
 
       if (res?.data?.length > 0) {
         let cleanedArray = null;
 
-        if (res?.data?.[0]?.action && res?.data?.[0]?.text) {
+        if (res?.data?.[0]?.action && res?.data?.[1]?.text) {
           if (res?.data?.[0]?.action == "GET_WORKFLOW") {
             const match = res?.data?.[1]?.text.match(/\n\n(\[.*?\])$/);
             cleanedArray = await Promise.all(
-              JSON.parse(match[1].trim()).map(
+              JSON.parse(match?.[1].trim()).map(
                 async (item: {
                   creator: string;
                   counter: string;
@@ -153,6 +150,7 @@ const useChat = (
             }));
           }
         }
+        
         setMensajes(
           [
             ...mensajes?.filter(
@@ -189,13 +187,14 @@ const useChat = (
   const conectarAgente = async () => {
     try {
       const connect = await fetch(`/api/connect`, {
-        method: "GET",
+        method: "POST",
       });
+
       const res = await connect.json();
 
       setAgente({
-        id: res?.sessionId,
-        puerto: res?.port,
+        id: res?.data?.sessionId,
+        puerto: res?.data?.port,
       });
     } catch (err: any) {
       console.error(err.message);
@@ -204,15 +203,17 @@ const useChat = (
 
   const disconnectAgent = async () => {
     if (!agente) return;
+    console.log("🚪 Intentando desconectar agente:", agente.id);
+
     try {
       await fetch("/api/disconnect", {
         method: "POST",
         body: JSON.stringify({ sessionId: agente.id }),
         headers: { "Content-Type": "application/json" },
+        keepalive: true,
       });
-      console.log(`❌ Disconnected agent ${agente.id}`);
-    } catch (err) {
-      console.error("Disconnect error:", err);
+    } catch (err: any) {
+      console.error(err.message);
     }
   };
 
@@ -234,7 +235,7 @@ const useChat = (
         mensajesLimpiados[mensajesLimpiados?.length - 1]?.contenido;
       let i: number = 0;
       let mensajeEscribiendo = "";
-      setTypedMessage("");
+
 
       const interval = setInterval(() => {
         if (i < ultimoMensaje.length) {
@@ -246,6 +247,7 @@ const useChat = (
         }
       }, 30);
 
+      setTypedMessage("");
       return () => clearInterval(interval);
     }
   }, [mensajes]);
@@ -254,15 +256,14 @@ const useChat = (
     if (!agente) {
       conectarAgente();
 
-      const cleanup = () => disconnectAgent();
-      window.addEventListener("beforeunload", cleanup);
+      window.addEventListener("beforeunload", disconnectAgent);
       document.addEventListener("visibilitychange", () => {
         if (document.hidden) disconnectAgent();
       });
 
       return () => {
-        window.removeEventListener("beforeunload", cleanup);
-        document.removeEventListener("visibilitychange", cleanup);
+        window.removeEventListener("beforeunload", disconnectAgent);
+        document.removeEventListener("visibilitychange", disconnectAgent);
       };
     }
   }, [agente]);

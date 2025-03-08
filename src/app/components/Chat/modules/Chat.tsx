@@ -65,7 +65,7 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                         }`}
                       >
                         {indice === contexto?.mensajes?.length - 1 &&
-                        valor?.usuario == Usuario.Maquina
+                        valor?.usuario == Usuario.Maquina && typedMessage.trim() !== ""
                           ? typedMessage
                           : valor?.contenido}
                       </div>

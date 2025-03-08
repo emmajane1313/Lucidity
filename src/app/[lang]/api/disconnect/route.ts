@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   try {
     const { sessionId } = await req.json();
 
-    const res = await fetch(RENDER_URL + `/disconnect`, {
+    const res = await fetch(RENDER_URL + `:5000/disconnect`, {
       method: "POST",
       body: JSON.stringify({ sessionId }),
       headers: {
