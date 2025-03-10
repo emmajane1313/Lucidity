@@ -29,18 +29,24 @@ export async function POST(req: Request) {
         headers: {
           "x-api-key": process.env.RENDER_API_KEY!,
         },
+        redirect: "manual",
       }
     );
 
-    console.log({res})
+    if (res.redirected) {
+      return NextResponse.json(
+        { error: "La API está redirigiendo la solicitud", redirectTo: res.url },
+        { status: 500 }
+      );
+    }
 
     if (!res.ok) {
       // const errorText = await res.text();
       // console.error("Error from Eliza:", errorText);
       // throw new Error("Failed to call Eliza");
-      return NextResponse.json({ res });
-    }
 
+      return NextResponse.json({ error: await res.text() }, { status: 500 });
+    }
 
     let data = await res.json();
     return NextResponse.json({ data });
