@@ -71,19 +71,15 @@ export const ModalContext = createContext<
         flujo?: object;
         action?: string;
       }[];
-      agente: { puerto: number; id: string } | undefined;
-      setAgente: (
-        e: SetStateAction<{ puerto: number; id: string } | undefined>
-      ) => void;
+      agente: string | undefined;
+      setAgente: (e: SetStateAction<string | undefined>) => void;
     }
   | undefined
 >(undefined);
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [clienteLens, setClienteLens] = useState<PublicClient | undefined>();
-  const [agente, setAgente] = useState<
-    { puerto: number; id: string } | undefined
-  >();
+  const [agente, setAgente] = useState<string | undefined>();
   const clienteAlmacenamiento = StorageClient.create(storageTestnet);
   const [lensConectado, setLensConectado] = useState<LensConnected>();
   const [signless, setSignless] = useState<boolean>(false);

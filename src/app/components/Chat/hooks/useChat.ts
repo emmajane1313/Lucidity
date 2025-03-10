@@ -27,10 +27,8 @@ const useChat = (
     flujo?: object;
     action?: string;
   }[],
-  setAgente: (
-    e: SetStateAction<{ puerto: number; id: string } | undefined>
-  ) => void,
-  agente: { puerto: number; id: string } | undefined
+  setAgente: (e: SetStateAction<string | undefined>) => void,
+  agente: string | undefined
 ) => {
   const [sendMessageLoading, setSendMessageLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<string>("");
@@ -47,17 +45,21 @@ const useChat = (
       action?: string;
     }[]
   ) => {
-    if (prompt?.trim() == "" || !agente) return;
+    if (prompt?.trim() == "") return;
     setSendMessageLoading(true);
     try {
       const formData = new FormData();
       formData.append("text", prompt);
       formData.append("user", "user");
       setPrompt("");
-      const chat = await fetch(`/api/chat?port=${agente?.puerto}`, {
+      const chat = await fetch(`/api/chat`, {
         method: "POST",
         body: formData,
       });
+      // const chat = await fetch(`/api/chat?sessionId=${agente}`, {
+      //   method: "POST",
+      //   body: formData,
+      // });
       setTypedMessage("");
       const res = await chat.json();
 
@@ -150,7 +152,7 @@ const useChat = (
             }));
           }
         }
-        
+
         setMensajes(
           [
             ...mensajes?.filter(
@@ -184,38 +186,35 @@ const useChat = (
     setSendMessageLoading(false);
   };
 
-  const conectarAgente = async () => {
-    try {
-      const connect = await fetch(`/api/connect`, {
-        method: "POST",
-      });
+  // const conectarAgente = async () => {
+  //   try {
+  //     const connect = await fetch(`/api/connect`, {
+  //       method: "POST",
+  //     });
 
-      const res = await connect.json();
+  //     const res = await connect.json();
 
-      setAgente({
-        id: res?.data?.sessionId,
-        puerto: res?.data?.port,
-      });
-    } catch (err: any) {
-      console.error(err.message);
-    }
-  };
+  //     setAgente(res?.data?.sessionId);
+  //   } catch (err: any) {
+  //     console.error(err.message);
+  //   }
+  // };
 
-  const disconnectAgent = async () => {
-    if (!agente) return;
-    console.log("🚪 Intentando desconectar agente:", agente.id);
+  // const disconnectAgent = async () => {
+  //   if (!agente) return;
+  //   console.log("🚪 Intentando desconectar agente:", agente);
 
-    try {
-      await fetch("/api/disconnect", {
-        method: "POST",
-        body: JSON.stringify({ sessionId: agente.id }),
-        headers: { "Content-Type": "application/json" },
-        keepalive: true,
-      });
-    } catch (err: any) {
-      console.error(err.message);
-    }
-  };
+  //   try {
+  //     await fetch("/api/disconnect", {
+  //       method: "POST",
+  //       body: JSON.stringify({ sessionId: agente }),
+  //       headers: { "Content-Type": "application/json" },
+  //       keepalive: true,
+  //     });
+  //   } catch (err: any) {
+  //     console.error(err.message);
+  //   }
+  // };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -236,7 +235,6 @@ const useChat = (
       let i: number = 0;
       let mensajeEscribiendo = "";
 
-
       const interval = setInterval(() => {
         if (i < ultimoMensaje.length) {
           mensajeEscribiendo += ultimoMensaje[i];
@@ -252,21 +250,21 @@ const useChat = (
     }
   }, [mensajes]);
 
-  useEffect(() => {
-    if (!agente) {
-      conectarAgente();
+  // useEffect(() => {
+  //   if (!agente) {
+  //     conectarAgente();
 
-      window.addEventListener("beforeunload", disconnectAgent);
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden) disconnectAgent();
-      });
+  // window.addEventListener("beforeunload", disconnectAgent);
+  // document.addEventListener("visibilitychange", () => {
+  //   if (document.hidden) disconnectAgent();
+  // });
 
-      return () => {
-        window.removeEventListener("beforeunload", disconnectAgent);
-        document.removeEventListener("visibilitychange", disconnectAgent);
-      };
-    }
-  }, [agente]);
+  // return () => {
+  //   window.removeEventListener("beforeunload", disconnectAgent);
+  //   document.removeEventListener("visibilitychange", disconnectAgent);
+  // };
+  // }
+  // }, [agente]);
 
   return {
     prompt,

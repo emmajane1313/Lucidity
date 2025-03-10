@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST() {
   try {
-    const res = await fetch(RENDER_URL + ":5000/connect", {
+    const res = await fetch(RENDER_URL + "/connect", {
       method: "POST",
       headers: {
         "x-api-key": process.env.RENDER_API_KEY!,
@@ -18,6 +18,8 @@ export async function POST() {
     }
 
     let data = await res.json();
+
+
 
     return NextResponse.json({ data });
   } catch (err: any) {
