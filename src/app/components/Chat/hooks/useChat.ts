@@ -63,7 +63,7 @@ const useChat = (
       // });
       setTypedMessage("");
       const res = await chat.json();
-
+      console.log({res})
       if (res?.data?.length > 0) {
         let cleanedArray = null;
 
