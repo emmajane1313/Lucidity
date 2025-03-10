@@ -56,6 +56,7 @@ const useChat = (
         method: "POST",
         body: formData,
       });
+      console.log({chat})
       // const chat = await fetch(`/api/chat?sessionId=${agente}`, {
       //   method: "POST",
       //   body: formData,

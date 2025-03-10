@@ -35,9 +35,10 @@ export async function POST(req: Request) {
     console.log({res})
 
     if (!res.ok) {
-      const errorText = await res.text();
-      console.error("Error from Eliza:", errorText);
-      throw new Error("Failed to call Eliza");
+      // const errorText = await res.text();
+      // console.error("Error from Eliza:", errorText);
+      // throw new Error("Failed to call Eliza");
+      return NextResponse.json({ res });
     }
 
 
