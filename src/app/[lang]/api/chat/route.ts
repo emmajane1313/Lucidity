@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
     const res = await fetch(
       // `${RENDER_URL}/chat/${sessionId}`,
-      `${RENDER_URL}/chat`,
+      `${RENDER_URL}/e51f224d-70d3-0f8c-90d5-e456b6ab9822/message`,
       {
         method: "POST",
         body: forwardData,
