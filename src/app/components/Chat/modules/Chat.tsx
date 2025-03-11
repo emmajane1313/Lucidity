@@ -58,6 +58,11 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
           }
         />
       )}
+      {Number(contexto?.mensajes?.length) == 0 && !sendMessageLoading && (
+        <div className="relative w-fit h-fit flex text-center text-white font-count uppercase text-xl">
+          {dict.Home.raid}
+        </div>
+      )}
       <div
         className={`relative w-full h-fit p-6 flex ${
           (Number(contexto?.mensajes?.length) > 0 || sendMessageLoading) &&

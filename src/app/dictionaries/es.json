@@ -47,13 +47,13 @@
     "like": "Me Gusta",
     "mirror": "Republicar",
     "commentOn": "Comentar sobre",
-    "info1": "El descubrimiento es uno de esos problemas ocultos.\n\nConstruimos vastos repositorios de conocimiento compartido—herramientas, flujos de trabajo, técnicas—pero luego dejamos que la gente tropiece por bosques oscuros de contenido mal etiquetado, búsquedas defectuosas y resultados sin contexto.\n\nLucidity resuelve esto para los flujos de trabajo de ComfyStream, ofreciendo una interfaz conversacional que entiende lo que intentas lograr en lugar de simplemente coincidir con palabras clave. Puedes discutir tus intenciones creativas, recibir recomendaciones de la experiencia colectiva de la comunidad y proporcionar comentarios que ayuden a refinar el sistema para todos los demás.",
-    "info2": "No se trata de hacer las cosas 'encantadoras' o 'sin fisuras'—se trata de reducir la fricción en el camino entre la imaginación y la implementación.\n\nCuando los creadores pasan menos tiempo buscando el flujo de trabajo adecuado y más tiempo creando, todos se benefician del trabajo resultante. Lucidity existe para hacer que el dominio público de los flujos de trabajo de ComfyStream sea genuinamente público—no solo técnicamente disponible, sino prácticamente accesible.",
-    "enlaces": "Añade Los Enlaces de Los Modelos y Loras",
+    "info1": "Los flujos de trabajo Comfy transforman vídeos en tiempo real.",
+    "info2": "Después de incontables experimentos y descubrimientos, están dispersos por hilos de Discord, enterrados en foros, perdidos en repositorios aleatorios. \n\nHemos creado agentes de IA para ayudar a ordenarlos. No son cerebros mágicos de AGI, solo herramientas que comparan lo que intentas crear con lo que la comunidad ya ha descubierto. Diles lo que buscas y te mostrarán flujos de trabajo que funcionan.\n\nOlvídate de buscar en publicaciones de foros de 2022. Se acabaron los hilos de 'alguien ha resuelto esto?' que murieron sin respuestas. Los agentes trazan rutas que otros creadores ya han abierto. Sorteando el tráfico para llevarte a flujos de trabajo que hacen todo lo que necesitas.",
     "agent": "Agente: Pixel",
     "user": "Usuario",
     "search": "Buscar Flujos",
-    "discovery": "Descubrimiento Agéntico"
+    "discovery": "Descubrimiento Agéntico",
+    "raid": "saqueando el alijo secreto de flujos de trabajo de los veteranos"
   },
   "404": {
     "nada": "Error 404: La página ha sido secuestrada por NPCs rebeldes. Estamos negociando su liberación."
