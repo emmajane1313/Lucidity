@@ -17,10 +17,10 @@ const Signless: FunctionComponent<SignlessProps> = ({
       onClick={() => setSignless(false)}
     >
       <div
-        className="w-96 h-fit text-sm text-white bg-black border border-brillo rounded-md font-nerdS flex items-center justify-start p-3 cursor-default flex-col gap-10"
+        className="w-96 h-fit text-sm text-white bg-black border border-brillo rounded-md font-dep flex items-center justify-start p-3 cursor-default flex-col gap-10"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative w-fit pb-3 h-fit flex items-center justify-center font-nerdC uppercase text-center">
+        <div className="relative w-fit pb-3 h-fit flex items-center justify-center font-dep uppercase text-center">
           {dict.Home.signless}
         </div>
         <div

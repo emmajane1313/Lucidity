@@ -8,12 +8,12 @@
     "Info": "Sobre Lucidity",
     "copiar": "Copiar",
     "copiado": "¡Copiado!",
-    "buscar": "Buscar Flujos de Trabajo",
+    "buscar": "Buscar Flujos",
     "term": "No flujos encontrados, ¿Intenta buscar de nuevo?",
     "noFlujos": "Aún no hay flujos de trabajo aquí.",
-    "subir": "Compartir Flujo de Trabajo",
+    "subir": "Compartir",
     "cc0": "Todos los flujos son CC0",
-    "name": "Nombre del Flujo de Trabajo",
+    "name": "Nombre del Flujo",
     "description": "Descripción",
     "etiquetas": "Etiquetas",
     "flujo": "Flujo de Trabajo",
@@ -47,8 +47,13 @@
     "like": "Me Gusta",
     "mirror": "Republicar",
     "commentOn": "Comentar sobre",
-    "info": "El descubrimiento es uno de esos problemas ocultos.\n\nConstruimos vastos repositorios de conocimiento compartido—herramientas, flujos de trabajo, técnicas—pero luego dejamos que la gente tropiece por bosques oscuros de contenido mal etiquetado, búsquedas defectuosas y resultados sin contexto.\n\nLucidity resuelve esto para los flujos de trabajo de ComfyStream, ofreciendo una interfaz conversacional que entiende lo que intentas lograr en lugar de simplemente coincidir con palabras clave. Puedes discutir tus intenciones creativas, recibir recomendaciones de la experiencia colectiva de la comunidad y proporcionar comentarios que ayuden a refinar el sistema para todos los demás.\n\nNo se trata de hacer las cosas 'encantadoras' o 'sin fisuras'—se trata de reducir la fricción en el camino entre la imaginación y la implementación.\n\nCuando los creadores pasan menos tiempo buscando el flujo de trabajo adecuado y más tiempo creando, todos se benefician del trabajo resultante. Lucidity existe para hacer que el dominio público de los flujos de trabajo de ComfyStream sea genuinamente público—no solo técnicamente disponible, sino prácticamente accesible.",
-    "enlaces": "Añade Los Enlaces de Los Modelos y Loras"
+    "info1": "El descubrimiento es uno de esos problemas ocultos.\n\nConstruimos vastos repositorios de conocimiento compartido—herramientas, flujos de trabajo, técnicas—pero luego dejamos que la gente tropiece por bosques oscuros de contenido mal etiquetado, búsquedas defectuosas y resultados sin contexto.\n\nLucidity resuelve esto para los flujos de trabajo de ComfyStream, ofreciendo una interfaz conversacional que entiende lo que intentas lograr en lugar de simplemente coincidir con palabras clave. Puedes discutir tus intenciones creativas, recibir recomendaciones de la experiencia colectiva de la comunidad y proporcionar comentarios que ayuden a refinar el sistema para todos los demás.",
+    "info2": "No se trata de hacer las cosas 'encantadoras' o 'sin fisuras'—se trata de reducir la fricción en el camino entre la imaginación y la implementación.\n\nCuando los creadores pasan menos tiempo buscando el flujo de trabajo adecuado y más tiempo creando, todos se benefician del trabajo resultante. Lucidity existe para hacer que el dominio público de los flujos de trabajo de ComfyStream sea genuinamente público—no solo técnicamente disponible, sino prácticamente accesible.",
+    "enlaces": "Añade Los Enlaces de Los Modelos y Loras",
+    "agent": "Agente: Pixel",
+    "user": "Usuario",
+    "search": "Buscar Flujos",
+    "discovery": "Descubrimiento Agéntico"
   },
   "404": {
     "nada": "Error 404: La página ha sido secuestrada por NPCs rebeldes. Estamos negociando su liberación."

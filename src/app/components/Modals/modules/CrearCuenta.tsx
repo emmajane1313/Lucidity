@@ -25,7 +25,7 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
       onClick={() => setCreateAccount(false)}
     >
       <div
-        className="rounded-md text-white bg-black border border-brillo w-96 h-fit text-sm flex items-center justify-start p-3 cursor-default flex-col gap-6 font-nerdS"
+        className="rounded-md text-white bg-black border border-brillo w-96 h-fit text-sm flex items-center justify-start p-3 cursor-default flex-col gap-6 font-dep"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative w-fit pb-3 h-fit flex items-center justify-center">

@@ -245,14 +245,14 @@ const Publicacion: FunctionComponent<PublicacionProps> = ({
             <textarea
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
-              className="relative w-full h-28 flex items-start justify-start p-2 text-left text-sm focus:outline-none font-nerdS bg-black rounded-md text-white border border-brillo"
+              className="relative w-full h-28 flex items-start justify-start p-2 text-left text-sm focus:outline-none font-dep bg-black rounded-md text-white border border-brillo"
               style={{
                 resize: "none",
               }}
             ></textarea>
           </div>
           <div
-            className={`relative w-full h-full text-white font-nerdS rounded-md hover:opacity-80 bg-black border border-brillo text-center flex items-center justify-center ${
+            className={`relative w-full h-full text-white font-dep rounded-md hover:opacity-80 bg-black border border-brillo text-center flex items-center justify-center ${
               !success && !interactionLoading.comment && texto?.trim() !== ""
                 ? "cursor-pointer"
                 : "opacity-70"

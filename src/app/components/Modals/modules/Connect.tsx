@@ -32,7 +32,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
       onClick={() => setConnect(false)}
     >
       <div
-        className="bg-black rounded-md text-white border border-white w-96 h-fit text-sm flex items-center justify-start p-3 cursor-default flex-col gap-6 font-nerdS"
+        className="bg-black rounded-md text-white border border-white w-96 h-fit text-sm flex items-center justify-start p-3 cursor-default flex-col gap-6 font-dep"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative w-fit pb-3 h-fit flex items-center justify-center">

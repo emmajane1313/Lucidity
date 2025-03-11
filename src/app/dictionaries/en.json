@@ -11,7 +11,7 @@
     "buscar": "Search Workflows",
     "term": "No workflows found, try searching again?",
     "noFlujos": "No Workflows here yet.",
-    "subir": "Share Workflow",
+    "subir": "Share",
     "cc0": "All workflows are CC0",
     "name": "Name of Workflow",
     "description": "Description",
@@ -47,8 +47,13 @@
     "like": "Like",
     "mirror": "Repost",
     "commentOn": "Comment On",
-    "info": "Discovery is one of those hidden problems.\n\nWe build vast repositories of shared knowledge—tools, workflows, techniques—but then leave people to stumble through dark forests of poorly tagged content, broken search, and contextless results.\n\nLucidity cuts through this for ComfyStream workflows, offering a conversational interface that understands what you're trying to accomplish rather than just matching keywords. You can discuss your creative intentions, get recommendations from the collective experience of the community, and provide feedback on Lens that helps refine the system for everyone else.\n\nThis isn't about making things 'delightful' or 'seamless'—it's about reducing friction in the path between imagination and implementation.\n\nWhen creators spend less time hunting for the right workflow and more time creating, everyone benefits from the resulting work. Lucidity exists to make the public domain of ComfyStream workflows genuinely public—not just technically available, but practically accessible.",
-    "enlaces": "Add Model and Lora Links"
+    "info1": "Discovery is one of those hidden problems.\n\nWe build vast repositories of shared knowledge—tools, workflows, techniques—but then leave people to stumble through dark forests of poorly tagged content, broken search, and contextless results.\n\nLucidity cuts through this for ComfyStream workflows, offering a conversational interface that understands what you're trying to accomplish rather than just matching keywords. You can discuss your creative intentions, get recommendations from the collective experience of the community, and provide feedback on Lens that helps refine the system for everyone else.",
+    "info2": "This isn't about making things 'delightful' or 'seamless'—it's about reducing friction in the path between imagination and implementation.\n\nWhen creators spend less time hunting for the right workflow and more time creating, everyone benefits from the resulting work. Lucidity exists to make the public domain of ComfyStream workflows genuinely public—not just technically available, but practically accessible.",
+    "enlaces": "Add Model and Lora Links",
+    "agent": "Agent: Pixel",
+    "user": "User",
+    "search": "Search Workflows",
+    "discovery": "Agentic Discovery"
   },
   "404": {
     "nada": "Error 404: This page has been hijacked by rogue NPCs. We are negotiating it's liberation."

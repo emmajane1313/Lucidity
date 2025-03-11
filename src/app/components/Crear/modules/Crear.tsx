@@ -40,10 +40,10 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
   );
   return (
     <div
-      className={`relative overflow-y-scroll w-full pb-10 h-full flex flex-col gap-10 text-sm font-nerdS text-white`}
+      className={`relative overflow-y-scroll w-full pb-10 h-full flex flex-col gap-10 text-sm font-dep text-black bg-white p-2 rounded-sm`}
     >
       <div className="relative w-full h-fit items-center justify-center text-center flex-col flex gap-2">
-        <div className="relative text-3xl w-full h-fit items-center justify-center flex font-nerdC uppercase">
+        <div className="relative text-5xl w-full h-fit items-center justify-center flex font-count uppercase">
           {dict?.Home?.subir}
         </div>
         <div className="flex relative w-fit h-fit items-center justify-center">
@@ -52,12 +52,12 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
       </div>
       <div className="relative flex-col flex w-full h-fit items-start justify-between gap-4">
         <div className="relative w-full h-fit flex flex-col gap-2 items-center justify-center pb-4">
-          <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
+          <div className="relative w-fit h-fit flex text-sm font-dep uppercase">
             {dict?.Home?.cover}
           </div>
           <div className="relative items-center justify-center flex w-fit h-fit">
             <label
-              className="relative w-40 rounded-md h-40 flex items-center justify-center border border-white cursor-pointer bg-brillo/20"
+              className="relative w-40 rounded-md h-40 flex items-center justify-center cursor-pointer bg-black"
               onClick={(e) => {
                 e.stopPropagation();
               }}
@@ -94,7 +94,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
         </div>
         <div className="relative w-full h-fit flex items-start justify-between gap-3 flex-row">
           <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
-            <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
+            <div className="relative w-fit h-fit flex text-sm font-dep uppercase">
               {dict?.Home?.name}
             </div>
             <input
@@ -108,7 +108,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
             />
           </div>
           <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
-            <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
+            <div className="relative w-fit h-fit flex text-sm font-dep uppercase">
               {dict?.Home?.etiquetas}
             </div>
             <input
@@ -151,11 +151,11 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
           </div>
         </div>
         <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
-          <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
+          <div className="relative w-fit h-fit flex text-sm font-dep uppercase">
             {dict?.Home?.setup}
           </div>
           <div className="relative w-full h-fit flex flex-row gap-2 items-center justify-between min-h-10 bg-black rounded-md px-2 py-1">
-            <div className="relative w-full h-fit flex flex-wrap gap-1.5 items-center justify-start">
+            <div className="relative w-full h-fit flex flex-wrap gap-1.5 items-center justify-start text-white">
               {detalles?.setup?.map((ajustes, indice) => {
                 return (
                   <div
@@ -185,7 +185,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
             />
           </div>
           {setupAbierto && (
-            <div className="absolute bg-black w-fit right-0 -bottom-64 flex items-center justify-start flex flex-col gap-2 border border-brillo rounded-md z-20 p-2">
+            <div className="absolute bg-black w-fit right-0 -bottom-64 flex items-center justify-start flex flex-col gap-2 border border-brillo rounded-md z-20 p-2 text-white">
               {SET_UP.map((set, indice) => {
                 return (
                   <div
@@ -208,7 +208,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
           )}
         </div>
         <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
-          <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
+          <div className="relative w-fit h-fit flex text-sm font-dep uppercase">
             {dict?.Home?.description}
           </div>
           <textarea
@@ -225,10 +225,10 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
           ></textarea>
         </div>
         <div className="relative w-full h-fit flex flex-col items-start justify-start gap-3">
-          <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
+          <div className="relative w-fit h-fit flex text-sm font-dep uppercase">
             {dict?.Home?.flujo}
           </div>
-          <div className="relative w-full h-fit flex items-start justify-start">
+          <div className="relative w-full h-fit flex items-start justify-start text-white">
             <div className="relative w-full flex flex-row gap-3 items-start justify-between h-[25rem]">
               <div className="relative flex-col flex w-full h-full items-start justify-between gap-4">
                 <textarea
@@ -247,7 +247,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   }}
                 ></textarea>
               </div>
-              <div className="relative w-full h-full flex items-start justify-start overflow-y-scroll bg-gris border border-ligero rounded-md p-2 ">
+              <div className="relative w-full h-full flex items-start justify-start overflow-y-scroll bg-gris border border-ligero rounded-md p-2">
                 <div className="relative w-full h-full text-sm overfl">
                   <pre className="flex relative h-full">
                     <code className="language-json whitespace-pre-wrap flex flex-wrap">
@@ -262,7 +262,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   <div className="absolute bottom-0 right-0 w-fit h-fit flex">
                     <div
                       className={`relative w-fit h-fit flex items-center justify-between px-2.5 py-1 flex-row gap-2 rounded-md cursor-pointer border border-white ${
-                        valido ? "bg-brillo text-black" : "bg-black"
+                        valido ? "bg-brillo text-black" : "bg-black text-white"
                       }`}
                       onClick={() => handleParse()}
                     >
@@ -283,11 +283,11 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
         </div>
         <div className="relative w-full h-fit flex flex-col items-start justify-start gap-3">
           <div className="relative w-fit h-fit flex flex-row gap-2 items-center justify-center">
-            <div className="relative w-fit h-fit flex text-lg font-nerdC uppercase">
+            <div className="relative w-fit h-fit flex text-sm font-dep uppercase">
               {dict?.Home?.enlaces}
             </div>
             <IoIosAddCircleOutline
-              color="white"
+              color="black"
               size={15}
               className="cursor-pointer"
               onClick={() =>
@@ -322,7 +322,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   />
                 </div>
                 <RxCross1
-                  color="white"
+                  color="black"
                   size={10}
                   className="cursor-pointer"
                   onClick={() =>
@@ -343,10 +343,10 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
       </div>
       <div className="relative w-full h-fit items-center justify-center text-center contextoflex-col flex gap-2">
         <div
-          className={`relative text-xl w-fit h-fit items-center justify-center flex font-nerdC uppercase border border-white rounded-md`}
+          className={`relative text-xl w-fit h-fit items-center justify-center flex font-dep uppercase border border-black rounded-md`}
         >
           <div
-            className={`relative w-24 h-8 flex items-center justify-center ${
+            className={`relative w-32 min-w-fit h-8 flex items-center justify-center ${
               !crearCargando ? "cursor-pointer" : "cursor-default"
             }`}
             onClick={() => !crearCargando && handleCrear()}

@@ -15,7 +15,7 @@ const Flujo: FunctionComponent<FlujoProps> = ({
   const router = useRouter();
   const { copiar, copiarFlujo, descargar } = useFlujo();
   return (
-    <div className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden grid grid-flow-col auto-cols-auto w-full h-auto items-center justify-center text-white font-nerdS">
+    <div className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden grid grid-flow-col auto-cols-auto w-full h-auto items-center justify-center text-white font-dep">
       <div
         className="w-full h-screen text-sm flex items-center justify-center cursor-pointer"
         onClick={() => setFlujo(undefined)}

@@ -8,6 +8,21 @@
 }
 
 @font-face {
+  font-family: "Gothic";
+  src: url("/fonts/DidactGothic.ttf");
+}
+
+@font-face {
+  font-family: "Departure";
+  src: url("/fonts/DepartureMonoNerdFont.otf");
+}
+
+@font-face {
+  font-family: "Countdown";
+  src: url("/fonts/Countdown.otf");
+}
+
+@font-face {
   font-family: "Vcr";
   src: url("/fonts/Vcr.ttf");
 }

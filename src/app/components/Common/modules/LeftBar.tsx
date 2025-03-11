@@ -32,7 +32,7 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
           draggable={false}
           layout="fill"
           objectFit="cover"
-          src={`${INFURA_GATEWAY}/ipfs/QmRtdnvSVDVC8oAd9MHaHz55m1uXUEWBMVW8eFfBnqKPjW`}
+          src={`${INFURA_GATEWAY}/ipfs/QmPUAjMJ2PzkJS1ZMyhJ96tyLvhweRaCsPRjZchYKbp647`}
         />
       </div>
       <div
@@ -42,13 +42,23 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
       ></div>
       <div className="relative w-fit h-fit flex items-center justify-center flex-col gap-2">
         <div
-          className="relative w-fit h-fit flex items-center justify-center cursor-pointer font-arc text-lg uppercase text-center text-white"
+          className="relative w-fit h-fit flex items-center justify-center cursor-pointer font-dep text-lg uppercase text-center text-[#1A7B94]"
           onClick={() => {
             router.push("/");
             contexto?.setPantalla(Pantalla.Chat);
             setAbrirBar(false);
           }}
         >
+          <div
+            className="absolute w-fit h-fit flex items-center justify-center cursor-pointer font-dep text-lg uppercase top-1 text-center text-white"
+            onClick={() => {
+              router.push("/");
+              contexto?.setPantalla(Pantalla.Chat);
+              setAbrirBar(false);
+            }}
+          >
+            {abrirBar ? "LUCIDITY" : ""}
+          </div>
           {abrirBar ? "LUCIDITY" : ""}
         </div>
         <div
@@ -76,9 +86,9 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
               >
                 {abrirBar && (
                   <div
-                    className={`relative uppercase text-sm w-full h-fit flex items-center font-nerdS justify-center text-center hover:text-brillo ${
+                    className={`relative uppercase text-sm w-full h-fit flex items-center font-dep justify-center text-center hover:text-amarillo text-xxs ${
                       contexto?.pantalla == elemento
-                        ? "text-brillo"
+                        ? "text-amarillo"
                         : "text-white"
                     }`}
                   >
@@ -126,9 +136,9 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
             </div>
             {abrirBar && (
               <div
-                className={`relative text-sm font-nerdS w-fit h-fit flex items-center justify-center text-left uppercase hover:text-brillo ${
+                className={`relative text-xxs font-dep w-fit h-fit flex items-center justify-center text-left uppercase hover:text-amarillo ${
                   contexto?.pantalla == Pantalla.Cuenta
-                    ? "text-brillo"
+                    ? "text-amarillo"
                     : "text-white"
                 }`}
               >
@@ -153,7 +163,7 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
         {abrirBar && (
           <div className="relative w-full h-fit flex justify-start items-start text-sm text-left">
             <div
-              className="relative whitespace-nowrap w-fit h-fit flex text-noche hover:text-brillo font-nerdS cursor-pointer"
+              className="relative whitespace-nowrap w-fit h-fit flex text-noche hover:text-amarillo font-dep cursor-pointer"
               onClick={() => {
                 contexto?.setPantalla(Pantalla.Info);
                 router.push("/info");

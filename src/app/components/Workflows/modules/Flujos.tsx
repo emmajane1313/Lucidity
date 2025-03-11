@@ -14,11 +14,14 @@ const Flujos: FunctionComponent<FlujosProps> = ({
   flujosCargando,
   texto,
   otroCargando,
+  color
 }): JSX.Element => {
   return (
     <div className="relative w-full h-full overflow-y-scroll items-start justify-between flex">
       {!flujosCargando && flujos?.length < 1 ? (
-        <div className="relative w-full h-full flex items-center justify-center text-sm text-center text-white font-nerdS">
+        <div
+          className={`"relative w-full h-full flex items-center justify-center text-sm text-center text font-dep ${color ? "text-black" : "text-white"}`}
+        >
           {texto}
         </div>
       ) : flujosCargando || otroCargando ? (
@@ -26,7 +29,7 @@ const Flujos: FunctionComponent<FlujosProps> = ({
           {Array.from({ length: 20 }).map((_, indice) => {
             return (
               <div key={indice} className="relative w-full sm:w-fit h-fit flex">
-                <div className="relative w-full sm:w-60 h-60 flex rounded-md border border-brillo bg-brillo/40 animate-pulse"></div>
+                <div className="relative w-full sm:w-60 h-60 flex rounded-md border border-brillo bg-brillo animate-pulse"></div>
               </div>
             );
           })}
@@ -48,7 +51,7 @@ const Flujos: FunctionComponent<FlujosProps> = ({
               >
                 <div className="relative sm:w-fit w-full flex h-fit">
                   <div
-                    className="w-full sm:w-60 h-60 rounded-md border border-brillo bg-brillo/20 flex p-4 relative cursor-pointer"
+                    className="w-full sm:w-60 h-60 rounded-md border border-brillo bg-brillo flex p-4 relative cursor-pointer"
                     onClick={() => setFlujo(flujo)}
                   >
                     <Image
@@ -63,7 +66,7 @@ const Flujos: FunctionComponent<FlujosProps> = ({
                     />
                   </div>
                 </div>
-                <div className="relative w-full h-fit flex text-xxs text-center text-white font-nerdS items-center justify-center">
+                <div className={`relative w-full h-fit flex text-xxs text-center font-dep items-center justify-center ${color ? "text-black" : "text-white"}`}>
                   {flujo?.name}
                 </div>
               </div>
@@ -76,7 +79,7 @@ const Flujos: FunctionComponent<FlujosProps> = ({
                   key={flujos.length + 1 + indice}
                   className="relative w-full sm:w-fit h-fit flex"
                 >
-                  <div className="relative w-full sm:w-60 h-60 flex rounded-md border border-brillo bg-brillo/40 animate-pulse"></div>
+                  <div className="relative w-full sm:w-60 h-60 flex rounded-md border border-brillo bg-brillo animate-pulse"></div>
                 </div>
               );
             })}

@@ -13,4 +13,5 @@ export type FlujosProps = {
   flujosCargando: boolean;
   texto: string;
   otroCargando?: boolean;
+  color?: boolean;
 };

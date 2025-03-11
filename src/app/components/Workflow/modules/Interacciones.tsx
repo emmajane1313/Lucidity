@@ -71,7 +71,7 @@ const Interacciones: FunctionComponent<InteraccionesProps> = ({
             })
           ) : (
             <div
-              className={`relative w-full font-nerdS flex flex-col items-start justify-start gap-3 h-fit h-full`}
+              className={`relative w-full font-dep flex flex-col items-start justify-start gap-3 h-fit h-full`}
             >
               {comments?.map((activity, indice) => {
                 return (
@@ -95,14 +95,14 @@ const Interacciones: FunctionComponent<InteraccionesProps> = ({
         <textarea
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
-          className="relative w-full h-28 flex items-start justify-start p-2 text-left text-sm focus:outline-none font-nerdS bg-black rounded-md text-white border border-brillo"
+          className="relative w-full h-28 flex items-start justify-start p-2 text-left text-sm focus:outline-none font-dep bg-black rounded-md text-white border border-brillo"
           style={{
             resize: "none",
           }}
         ></textarea>
       </div>
       <div
-        className={`relative w-full h-fit text-white font-nerdS rounded-md hover:opacity-80 bg-black border border-brillo text-center flex items-center justify-center ${
+        className={`relative w-full h-fit text-white font-dep rounded-md hover:opacity-80 bg-black border border-brillo text-center flex items-center justify-center ${
           !success && !postLoading && texto?.trim() !== ""
             ? "cursor-pointer"
             : "opacity-70"
@@ -113,7 +113,7 @@ const Interacciones: FunctionComponent<InteraccionesProps> = ({
             : handleComment()
         }
       >
-        <div className="relative w-full h-full flex items-center justify-center">
+        <div className="relative w-full h-10 flex items-center justify-center">
           {success ? (
             "Success"
           ) : postLoading ? (

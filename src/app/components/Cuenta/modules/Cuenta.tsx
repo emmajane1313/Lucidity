@@ -19,12 +19,12 @@ const Cuenta: FunctionComponent<CambioElementoProps> = ({
   } = useCuenta(contexto?.lensConectado!);
   return (
     <div
-      className={`relative w-full pb-10 h-full flex flex-col gap-10 font-nerdC text-white`}
+      className={`relative w-full pb-10 h-full bg-white px-2 pt-2 rounded-sm flex flex-col gap-10 font-dep text-white`}
     >
       <div className={`relative w-full h-fit flex items-center justify-center`}>
-        <div className="relative w-full h-40 flex items-start justify-between bg-brillo/20 rounded-md border border-brillo p-2 flex-col gap-3">
+        <div className="relative w-full h-40 flex items-start justify-between bg-black rounded-md border border-brillo p-2 flex-col gap-3">
           {contexto?.lensConectado?.address && (
-            <div className="relative w-full items-center justify-center h-fit text-center flex break-all">
+            <div className="relative w-full items-center justify-center h-fit text-center flex break-all font-goth">
               <div className="relative w-fit h-fit flex">
                 {contexto?.lensConectado?.address?.slice(0, 20) + "..."}
               </div>
@@ -50,7 +50,7 @@ const Cuenta: FunctionComponent<CambioElementoProps> = ({
                 </div>
               </div>
               <div className="relative w-full items-center justify-center h-fit text-center flex break-all">
-                <div className="relative w-fit h-fit flex font-nerdC uppercase">
+                <div className="relative w-fit h-fit flex font-count uppercase">
                   {Number(
                     contexto?.lensConectado?.profile?.username?.localName
                       ?.length
@@ -64,16 +64,16 @@ const Cuenta: FunctionComponent<CambioElementoProps> = ({
               </div>
             </div>
           )}
+          <div
+            className={`absolute bottom-2 right-2 text-sm bg-black w-fit h-fit items-center justify-center flex font-dep uppercase border border-white rounded-md`}
+          >
             <div
-              className={`absolute bottom-2 right-2 text-sm bg-black w-fit h-fit items-center justify-center flex font-nerdC uppercase border border-white rounded-md`}
+              className={`relative w-24 h-8 flex items-center justify-center cursor-pointer`}
+              onClick={() => contexto?.setConnect(true)}
             >
-              <div
-                className={`relative w-24 h-8 flex items-center justify-center cursor-pointer`}
-                onClick={() => contexto?.setConnect(true)}
-              >
-                {dict?.Home?.connect}
-              </div>
+              {dict?.Home?.connect}
             </div>
+          </div>
         </div>
       </div>
       <Flujos
@@ -84,6 +84,7 @@ const Cuenta: FunctionComponent<CambioElementoProps> = ({
         setFlujo={contexto?.setFlujo!}
         texto={dict?.Home?.noFlujos}
         flujosCargando={flujosCargando}
+        color={true}
       />
     </div>
   );

@@ -56,29 +56,25 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
                 }
               );
 
-              if (result.isErr()) {
-                setBuscarCargando(false);
+              if (result.isOk()) {
+                const profile = result?.value.items[0]?.account as Account;
+                let picture = "";
+                if (profile?.metadata?.picture) {
+                  const pictureKey =
+                    profile.metadata.picture.split("lens://")?.[1];
+                  const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
+                  const json = await cadena.json();
+                  picture = json.item;
+                }
 
-                return;
+                profileCache.set(flujo?.creator, {
+                  ...profile,
+                  metadata: {
+                    ...profile?.metadata!,
+                    picture,
+                  },
+                });
               }
-
-              const profile = result?.value.items[0]?.account as Account;
-              let picture = "";
-              if (profile?.metadata?.picture) {
-                const pictureKey =
-                  profile.metadata.picture.split("lens://")?.[1];
-                const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
-                const json = await cadena.json();
-                picture = json.item;
-              }
-
-              profileCache.set(flujo?.creator, {
-                ...profile,
-                metadata: {
-                  ...profile?.metadata!,
-                  picture,
-                },
-              });
             }
 
             return {
@@ -126,28 +122,25 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
                 }
               );
 
-              if (result.isErr()) {
-                setMasFlujosCargando(false);
-                return;
-              }
+              if (result.isOk()) {
+                const profile = result?.value.items[0]?.account as Account;
+                let picture = "";
+                if (profile?.metadata?.picture) {
+                  const pictureKey =
+                    profile.metadata.picture.split("lens://")?.[1];
+                  const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
+                  const json = await cadena.json();
+                  picture = json.item;
+                }
 
-              const profile = result?.value.items[0]?.account as Account;
-              let picture = "";
-              if (profile?.metadata?.picture) {
-                const pictureKey =
-                  profile.metadata.picture.split("lens://")?.[1];
-                const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
-                const json = await cadena.json();
-                picture = json.item;
+                profileCache.set(flujo?.creator, {
+                  ...profile,
+                  metadata: {
+                    ...profile?.metadata!,
+                    picture,
+                  },
+                });
               }
-
-              profileCache.set(flujo?.creator, {
-                ...profile,
-                metadata: {
-                  ...profile?.metadata!,
-                  picture,
-                },
-              });
             }
 
             return {
@@ -196,28 +189,25 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
                 }
               );
 
-              if (result.isErr()) {
-                setMasFlujosCargando(false);
-                return;
-              }
+              if (result.isOk()) {
+                const profile = result?.value.items[0]?.account as Account;
+                let picture = "";
+                if (profile?.metadata?.picture) {
+                  const pictureKey =
+                    profile.metadata.picture.split("lens://")?.[1];
+                  const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
+                  const json = await cadena.json();
+                  picture = json.item;
+                }
 
-              const profile = result?.value.items[0]?.account as Account;
-              let picture = "";
-              if (profile?.metadata?.picture) {
-                const pictureKey =
-                  profile.metadata.picture.split("lens://")?.[1];
-                const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
-                const json = await cadena.json();
-                picture = json.item;
+                profileCache.set(flujo?.creator, {
+                  ...profile,
+                  metadata: {
+                    ...profile?.metadata!,
+                    picture,
+                  },
+                });
               }
-
-              profileCache.set(flujo?.creator, {
-                ...profile,
-                metadata: {
-                  ...profile?.metadata!,
-                  picture,
-                },
-              });
             }
 
             return {

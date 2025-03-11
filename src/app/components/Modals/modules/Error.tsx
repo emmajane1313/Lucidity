@@ -7,7 +7,7 @@ const Error: FunctionComponent<ErrorProps> = ({
 }): JSX.Element => {
   return (
     <div
-      className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden grid grid-flow-col auto-cols-auto w-full h-auto cursor-pointer items-center justify-center text-white font-nerdS"
+      className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden grid grid-flow-col auto-cols-auto w-full h-auto cursor-pointer items-center justify-center text-white font-dep"
       onClick={() => setError(undefined)}
     >
       <div

@@ -35,7 +35,7 @@ export default function Creador({ dict }: { dict: any }) {
         </div>
         <div className="absolute flex w-full h-full top-0 right-0 rounded-md bg-gris/70"></div>
         <div
-          className={`relative w-full pb-10 h-full flex flex-col gap-10 font-nerdC text-white`}
+          className={`relative w-full pb-10 h-full flex flex-col gap-10 font-dep text-white`}
         >
           <div
             className={`relative w-full h-fit flex items-center justify-center`}
@@ -70,7 +70,7 @@ export default function Creador({ dict }: { dict: any }) {
                     </div>
                   </div>
                   <div className="relative w-full items-center justify-center h-fit text-center flex break-all">
-                    <div className="relative w-fit h-fit flex font-nerdC uppercase">
+                    <div className="relative w-fit h-fit flex font-dep uppercase">
                       {Number(creador?.username?.localName?.length) > 20
                         ? creador?.username?.localName?.slice(0, 20) + "..."
                         : creador?.username?.localName}
@@ -79,7 +79,7 @@ export default function Creador({ dict }: { dict: any }) {
                 </div>
               )}
               <div
-                className={`absolute bottom-2 right-2 text-sm bg-black w-fit h-fit items-center justify-center flex font-nerdC uppercase border border-white rounded-md`}
+                className={`absolute bottom-2 right-2 text-sm bg-black w-fit h-fit items-center justify-center flex font-dep uppercase border border-white rounded-md`}
               >
                 <div
                   className={`relative w-24 h-8 flex items-center justify-center cursor-pointer`}
@@ -98,6 +98,7 @@ export default function Creador({ dict }: { dict: any }) {
             setFlujo={contexto?.setFlujo!}
             texto={dict?.Home?.noFlujos}
             flujosCargando={flujosCargando || creadorCargando}
+            
           />
         </div>
       </div>

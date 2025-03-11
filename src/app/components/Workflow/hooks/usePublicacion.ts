@@ -109,6 +109,7 @@ const usePublicacion = (
         },
       });
 
+
       const res = await createPost(lensConnected?.sessionClient!, {
         contentUri: uri,
       });

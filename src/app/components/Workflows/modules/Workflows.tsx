@@ -25,13 +25,29 @@ const Workflows: FunctionComponent<CambioElementoProps> = ({
     <div
       className={`relative w-full pb-10 h-full flex flex-col gap-10 items-start justify-between`}
     >
-      <div className={`relative w-full h-fit flex items-center justify-center`}>
+      <Flujos
+        handleMasFlujos={handleMasFlujos}
+        masFlujosCargando={masFlujosCargando}
+        hasMore={hasMore}
+        flujos={flujos}
+        setFlujo={contexto?.setFlujo!}
+        texto={dict?.Home?.term}
+        otroCargando={buscarCargando}
+        flujosCargando={flujosCargando}
+        
+      />
+      <div
+        className={`relative w-full h-fit flex items-center justify-center flex-col gap-3`}
+      >
+        <div className="relative w-fit h-fit flex text-white uppercase font-count text-3xl">
+          {dict.Home.search}
+        </div>
         <div
           className={`relative flex flex-row gap-2 items-start justify-start rounded-md bg-black h-10 px-2 py-1 w-full`}
         >
           <input
             onChange={(e) => setBuscar(e.target.value)}
-            className="font-nerdS text-xs uppercase text-ama focus:outline-none relative w-full h-full rounded-md bg-black placeholder:text-ama"
+            className="font-dep text-xs uppercase text-ama focus:outline-none relative w-full h-full rounded-md bg-black placeholder:text-ama"
             value={buscar}
             placeholder={dict?.Home.buscar}
             onKeyDown={(e) => {
@@ -56,16 +72,6 @@ const Workflows: FunctionComponent<CambioElementoProps> = ({
           </div>
         </div>
       </div>
-      <Flujos
-        handleMasFlujos={handleMasFlujos}
-        masFlujosCargando={masFlujosCargando}
-        hasMore={hasMore}
-        flujos={flujos}
-        setFlujo={contexto?.setFlujo!}
-        texto={dict?.Home?.term}
-        otroCargando={buscarCargando}
-        flujosCargando={flujosCargando}
-      />
     </div>
   );
 };
