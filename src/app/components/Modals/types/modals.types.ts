@@ -1,7 +1,7 @@
 import { SetStateAction } from "react";
 import { LensConnected } from "../../Common/types/common.types";
-import { StorageClient } from "@lens-protocol/storage-node-client";
 import { Account, PublicClient } from "@lens-protocol/client";
+import { StorageClient } from "@lens-chain/storage-client";
 
 export type FlujoProps = {
   flujo: Flujo;

@@ -5,10 +5,10 @@ import {
   TextOnlyMetadata,
 } from "@lens-protocol/client";
 import { LensConnected } from "../../Common/types/common.types";
-import { StorageClient } from "@lens-protocol/storage-node-client";
 import { SetStateAction } from "react";
 import { Flujo } from "../../Modals/types/modals.types";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { StorageClient } from "@lens-chain/storage-client";
 
 export type InteraccionesProps = {
   clienteLens: PublicClient;
