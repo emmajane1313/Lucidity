@@ -8,7 +8,7 @@ export const RENDER_URL: string =
   "https://eliza-plugins.onrender.com";
 
 export const LUCIDITY_WORKFLOWS_CONTRACT: `0x${string}` =
-  "0xc2843882596aAFeA78434544C8bf25688a7162eB";
+  "0x39d4cd14DcCf54aa8E343583A224d5864e00E5eB";
 
 export const SET_UP: string[] = [
   "Windows",

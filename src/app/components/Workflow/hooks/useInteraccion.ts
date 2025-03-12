@@ -8,7 +8,8 @@ import {
 } from "@lens-protocol/client/actions";
 import pollResult from "@/app/lib/helpers/pollResult";
 import { v4 as uuidv4 } from "uuid";
-import { StorageClient } from "@lens-protocol/storage-node-client";
+import { immutable, StorageClient } from "@lens-chain/storage-client";
+import { chains } from "@lens-network/sdk/viem";
 
 const useInteraccion = (
   lensConnected: LensConnected,
@@ -139,15 +140,19 @@ const useInteraccion = (
       comment: true,
     });
     try {
-      const { uri } = await storageClient.uploadAsJson({
-        $schema: "https://json-schemas.lens.dev/posts/text-only/3.0.0.json",
-        lens: {
-          mainContentFocus: MainContentFocus.TextOnly,
-          content: post,
-          id: uuidv4(),
-          locale: "en",
+      const acl = immutable(chains.testnet.id);
+      const { uri } = await storageClient.uploadAsJson(
+        {
+          $schema: "https://json-schemas.lens.dev/posts/text-only/3.0.0.json",
+          lens: {
+            mainContentFocus: MainContentFocus.TextOnly,
+            content: post,
+            id: uuidv4(),
+            locale: "en",
+          },
         },
-      });
+        { acl }
+      );
 
       const res = await createPost(lensConnected?.sessionClient!, {
         contentUri: uri,

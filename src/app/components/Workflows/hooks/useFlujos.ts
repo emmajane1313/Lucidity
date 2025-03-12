@@ -47,35 +47,35 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
       setFlujos(
         await Promise.all(
           datos?.data?.workflowCreateds?.map(async (flujo: any) => {
-            if (!profileCache.get(flujo?.creator)) {
-              const result = await fetchAccountsAvailable(
-                lensConectado?.sessionClient ?? lensClient,
-                {
-                  managedBy: evmAddress(flujo?.creator),
-                  includeOwned: true,
-                }
-              );
+            // if (!profileCache.get(flujo?.creator)) {
+            //   const result = await fetchAccountsAvailable(
+            //     lensConectado?.sessionClient ?? lensClient,
+            //     {
+            //       managedBy: evmAddress(flujo?.creator),
+            //       includeOwned: true,
+            //     }
+            //   );
 
-              if (result.isOk()) {
-                const profile = result?.value.items[0]?.account as Account;
-                let picture = "";
-                if (profile?.metadata?.picture) {
-                  const pictureKey =
-                    profile.metadata.picture.split("lens://")?.[1];
-                  const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
-                  const json = await cadena.json();
-                  picture = json.item;
-                }
+            //   if (result.isOk()) {
+            //     const profile = result?.value.items[0]?.account as Account;
+            //     let picture = "";
+            //     if (profile?.metadata?.picture) {
+            //       const pictureKey =
+            //         profile.metadata.picture.split("lens://")?.[1];
+            //       const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
+            //       const json = await cadena.json();
+            //       picture = json.item;
+            //     }
 
-                profileCache.set(flujo?.creator, {
-                  ...profile,
-                  metadata: {
-                    ...profile?.metadata!,
-                    picture,
-                  },
-                });
-              }
-            }
+            //     profileCache.set(flujo?.creator, {
+            //       ...profile,
+            //       metadata: {
+            //         ...profile?.metadata!,
+            //         picture,
+            //       },
+            //     });
+            //   }
+            // }
 
             return {
               tags: flujo?.workflowMetadata?.tags?.split(", "),
@@ -113,35 +113,35 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
         ...flujos,
         ...(await Promise.all(
           datos?.data?.workflowCreateds?.map(async (flujo: any) => {
-            if (!profileCache.get(flujo?.creator)) {
-              const result = await fetchAccountsAvailable(
-                lensConectado?.sessionClient ?? lensClient,
-                {
-                  managedBy: evmAddress(flujo?.creator),
-                  includeOwned: true,
-                }
-              );
+            // if (!profileCache.get(flujo?.creator)) {
+            //   const result = await fetchAccountsAvailable(
+            //     lensConectado?.sessionClient ?? lensClient,
+            //     {
+            //       managedBy: evmAddress(flujo?.creator),
+            //       includeOwned: true,
+            //     }
+            //   );
 
-              if (result.isOk()) {
-                const profile = result?.value.items[0]?.account as Account;
-                let picture = "";
-                if (profile?.metadata?.picture) {
-                  const pictureKey =
-                    profile.metadata.picture.split("lens://")?.[1];
-                  const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
-                  const json = await cadena.json();
-                  picture = json.item;
-                }
+            //   if (result.isOk()) {
+            //     const profile = result?.value.items[0]?.account as Account;
+            //     let picture = "";
+            //     if (profile?.metadata?.picture) {
+            //       const pictureKey =
+            //         profile.metadata.picture.split("lens://")?.[1];
+            //       const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
+            //       const json = await cadena.json();
+            //       picture = json.item;
+            //     }
 
-                profileCache.set(flujo?.creator, {
-                  ...profile,
-                  metadata: {
-                    ...profile?.metadata!,
-                    picture,
-                  },
-                });
-              }
-            }
+            //     profileCache.set(flujo?.creator, {
+            //       ...profile,
+            //       metadata: {
+            //         ...profile?.metadata!,
+            //         picture,
+            //       },
+            //     });
+            //   }
+            // }
 
             return {
               tags: flujo?.workflowMetadata?.tags?.split(", "),
@@ -177,38 +177,38 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
       setFlujos(
         await Promise.all(
           datos?.data?.workflowCreateds?.map(async (flujo: any) => {
-            if (
-              !profileCache.get(flujo?.creator) &&
-              lensConectado?.sessionClient
-            ) {
-              const result = await fetchAccountsAvailable(
-                lensConectado?.sessionClient,
-                {
-                  managedBy: evmAddress(flujo?.creator),
-                  includeOwned: true,
-                }
-              );
+            // if (
+            //   !profileCache.get(flujo?.creator) &&
+            //   lensConectado?.sessionClient
+            // ) {
+            //   const result = await fetchAccountsAvailable(
+            //     lensConectado?.sessionClient,
+            //     {
+            //       managedBy: evmAddress(flujo?.creator),
+            //       includeOwned: true,
+            //     }
+            //   );
 
-              if (result.isOk()) {
-                const profile = result?.value.items[0]?.account as Account;
-                let picture = "";
-                if (profile?.metadata?.picture) {
-                  const pictureKey =
-                    profile.metadata.picture.split("lens://")?.[1];
-                  const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
-                  const json = await cadena.json();
-                  picture = json.item;
-                }
+            //   if (result.isOk()) {
+            //     const profile = result?.value.items[0]?.account as Account;
+            //     let picture = "";
+            //     if (profile?.metadata?.picture) {
+            //       const pictureKey =
+            //         profile.metadata.picture.split("lens://")?.[1];
+            //       const cadena = await fetch(`${STORAGE_NODE}/${pictureKey}`);
+            //       const json = await cadena.json();
+            //       picture = json.item;
+            //     }
 
-                profileCache.set(flujo?.creator, {
-                  ...profile,
-                  metadata: {
-                    ...profile?.metadata!,
-                    picture,
-                  },
-                });
-              }
-            }
+            //     profileCache.set(flujo?.creator, {
+            //       ...profile,
+            //       metadata: {
+            //         ...profile?.metadata!,
+            //         picture,
+            //       },
+            //     });
+            //   }
+            // }
 
             return {
               tags: flujo?.workflowMetadata?.tags?.split(", "),

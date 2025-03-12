@@ -18,7 +18,7 @@ export default function Entry({ dict }: { dict: any }) {
             src={`${INFURA_GATEWAY}/ipfs/${
               contexto?.pantalla == Pantalla.Chat
                 ? Number(contexto?.mensajes?.length) < 1
-                  ? "QmNXZJiuwLLUnzLNsbdpWHnMWZnQdhd5wZKihRrQLKRDKN"
+                  ? "QmWEyu3hbEd7tLEUcegv8xrpdNH27VVwN14cJtit6QL6bV"
                   : "QmQ6YhM7gSVYgqVHNHwRzgSjY2f1yzyHDz1BKvaj1TVp97"
                 : contexto?.pantalla == Pantalla.Workflows
                 ? "QmWbqFv4CTwynHK2iGPxu6U9iz6aJGnR1H2k25nUcqmTe7"

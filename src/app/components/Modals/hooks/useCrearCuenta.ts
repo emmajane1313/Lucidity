@@ -3,7 +3,6 @@ import { evmAddress } from "@lens-protocol/client";
 import { createWalletClient, custom } from "viem";
 import { chains } from "@lens-network/sdk/viem";
 import { v4 as uuidv4 } from "uuid";
-import { StorageClient } from "@lens-protocol/storage-node-client";
 import {
   createAccountWithUsername,
   fetchAccount,
@@ -11,6 +10,7 @@ import {
 import { LensConnected } from "../../Common/types/common.types";
 import { STORAGE_NODE } from "@/app/lib/constants";
 import pollResult from "@/app/lib/helpers/pollResult";
+import { immutable, StorageClient } from "@lens-chain/storage-client";
 
 const useCrearCuenta = (
   lensConnected: LensConnected | undefined,
@@ -44,32 +44,39 @@ const useCrearCuenta = (
       });
 
       let picture = {};
-
+      const acl = immutable(chains.testnet.id);
       if (account?.pfp) {
         const res = await fetch("/api/ipfs", {
           method: "POST",
           body: account?.pfp,
         });
         const json = await res.json();
-        const { uri } = await storageClient.uploadAsJson({
-          type: "image/png",
-          item: "ipfs://" + json?.cid,
-        });
+
+        const { uri } = await storageClient.uploadAsJson(
+          {
+            type: "image/png",
+            item: "ipfs://" + json?.cid,
+          },
+          { acl }
+        );
 
         picture = {
           picture: uri,
         };
       }
 
-      const { uri } = await storageClient.uploadAsJson({
-        $schema: "https://json-schemas.lens.dev/account/1.0.0.json",
-        lens: {
-          id: uuidv4(),
-          name: account?.localname,
-          bio: account?.bio,
-          ...picture,
+      const { uri } = await storageClient.uploadAsJson(
+        {
+          $schema: "https://json-schemas.lens.dev/account/1.0.0.json",
+          lens: {
+            id: uuidv4(),
+            name: account?.localname,
+            bio: account?.bio,
+            ...picture,
+          },
         },
-      });
+        { acl }
+      );
 
       const accountResponse = await createAccountWithUsername(
         lensConnected?.sessionClient,

@@ -5,10 +5,6 @@ import { WagmiProvider, createConfig, http } from "wagmi";
 import { createContext, SetStateAction, useEffect, useState } from "react";
 import { chains } from "@lens-network/sdk/viem";
 import { Context, PublicClient, testnet } from "@lens-protocol/client";
-import {
-  StorageClient,
-  testnet as storageTestnet,
-} from "@lens-protocol/storage-node-client";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import {
   LensConnected,
@@ -16,6 +12,7 @@ import {
 } from "./components/Common/types/common.types";
 import { Flujo } from "./components/Modals/types/modals.types";
 import { Usuario } from "./components/Chat/types/chat.types";
+import { StorageClient } from "@lens-chain/storage-client";
 
 export const config = createConfig(
   getDefaultConfig({
@@ -48,7 +45,6 @@ export const ModalContext = createContext<
       connect: boolean;
       setCrearCuenta: (e: SetStateAction<boolean>) => void;
       crearCuenta: boolean;
-      storageClient: StorageClient;
       pantalla: Pantalla;
       setPantalla: (e: SetStateAction<Pantalla>) => void;
       signless: boolean;
@@ -80,7 +76,7 @@ export const ModalContext = createContext<
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [clienteLens, setClienteLens] = useState<PublicClient | undefined>();
   const [agente, setAgente] = useState<string | undefined>();
-  const clienteAlmacenamiento = StorageClient.create(storageTestnet);
+  const clienteAlmacenamiento = StorageClient.create();
   const [lensConectado, setLensConectado] = useState<LensConnected>();
   const [signless, setSignless] = useState<boolean>(false);
   const [flujo, setFlujo] = useState<Flujo>();
@@ -98,7 +94,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     }[]
   >([]);
 
-  const storageClient = StorageClient.create(storageTestnet);
 
   useEffect(() => {
     if (!clienteLens) {
@@ -133,7 +128,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               setConnect,
               crearCuenta,
               setCrearCuenta,
-              storageClient,
               pantalla,
               setPantalla,
               signless,

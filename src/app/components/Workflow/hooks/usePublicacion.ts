@@ -7,7 +7,6 @@ import {
 } from "@lens-protocol/client";
 import { LensConnected } from "../../Common/types/common.types";
 import { SetStateAction, useEffect, useState } from "react";
-import { StorageClient } from "@lens-protocol/storage-node-client";
 import { v4 as uuidv4 } from "uuid";
 import {
   post as createPost,
@@ -16,6 +15,8 @@ import {
 } from "@lens-protocol/client/actions";
 import pollResult from "@/app/lib/helpers/pollResult";
 import { Flujo } from "../../Modals/types/modals.types";
+import { immutable, StorageClient } from "@lens-chain/storage-client";
+import { chains } from "@lens-network/sdk/viem";
 
 const usePublicacion = (
   lensClient: PublicClient,
@@ -44,15 +45,19 @@ const usePublicacion = (
     if (!post) return;
     setPostLoading(true);
     try {
-      const { uri } = await storageClient.uploadAsJson({
-        $schema: "https://json-schemas.lens.dev/posts/text-only/3.0.0.json",
-        lens: {
-          mainContentFocus: MainContentFocus.TextOnly,
-          content: post,
-          id: uuidv4(),
-          locale: "en",
+      const acl = immutable(chains.testnet.id);
+      const { uri } = await storageClient.uploadAsJson(
+        {
+          $schema: "https://json-schemas.lens.dev/posts/text-only/3.0.0.json",
+          lens: {
+            mainContentFocus: MainContentFocus.TextOnly,
+            content: post,
+            id: uuidv4(),
+            locale: "en",
+          },
         },
-      });
+        { acl }
+      );
 
       const res = await createPost(lensConnected?.sessionClient!, {
         contentUri: uri,
@@ -98,17 +103,20 @@ const usePublicacion = (
     if (texto?.trim() == "" || post?.id) return;
     setPostLoading(true);
     try {
-      const { uri } = await storageClient.uploadAsJson({
-        $schema: "https://json-schemas.lens.dev/posts/text-only/3.0.0.json",
-        lens: {
-          mainContentFocus: MainContentFocus.TextOnly,
-          content: post,
-          id: uuidv4(),
-          locale: "en",
-          tags: ["lucidity", flujo?.name, flujo?.counter]?.filter(Boolean),
+      const acl = immutable(chains.testnet.id);
+      const { uri } = await storageClient.uploadAsJson(
+        {
+          $schema: "https://json-schemas.lens.dev/posts/text-only/3.0.0.json",
+          lens: {
+            mainContentFocus: MainContentFocus.TextOnly,
+            content: post,
+            id: uuidv4(),
+            locale: "en",
+            tags: ["lucidity", flujo?.name, flujo?.counter]?.filter(Boolean),
+          },
         },
-      });
-
+        { acl }
+      );
 
       const res = await createPost(lensConnected?.sessionClient!, {
         contentUri: uri,

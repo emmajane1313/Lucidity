@@ -75,41 +75,41 @@ const useChat = (
                     };
                   }) => {
                     if (item.workflowMetadata?.workflow) {
-                      if (
-                        !profileCache.get(item?.creator) &&
-                        (lensClient || lensConnected?.sessionClient)
-                      ) {
-                        const result = await fetchAccountsAvailable(
-                          lensConnected?.sessionClient ?? lensClient,
-                          {
-                            managedBy: evmAddress(item?.creator),
-                            includeOwned: true,
-                          }
-                        );
+                      // if (
+                      //   !profileCache.get(item?.creator) &&
+                      //   (lensClient || lensConnected?.sessionClient)
+                      // ) {
+                      //   const result = await fetchAccountsAvailable(
+                      //     lensConnected?.sessionClient ?? lensClient,
+                      //     {
+                      //       managedBy: evmAddress(item?.creator),
+                      //       includeOwned: true,
+                      //     }
+                      //   );
 
-                        if (result.isOk()) {
-                          const profile = result?.value.items[0]
-                            ?.account as Account;
-                          let picture = "";
-                          if (profile?.metadata?.picture) {
-                            const pictureKey =
-                              profile.metadata.picture.split("lens://")?.[1];
-                            const cadena = await fetch(
-                              `${STORAGE_NODE}/${pictureKey}`
-                            );
-                            const json = await cadena.json();
-                            picture = json.item;
-                          }
+                      //   if (result.isOk()) {
+                      //     const profile = result?.value.items[0]
+                      //       ?.account as Account;
+                      //     let picture = "";
+                      //     if (profile?.metadata?.picture) {
+                      //       const pictureKey =
+                      //         profile.metadata.picture.split("lens://")?.[1];
+                      //       const cadena = await fetch(
+                      //         `${STORAGE_NODE}/${pictureKey}`
+                      //       );
+                      //       const json = await cadena.json();
+                      //       picture = json.item;
+                      //     }
 
-                          profileCache.set(item?.creator, {
-                            ...profile,
-                            metadata: {
-                              ...profile?.metadata!,
-                              picture,
-                            },
-                          });
-                        }
-                      }
+                      //     profileCache.set(item?.creator, {
+                      //       ...profile,
+                      //       metadata: {
+                      //         ...profile?.metadata!,
+                      //         picture,
+                      //       },
+                      //     });
+                      //   }
+                      // }
 
                       return {
                         creator: item.creator,

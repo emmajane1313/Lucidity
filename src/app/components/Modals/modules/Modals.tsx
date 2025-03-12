@@ -36,7 +36,7 @@ export default function Modals({ dict }: { dict: any }) {
           setCreateAccount={contexto?.setCrearCuenta!}
           setLensConnected={contexto?.setLensConectado!}
           lensConnected={contexto?.lensConectado}
-          storageClient={contexto?.storageClient}
+          storageClient={contexto?.clienteAlmacenamiento}
           setNotification={contexto?.setError}
         />
       )}
