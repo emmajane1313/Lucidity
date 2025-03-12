@@ -16,6 +16,7 @@ const ALL_WORKFLOWS = gql`
         description
         setup
         links
+        cover
       }
       creator
       uri

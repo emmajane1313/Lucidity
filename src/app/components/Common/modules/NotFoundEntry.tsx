@@ -17,7 +17,7 @@ export default function NotFoundEntry({ dict }: { dict: any }) {
           contexto?.setPantalla?.(Pantalla.Chat);
         }}
       >
-        {dict[404].nada}
+        {dict?.[404]?.nada}
       </div>
     </div>
   );

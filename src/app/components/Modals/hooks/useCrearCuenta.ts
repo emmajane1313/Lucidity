@@ -1,7 +1,7 @@
 import { SetStateAction, useState } from "react";
 import { evmAddress } from "@lens-protocol/client";
 import { createWalletClient, custom } from "viem";
-import { chains } from "@lens-network/sdk/viem";
+import { chains } from "@lens-chain/sdk/viem";
 import { v4 as uuidv4 } from "uuid";
 import {
   createAccountWithUsername,

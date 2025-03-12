@@ -17,6 +17,7 @@ export const getWorkflows = async (
             description
             setup
             links
+            cover
           }
           creator
           uri

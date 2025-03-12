@@ -16,6 +16,7 @@ const Flujos: FunctionComponent<FlujosProps> = ({
   otroCargando,
   color
 }): JSX.Element => {
+
   return (
     <div className="relative w-full h-full overflow-y-scroll items-start justify-between flex">
       {!flujosCargando && flujos?.length < 1 ? (

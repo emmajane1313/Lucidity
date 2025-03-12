@@ -30,7 +30,7 @@ export default function Flujo({ dict }: { dict: any }) {
           />
         </div>
         <div className="absolute flex w-full h-full top-0 right-0 rounded-md bg-gris/70"></div>
-        <div className="relative w-full h-fit flex flex-col gap-3 items-center justify-start">
+        <div className="relative w-full h-full flex flex-col gap-3 items-center justify-start overflow-y-scroll">
           <div className="relative w-fit text-2xl h-fit flex items-center justify-center uppercase font-count">
             {flujo?.name}
           </div>
@@ -81,8 +81,10 @@ export default function Flujo({ dict }: { dict: any }) {
               </div>
             </div>
           )}
-          <div className="relative w-fit text-xs h-fit flex text-center max-h-40 overflow-y-scroll">
-            {flujo?.description}
+          <div className="relative w-full h-fit flex items-center justify-center">
+            <div className="relative w-fit text-xs h-fit flex text-center max-h-40 overflow-y-scroll">
+              {flujo?.description}
+            </div>
           </div>
           <div className="relative w-full flex flex-wrap text-xs h-fit gap-3 items-center justify-center pb-3">
             {flujo?.tags?.map((etiqueta, indice) => {
@@ -124,8 +126,8 @@ export default function Flujo({ dict }: { dict: any }) {
               color="white"
             />
           </div>
-          <div className="relative w-full h-fit flex items-start justify-start overflow-y-scroll overflow-x-auto bg-gris border border-ligero rounded-md p-2">
-            <div className="relative w-full h-96 text-sm">
+          <div className="relative w-full h-full flex items-start justify-start overflow-y-scroll overflow-x-auto bg-gris border border-ligero rounded-md p-2">
+            <div className="relative w-full text-sm">
               <pre className="flex relative">
                 <code className="language-json">
                   {JSON.stringify(flujo?.workflow, null, 2)}

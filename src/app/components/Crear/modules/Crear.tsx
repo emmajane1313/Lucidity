@@ -7,9 +7,9 @@ import { TbChecklist } from "react-icons/tb";
 import Image from "next/legacy/image";
 import { INFURA_GATEWAY, SET_UP } from "@/app/lib/constants";
 import { createPublicClient, http } from "viem";
-import { chains } from "@lens-network/sdk/viem";
 import { FaChevronDown } from "react-icons/fa";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { chains } from "@lens-chain/sdk/viem";
 
 const Crear: FunctionComponent<CambioElementoProps> = ({
   dict,

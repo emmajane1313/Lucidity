@@ -5,7 +5,7 @@ import {
 import { SetStateAction, useEffect, useState } from "react";
 import { LensConnected } from "../../Common/types/common.types";
 import { createWalletClient, custom } from "viem";
-import { chains } from "@lens-network/sdk/viem";
+import { chains } from "@lens-chain/sdk/viem";
 import { evmAddress, PublicClient } from "@lens-protocol/client";
 import { STORAGE_NODE } from "@/app/lib/constants";
 

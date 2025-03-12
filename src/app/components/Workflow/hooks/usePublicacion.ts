@@ -16,7 +16,7 @@ import {
 import pollResult from "@/app/lib/helpers/pollResult";
 import { Flujo } from "../../Modals/types/modals.types";
 import { immutable, StorageClient } from "@lens-chain/storage-client";
-import { chains } from "@lens-network/sdk/viem";
+import { chains } from "@lens-chain/sdk/viem";
 
 const usePublicacion = (
   lensClient: PublicClient,

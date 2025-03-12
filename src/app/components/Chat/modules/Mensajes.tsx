@@ -79,7 +79,7 @@ const Mensajes: FunctionComponent<MensajesProps> = ({
                               />
                             </div>
                             <div
-                              className={`absolute top-0 left-0 w-full h-full rounded-md text-white break-all font-dep bg-brillo/40 flex hover:opacity-70 items-center justify-center`}
+                              className={`absolute top-0 left-0 w-full h-full rounded-md text-white break-all font-dep bg-brillo/10 flex hover:opacity-70 items-center justify-center`}
                             >
                               <div className="relative w-fit h-fit flex text-center text-sm">
                                 {flujo.name}

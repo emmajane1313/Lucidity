@@ -11,6 +11,7 @@ const ACCOUNT_WORKFLOWS = gql`
         description
         setup
         links
+        cover
       }
       creator
       uri

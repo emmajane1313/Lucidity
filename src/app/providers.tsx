@@ -3,7 +3,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { createContext, SetStateAction, useEffect, useState } from "react";
-import { chains } from "@lens-network/sdk/viem";
 import { Context, PublicClient, testnet } from "@lens-protocol/client";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import {
@@ -13,6 +12,7 @@ import {
 import { Flujo } from "./components/Modals/types/modals.types";
 import { Usuario } from "./components/Chat/types/chat.types";
 import { StorageClient } from "@lens-chain/storage-client";
+import { chains } from "@lens-chain/sdk/viem";
 
 export const config = createConfig(
   getDefaultConfig({

@@ -43,7 +43,6 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
           },
         });
       }
-
       setFlujos(
         await Promise.all(
           datos?.data?.workflowCreateds?.map(async (flujo: any) => {
@@ -76,6 +75,7 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
             //     });
             //   }
             // }
+
 
             return {
               tags: flujo?.workflowMetadata?.tags?.split(", "),

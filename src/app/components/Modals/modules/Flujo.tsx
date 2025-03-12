@@ -91,9 +91,11 @@ const Flujo: FunctionComponent<FlujoProps> = ({
               </div>
             </div>
           )}
-          <div className="relative w-full h-fit flex">
-            <div className="relative w-full text-xs h-fit flex text-center max-h-40 overflow-y-scroll">
-              {flujo.description}
+          <div className="relative w-full h-fit flex justify-center">
+            <div className="relative w-3/5 h-fit flex justify-center">
+              <div className="relative w-fit text-xs h-fit flex text-center max-h-40 overflow-y-scroll">
+                {flujo.description}
+              </div>
             </div>
           </div>
           <div className="relative w-full flex flex-wrap text-xs h-fit gap-3 items-center justify-center pb-3">
@@ -139,7 +141,7 @@ const Flujo: FunctionComponent<FlujoProps> = ({
           <div className="relative w-full h-fit flex items-start justify-start bg-gris border border-ligero rounded-md p-2">
             <div className="relative w-full h-96 text-sm flex overflow-y-scroll">
               <pre className="flex relative w-full h-full">
-                <code className="language-json flex w-full h-full">
+                <code className="language-json w-20 h-full">
                   {JSON.stringify(flujo.workflow, null, 2)}
                 </code>
               </pre>

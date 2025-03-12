@@ -1,4 +1,4 @@
-import { chains } from "@lens-network/sdk/viem";
+import { chains } from "@lens-chain/sdk/viem";
 import { SetStateAction, useState } from "react";
 import LucidityWorkflowsAbi from "@abis/LucidityWorkflows.json";
 import { LUCIDITY_WORKFLOWS_CONTRACT } from "@/app/lib/constants";

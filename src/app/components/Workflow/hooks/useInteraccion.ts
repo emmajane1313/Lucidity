@@ -9,7 +9,7 @@ import {
 import pollResult from "@/app/lib/helpers/pollResult";
 import { v4 as uuidv4 } from "uuid";
 import { immutable, StorageClient } from "@lens-chain/storage-client";
-import { chains } from "@lens-network/sdk/viem";
+import { chains } from "@lens-chain/sdk/viem";
 
 const useInteraccion = (
   lensConnected: LensConnected,
