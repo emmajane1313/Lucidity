@@ -16,6 +16,7 @@ export type MensajesProps = {
   setFlujo: (e: SetStateAction<Flujo | undefined>) => void;
   typedMessage: string;
   user?: string;
+  typed: boolean;
 };
 
 export interface Mensaje {

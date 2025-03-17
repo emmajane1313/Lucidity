@@ -18,13 +18,18 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
     sendMessageLoading,
     messagesEndRef,
     typedMessage,
+    typed,
   } = useChat(
-    contexto?.lensConectado!,
-    contexto?.clienteLens!,
+    contexto?.openAI!,
+    contexto?.setOpenAI!,
     contexto?.setMensajes!,
     contexto?.mensajes!,
-    contexto?.setAgente!,
-    contexto?.agente!
+    contexto?.lensConectado!,
+    contexto?.clienteLens!,
+    contexto?.assistant!,
+    contexto?.setAssistant!,
+    contexto?.thread!,
+    contexto?.setThread!
   );
 
   return (
@@ -38,6 +43,7 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
       {(Number(contexto?.mensajes?.length) > 0 || sendMessageLoading) && (
         <Mensajes
           mensajes={contexto?.mensajes!}
+          typed={typed}
           sendMessageLoading={sendMessageLoading}
           messagesEndRef={messagesEndRef}
           dict={dict}

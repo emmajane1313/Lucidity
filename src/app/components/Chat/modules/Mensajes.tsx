@@ -13,8 +13,10 @@ const Mensajes: FunctionComponent<MensajesProps> = ({
   setFlujo,
   typedMessage,
   user,
+  typed,
 }): JSX.Element => {
   const { copiar, copiarFlujo, descargar } = useFlujo();
+
   return (
     <div className="relative w-full h-full flex flex-row justify-between items-start p-3 bg-black gap-4 overflow-y-scroll rounded-sm">
       <div className="relative w-full h-full overflow-y-scroll flex items-start justify-start flex-col gap-3">
@@ -23,7 +25,7 @@ const Mensajes: FunctionComponent<MensajesProps> = ({
         </div>
         <div className="relative w-full h-fit items-start justify-start flex flex-col gap-3 font-dep text-base">
           {mensajes
-            ?.filter((me) => me.usuario !== Usuario.Humano)
+            ?.filter((me) => me?.usuario !== Usuario.Humano)
             ?.map((valor, indice) => {
               return (
                 <div
@@ -31,9 +33,17 @@ const Mensajes: FunctionComponent<MensajesProps> = ({
                   className={`relative text-[#A0AA0C] w-full h-fit flex justify-start text-left`}
                   ref={
                     indice ==
-                    mensajes?.filter((me) => me.usuario !== Usuario.Humano)
-                      ?.length -
-                      1
+                      mensajes?.filter((me) => me?.usuario !== Usuario.Humano)
+                        ?.length -
+                        1 ||
+                    (indice ==
+                      mensajes?.filter((me) => me?.usuario !== Usuario.Humano)
+                        ?.length -
+                        2 &&
+                      mensajes?.[
+                        mensajes?.filter((me) => me?.usuario !== Usuario.Humano)
+                          ?.length - 1
+                      ]?.usuario == Usuario.Flujos)
                       ? messagesEndRef
                       : null
                   }
@@ -46,9 +56,11 @@ const Mensajes: FunctionComponent<MensajesProps> = ({
                       >
                         {indice ===
                           mensajes?.filter(
-                            (me) => me.usuario !== Usuario.Humano
+                            (me) => me?.usuario !== Usuario.Humano
                           )?.length -
-                            1 && typedMessage.trim() !== ""
+                            1 &&
+                        typedMessage.trim() !== "" &&
+                        !typed
                           ? typedMessage
                           : valor?.contenido}
                       </div>
@@ -154,7 +166,7 @@ const Mensajes: FunctionComponent<MensajesProps> = ({
         </div>
         <div className="relative w-full h-fit items-start justify-end flex flex-col gap-3 font-dep text-base">
           {mensajes
-            ?.filter((mes) => mes.usuario == Usuario.Humano)
+            ?.filter((mes) => mes?.usuario == Usuario.Humano)
             ?.map((valor, indice) => {
               return (
                 <div

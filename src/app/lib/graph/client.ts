@@ -6,3 +6,4 @@ export const lucidityClient = new ApolloClient({
   }),
   cache: new InMemoryCache(),
 });
+
