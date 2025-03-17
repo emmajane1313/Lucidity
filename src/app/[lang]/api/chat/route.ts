@@ -1,50 +1,135 @@
-import { RENDER_URL } from "@/app/lib/constants";
-import { NextResponse } from "next/server";
+import { ASSISTANT_ID } from "@/app/lib/constants";
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
+import { getWorkflows } from "../../../../../graphql/queries/getWorkflows";
 
-export async function POST(req: Request) {
+const openAI = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+export async function POST(req: NextRequest) {
   try {
-    // const { searchParams } = new URL(req.url);
-    // const sessionId = searchParams.get("sessionId");
-
-    // if (!sessionId) {
-    //   return NextResponse.json(
-    //     { error: "⛔ Falta el sessionId" },
-    //     { status: 400 }
-    //   );
-    // }
-
-    const formData = await req.formData();
-
-    const forwardData = new FormData();
-    formData.forEach((value, key) => {
-      forwardData.append(key, value);
+    const { prompt, thread } = await req.json();
+    await openAI.beta.threads.messages.create(thread, {
+      role: "user",
+      content: prompt,
     });
 
-    const res = await fetch(
-      // `${RENDER_URL}/chat/${sessionId}`,
-      `${RENDER_URL}/e51f224d-70d3-0f8c-90d5-e456b6ab9822/message`,
-      {
-        method: "POST",
-        body: forwardData,
-        headers: {
-          "x-api-key": process.env.RENDER_API_KEY!,
-        },
-        redirect: "manual",
-      }
-    );
+    let run = await openAI.beta.threads.runs.createAndPoll(thread, {
+      assistant_id: ASSISTANT_ID,
+    });
 
-    if (!res.ok) {
-      // const errorText = await res.text();
-      // console.error("Error from Eliza:", errorText);
-      // throw new Error("Failed to call Eliza");
+    const res = await handleRun(run);
 
-      return NextResponse.json({ text: await res.text() });
-    }
-
-    let data = await res.json();
-    return NextResponse.json({ data });
-  } catch (err: any) {
-    console.error(err.message);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ success: true, run: res });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+const handleRun = async (
+  run: OpenAI.Beta.Threads.Runs.Run
+): Promise<
+  | {
+      messages: OpenAI.Beta.Threads.Messages.Message[];
+      output: {
+        name: string;
+        output: string;
+      }[];
+    }
+  | undefined
+> => {
+  let tool_output: {
+    name: string;
+    output: string;
+  }[] = [];
+  while (true) {
+    const runRetrieved = await openAI.beta.threads.runs.retrieve(
+      run.thread_id,
+      run.id
+    );
+    let status = runRetrieved.status;
+
+    if (status === "requires_action") {
+      const requiredActions =
+        runRetrieved?.required_action?.submit_tool_outputs.tool_calls;
+
+      if (requiredActions) {
+        let toolsOutput: {
+          tool_call_id: string;
+          output: string;
+        }[] = [];
+        for (const action of requiredActions) {
+          const funcName = action.function.name;
+          const functionArguments = JSON.parse(action.function.arguments);
+
+          if (funcName === "getWorkflowsTool") {
+            try {
+              const output = await getWorkflowsTool(functionArguments);
+              toolsOutput.push({
+                tool_call_id: action.id,
+                output: JSON.stringify(
+                  JSON.parse(output).map(
+                    (item: any) => item?.workflowMetadata?.name
+                  )
+                ),
+              });
+              tool_output.push({
+                name: "GET_WORKFLOWS",
+                output: output,
+              });
+            } catch (error) {
+              console.error(`Error executing function ${funcName}: ${error}`);
+            }
+          } else {
+            console.error("Function not found");
+            break;
+          }
+        }
+
+        if (toolsOutput.length > 0) {
+          await openAI.beta.threads.runs.submitToolOutputs(
+            run.thread_id,
+            run.id,
+            {
+              tool_outputs: toolsOutput,
+            }
+          );
+        }
+      }
+    } else if (status === "completed") {
+      let messages = await openAI.beta.threads.messages.list(run.thread_id);
+      return {
+        messages: messages.data,
+        output: tool_output,
+      };
+    } else if (status === "failed" || status === "cancelled") {
+      console.error("Run failed or was cancelled.");
+      return;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+};
+
+const getWorkflowsTool = async (params: { search: string }) => {
+  try {
+    const searchTerms = params?.search.split(" ").filter(Boolean);
+    const orConditions = searchTerms.flatMap((term) => [
+      { description_contains_nocase: term },
+      { name_contains_nocase: term },
+      { tags_contains_nocase: term },
+      { workflow_contains_nocase: term },
+    ]);
+
+    const result = await getWorkflows({
+      workflowMetadata_: {
+        or: orConditions,
+      },
+    });
+
+    return JSON.stringify(result?.data?.workflowCreateds, null, 2);
+  } catch (error) {
+    console.error("API Error:", error);
+
+    throw error;
+  }
+};

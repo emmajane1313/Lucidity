@@ -70,34 +70,8 @@ export const ModalContext = createContext<
       }[];
       agente: string | undefined;
       setAgente: (e: SetStateAction<string | undefined>) => void;
-      openAI: OpenAI | undefined;
-      setOpenAI: (e: SetStateAction<OpenAI | undefined>) => void;
-      thread:
-        | (OpenAI.Beta.Threads.Thread & {
-            _request_id?: string | null;
-          })
-        | undefined;
-      setThread: (
-        e: SetStateAction<
-          | (OpenAI.Beta.Threads.Thread & {
-              _request_id?: string | null;
-            })
-          | undefined
-        >
-      ) => void;
-      assistant:
-        | (OpenAI.Beta.Assistants.Assistant & {
-            _request_id?: string | null;
-          })
-        | undefined;
-      setAssistant: (
-        e: SetStateAction<
-          | (OpenAI.Beta.Assistants.Assistant & {
-              _request_id?: string | null;
-            })
-          | undefined
-        >
-      ) => void;
+      thread: string | undefined;
+      setThread: (e: SetStateAction<string | undefined>) => void;
     }
   | undefined
 >(undefined);
@@ -113,7 +87,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [connect, setConnect] = useState<boolean>(false);
   const [crearCuenta, setCrearCuenta] = useState<boolean>(false);
   const [pantalla, setPantalla] = useState<Pantalla>(Pantalla.Chat);
-  const [openAI, setOpenAI] = useState<OpenAI>();
   const [mensajes, setMensajes] = useState<
     {
       contenido: string;
@@ -123,17 +96,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       action?: string;
     }[]
   >([]);
-  const [assistant, setAssistant] = useState<
-    | (OpenAI.Beta.Assistants.Assistant & {
-        _request_id?: string | null;
-      })
-    | undefined
-  >();
-  const [thread, setThread] = useState<
-    OpenAI.Beta.Threads.Thread & {
-      _request_id?: string | null;
-    }
-  >();
+  const [thread, setThread] = useState<string>();
 
   useEffect(() => {
     if (!clienteLens) {
@@ -156,14 +119,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         >
           <ModalContext.Provider
             value={{
-              assistant,
-              setAssistant,
               thread,
               setThread,
               clienteLens,
               clienteAlmacenamiento,
-              openAI,
-              setOpenAI,
               lensConectado,
               setLensConectado,
               flujo,

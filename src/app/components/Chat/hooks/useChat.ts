@@ -5,44 +5,17 @@ import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
 import OpenAI from "openai";
 import { getWorkflows } from "../../../../../graphql/queries/getWorkflows";
 import { TextContentBlock } from "openai/resources/beta/threads/messages.mjs";
-import {
-  ASSISTANT_ID,
-  GREY_BEARD,
-  INSTRUCTIONS,
-  STORAGE_NODE,
-} from "@/app/lib/constants";
+import { ASSISTANT_ID, STORAGE_NODE } from "@/app/lib/constants";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { LensConnected } from "../../Common/types/common.types";
 
 const useChat = (
-  openAI: OpenAI,
-  setOpenAI: (e: SetStateAction<OpenAI | undefined>) => void,
   setMensajes: (e: SetStateAction<Mensaje[]>) => void,
   mensajes: Mensaje[],
   lensConnected: LensConnected,
   lensClient: PublicClient,
-  assistant: OpenAI.Beta.Assistants.Assistant & {
-    _request_id?: string | null;
-  },
-  setAssistant: (
-    e: SetStateAction<
-      | (OpenAI.Beta.Assistants.Assistant & {
-          _request_id?: string | null;
-        })
-      | undefined
-    >
-  ) => void,
-  thread: OpenAI.Beta.Threads.Thread & {
-    _request_id?: string | null;
-  },
-  setThread: (
-    e: SetStateAction<
-      | (OpenAI.Beta.Threads.Thread & {
-          _request_id?: string | null;
-        })
-      | undefined
-    >
-  ) => void
+  thread: string | undefined,
+  setThread: (e: SetStateAction<string | undefined>) => void
 ) => {
   const [sendMessageLoading, setSendMessageLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<string>("");
@@ -50,91 +23,6 @@ const useChat = (
   const [typedMessage, setTypedMessage] = useState("");
   const profileCache = new Map<string, Account>();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
-  const handleRun = async (
-    run: OpenAI.Beta.Threads.Runs.Run
-  ): Promise<
-    | {
-        messages: OpenAI.Beta.Threads.Messages.Message[];
-        output: {
-          name: string;
-          output: string;
-        }[];
-      }
-    | undefined
-  > => {
-    let tool_output: {
-      name: string;
-      output: string;
-    }[] = [];
-    while (true) {
-      const runRetrieved = await openAI.beta.threads.runs.retrieve(
-        run.thread_id,
-        run.id
-      );
-      let status = runRetrieved.status;
-
-      if (status === "requires_action") {
-        const requiredActions =
-          runRetrieved?.required_action?.submit_tool_outputs.tool_calls;
-
-        if (requiredActions) {
-          let toolsOutput: {
-            tool_call_id: string;
-            output: string;
-          }[] = [];
-          for (const action of requiredActions) {
-            const funcName = action.function.name;
-            const functionArguments = JSON.parse(action.function.arguments);
-
-            if (funcName === "getWorkflowsTool") {
-              try {
-                const output = await getWorkflowsTool(functionArguments);
-                toolsOutput.push({
-                  tool_call_id: action.id,
-                  output: JSON.stringify(
-                    JSON.parse(output).map(
-                      (item: any) => item?.workflowMetadata?.name
-                    )
-                  ),
-                });
-                tool_output.push({
-                  name: "GET_WORKFLOWS",
-                  output: output,
-                });
-              } catch (error) {
-                console.error(`Error executing function ${funcName}: ${error}`);
-              }
-            } else {
-              console.error("Function not found");
-              break;
-            }
-          }
-
-          if (toolsOutput.length > 0) {
-            await openAI.beta.threads.runs.submitToolOutputs(
-              run.thread_id,
-              run.id,
-              {
-                tool_outputs: toolsOutput,
-              }
-            );
-          }
-        }
-      } else if (status === "completed") {
-        let messages = await openAI.beta.threads.messages.list(run.thread_id);
-        return {
-          messages: messages.data,
-          output: tool_output,
-        };
-      } else if (status === "failed" || status === "cancelled") {
-        console.error("Run failed or was cancelled.");
-        return;
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-  };
 
   const handleSendMessage = async (
     mensajes: {
@@ -148,12 +36,16 @@ const useChat = (
     let internal_prompt = prompt;
     setPrompt("");
     setTypedMessage("");
-    if (internal_prompt?.trim() == "" || !assistant) return;
+    if (internal_prompt?.trim() == "") return;
     setSendMessageLoading(true);
     try {
       let hilo = thread;
       if (mensajes.length == 1 && !hilo) {
-        hilo = await openAI.beta.threads.create();
+        const res = await fetch("/api/thread", {
+          method: "POST",
+        });
+        const json = await res.json();
+        hilo = json?.threadId;
         setThread(hilo);
       }
 
@@ -164,18 +56,17 @@ const useChat = (
 
       setTyped(false);
 
-      await openAI.beta.threads.messages.create(hilo!?.id, {
-        role: "user",
-        content: internal_prompt,
+      const run_res = await fetch("/api/chat", {
+        method: "POST",
+        body: JSON.stringify({
+          prompt: internal_prompt,
+          thread: hilo,
+        }),
       });
 
-      let run = await openAI.beta.threads.runs.createAndPoll(hilo!?.id, {
-        assistant_id: assistant!?.id,
-      });
+      const run_json = await run_res.json();
 
-      const res = await handleRun(run);
-
-      if (res) {
+      if (run_json?.run) {
         setMensajes([
           ...mensajes?.filter(
             (mensaje) => mensaje !== undefined && mensaje !== null
@@ -185,28 +76,32 @@ const useChat = (
               !mensajes?.find(
                 (men) =>
                   men.contenido ==
-                  (res?.messages?.[1]?.content?.[0] as TextContentBlock)?.text
-                    ?.value
+                  (
+                    run_json?.run?.messages?.[1]
+                      ?.content?.[0] as TextContentBlock
+                  )?.text?.value
               ) &&
-              (res?.messages?.[1]?.content?.[0] as TextContentBlock)?.text
-                ?.value
+              (run_json?.run?.messages?.[1]?.content?.[0] as TextContentBlock)
+                ?.text?.value
                 ? `${
-                    (res?.messages?.[1]?.content?.[0] as TextContentBlock)?.text
-                      ?.value
+                    (
+                      run_json?.run?.messages?.[1]
+                        ?.content?.[0] as TextContentBlock
+                    )?.text?.value
                   }\n\n`
                 : ""
             }${
-              (res?.messages?.[0]?.content?.[0] as TextContentBlock)?.text
-                ?.value ?? ""
+              (run_json?.run?.messages?.[0]?.content?.[0] as TextContentBlock)
+                ?.text?.value ?? ""
             }`,
             usuario: Usuario.Maquina,
-            action: res?.output?.[0]?.name,
+            action: run_json?.run?.output?.[0]?.name,
           },
-          res?.output?.[0]?.output &&
+          run_json?.run?.output?.[0]?.output &&
             ({
               usuario: Usuario.Flujos,
               flujos: (await Promise.all(
-                JSON.parse(res?.output?.[0]?.output).map(
+                JSON.parse(run_json?.run?.output?.[0]?.output).map(
                   async (item: {
                     creator: string;
                     counter: string;
@@ -282,56 +177,6 @@ const useChat = (
     }
     setSendMessageLoading(false);
   };
-
-  const getAssistant = async () => {
-    try {
-      const open_assistant = await openAI.beta.assistants.retrieve(
-        ASSISTANT_ID
-      );
-      setAssistant(open_assistant);
-    } catch (err: any) {
-      console.error(err.message);
-    }
-  };
-
-  const getWorkflowsTool = async (params: { search: string }) => {
-    try {
-      const searchTerms = params?.search.split(" ").filter(Boolean);
-      const orConditions = searchTerms.flatMap((term) => [
-        { description_contains_nocase: term },
-        { name_contains_nocase: term },
-        { tags_contains_nocase: term },
-        { workflow_contains_nocase: term },
-      ]);
-
-      const result = await getWorkflows({
-        workflowMetadata_: {
-          or: orConditions,
-        },
-      });
-
-      return JSON.stringify(result?.data?.workflowCreateds, null, 2);
-    } catch (error) {
-      console.error("API Error:", error);
-
-      throw error;
-    }
-  };
-
-  useEffect(() => {
-    if (!openAI) {
-      setOpenAI(
-        new OpenAI({
-          apiKey: process.env.NEXT_PUBLIC_OPEN_AI_KEY,
-          dangerouslyAllowBrowser: true,
-        })
-      );
-    }
-
-    if (!assistant && openAI) {
-      getAssistant();
-    }
-  }, [openAI]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

@@ -20,14 +20,10 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
     typedMessage,
     typed,
   } = useChat(
-    contexto?.openAI!,
-    contexto?.setOpenAI!,
     contexto?.setMensajes!,
     contexto?.mensajes!,
     contexto?.lensConectado!,
     contexto?.clienteLens!,
-    contexto?.assistant!,
-    contexto?.setAssistant!,
     contexto?.thread!,
     contexto?.setThread!
   );
