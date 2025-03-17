@@ -2,10 +2,8 @@ import { SetStateAction, useEffect, useRef, useState } from "react";
 import { Mensaje, Usuario } from "../types/chat.types";
 import { Flujo } from "../../Modals/types/modals.types";
 import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
-import OpenAI from "openai";
-import { getWorkflows } from "../../../../../graphql/queries/getWorkflows";
 import { TextContentBlock } from "openai/resources/beta/threads/messages.mjs";
-import { ASSISTANT_ID, STORAGE_NODE } from "@/app/lib/constants";
+import { STORAGE_NODE } from "@/app/lib/constants";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { LensConnected } from "../../Common/types/common.types";
 
@@ -40,7 +38,7 @@ const useChat = (
     setSendMessageLoading(true);
     try {
       let hilo = thread;
-      if (mensajes.length == 1 && !hilo) {
+      if (!hilo) {
         const res = await fetch("/api/thread", {
           method: "POST",
         });
