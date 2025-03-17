@@ -5,7 +5,12 @@ import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
 import OpenAI from "openai";
 import { getWorkflows } from "../../../../../graphql/queries/getWorkflows";
 import { TextContentBlock } from "openai/resources/beta/threads/messages.mjs";
-import { GREY_BEARD, INSTRUCTIONS, STORAGE_NODE } from "@/app/lib/constants";
+import {
+  ASSISTANT_ID,
+  GREY_BEARD,
+  INSTRUCTIONS,
+  STORAGE_NODE,
+} from "@/app/lib/constants";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { LensConnected } from "../../Common/types/common.types";
 
@@ -278,33 +283,11 @@ const useChat = (
     setSendMessageLoading(false);
   };
 
-  const createAssistant = async () => {
+  const getAssistant = async () => {
     try {
-      const open_assistant = await openAI.beta.assistants.create({
-        name: "Pixel",
-        instructions: GREY_BEARD,
-        model: "gpt-4o-mini",
-        tools: [
-          {
-            type: "function",
-            function: {
-              name: "getWorkflowsTool",
-              parameters: {
-                type: "object",
-                properties: {
-                  search: {
-                    type: "string",
-                    description:
-                      "1-5 key search terms i.e. segmentation mask filter",
-                  },
-                },
-                required: ["search"],
-              },
-              description: INSTRUCTIONS,
-            },
-          },
-        ],
-      });
+      const open_assistant = await openAI.beta.assistants.retrieve(
+        ASSISTANT_ID
+      );
       setAssistant(open_assistant);
     } catch (err: any) {
       console.error(err.message);
@@ -346,7 +329,7 @@ const useChat = (
     }
 
     if (!assistant && openAI) {
-      createAssistant();
+      getAssistant();
     }
   }, [openAI]);
 
