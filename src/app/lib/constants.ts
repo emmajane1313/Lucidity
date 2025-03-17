@@ -3,10 +3,6 @@ export const LENS_BASE_URL: string = "https://api.testnet.lens.dev/graphql";
 export const STORAGE_NODE: string = "https://storage-api.testnet.lens.dev";
 
 export const IPFS_REGEX: RegExp = /\b(Qm[1-9A-Za-z]{44}|ba[A-Za-z2-7]{57})\b/;
-export const RENDER_URL: string =
-  // "http://localhost";
-  "https://eliza-plugins.onrender.com";
-
 export const LUCIDITY_WORKFLOWS_CONTRACT: `0x${string}` =
   "0x39d4cd14DcCf54aa8E343583A224d5864e00E5eB";
 

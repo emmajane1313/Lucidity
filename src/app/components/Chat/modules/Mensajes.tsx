@@ -5,6 +5,7 @@ import { MensajesProps, Usuario } from "../types/chat.types";
 import { IoMdDownload } from "react-icons/io";
 import useFlujo from "../../Modals/hooks/useFlujo";
 
+
 const Mensajes: FunctionComponent<MensajesProps> = ({
   mensajes,
   sendMessageLoading,
