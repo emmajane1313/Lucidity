@@ -6,6 +6,7 @@ import { TextContentBlock } from "openai/resources/beta/threads/messages.mjs";
 import { STORAGE_NODE } from "@/app/lib/constants";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { LensConnected } from "../../Common/types/common.types";
+import { procesarMensaje } from "@/app/lib/helpers/procesarMensaje";
 
 const useChat = (
   setMensajes: (e: SetStateAction<Mensaje[]>) => void,
@@ -63,38 +64,50 @@ const useChat = (
       });
 
       const run_json = await run_res.json();
-
       if (run_json?.run) {
         setMensajes([
           ...mensajes?.filter(
             (mensaje) => mensaje !== undefined && mensaje !== null
           ),
-          {
-            contenido: `${
-              !mensajes?.find(
-                (men) =>
-                  men.contenido ==
-                  (
-                    run_json?.run?.messages?.[1]
-                      ?.content?.[0] as TextContentBlock
-                  )?.text?.value
-              ) &&
-              (run_json?.run?.messages?.[1]?.content?.[0] as TextContentBlock)
-                ?.text?.value
-                ? `${
+          ...((
+            run_json?.run?.messages?.[0]?.content?.[0] as TextContentBlock
+          )?.text?.value?.includes("```json")
+            ? procesarMensaje(
+                (run_json?.run?.messages?.[0]?.content?.[0] as TextContentBlock)
+                  ?.text?.value
+              )
+            : [
+                {
+                  contenido: `${
+                    !mensajes?.find(
+                      (men) =>
+                        men.contenido ==
+                        (
+                          run_json?.run?.messages?.[1]
+                            ?.content?.[0] as TextContentBlock
+                        )?.text?.value
+                    ) &&
                     (
                       run_json?.run?.messages?.[1]
                         ?.content?.[0] as TextContentBlock
                     )?.text?.value
-                  }\n\n`
-                : ""
-            }${
-              (run_json?.run?.messages?.[0]?.content?.[0] as TextContentBlock)
-                ?.text?.value ?? ""
-            }`,
-            usuario: Usuario.Maquina,
-            action: run_json?.run?.output?.[0]?.name,
-          },
+                      ? `${
+                          (
+                            run_json?.run?.messages?.[1]
+                              ?.content?.[0] as TextContentBlock
+                          )?.text?.value
+                        }\n\n`
+                      : ""
+                  }${
+                    (
+                      run_json?.run?.messages?.[0]
+                        ?.content?.[0] as TextContentBlock
+                    )?.text?.value ?? ""
+                  }`,
+                  usuario: Usuario.Maquina,
+                  action: run_json?.run?.output?.[0]?.name,
+                },
+              ]),
           run_json?.run?.output?.[0]?.output &&
             ({
               usuario: Usuario.Flujos,
@@ -177,7 +190,10 @@ const useChat = (
   };
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
 
     if (mensajes) {
       const mensajesLimpiados = (mensajes || [])?.filter(

@@ -18,6 +18,11 @@ export async function POST(req: NextRequest) {
     });
 
     const res = await handleRun(run);
+    // const runSteps = await openAI.beta.threads.runs.steps.list(
+    //   thread,
+    //   run.id
+    // );
+
 
     return NextResponse.json({ success: true, run: res });
   } catch (error: any) {
