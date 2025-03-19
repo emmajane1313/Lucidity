@@ -65,6 +65,7 @@ const useChat = (
 
       const run_json = await run_res.json();
       if (run_json?.run) {
+    
         setMensajes([
           ...mensajes?.filter(
             (mensaje) => mensaje !== undefined && mensaje !== null
@@ -112,7 +113,7 @@ const useChat = (
             ({
               usuario: Usuario.Flujos,
               flujos: (await Promise.all(
-                JSON.parse(run_json?.run?.output?.[0]?.output).map(
+                JSON.parse(run_json?.run?.output?.[0]?.output)?.map(
                   async (item: {
                     creator: string;
                     counter: string;
@@ -212,6 +213,9 @@ const useChat = (
         let i: number = 0;
         let mensajeEscribiendo = "";
 
+        setTypedMessage("");
+        setTyped(true);
+
         const interval = setInterval(() => {
           if (i < ultimoMensaje.length) {
             mensajeEscribiendo += ultimoMensaje[i];
@@ -219,11 +223,11 @@ const useChat = (
             i++;
           } else {
             clearInterval(interval);
+            setTyped(false);
           }
         }, 30);
 
-        setTypedMessage("");
-        setTyped(true);
+       
         return () => clearInterval(interval);
       }
     }
