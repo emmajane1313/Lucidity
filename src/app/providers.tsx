@@ -13,7 +13,6 @@ import { Flujo } from "./components/Modals/types/modals.types";
 import { Usuario } from "./components/Chat/types/chat.types";
 import { StorageClient } from "@lens-chain/storage-client";
 import { chains } from "@lens-chain/sdk/viem";
-import OpenAI from "openai";
 
 export const config = createConfig(
   getDefaultConfig({

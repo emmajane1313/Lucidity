@@ -18,7 +18,6 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
     sendMessageLoading,
     messagesEndRef,
     typedMessage,
-    typed,
   } = useChat(
     contexto?.setMensajes!,
     contexto?.mensajes!,
@@ -39,7 +38,6 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
       {(Number(contexto?.mensajes?.length) > 0 || sendMessageLoading) && (
         <Mensajes
           mensajes={contexto?.mensajes!}
-          typed={typed}
           sendMessageLoading={sendMessageLoading}
           messagesEndRef={messagesEndRef}
           dict={dict}

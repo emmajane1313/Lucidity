@@ -5,7 +5,6 @@ import { MensajesProps, Usuario } from "../types/chat.types";
 import { IoMdDownload } from "react-icons/io";
 import useFlujo from "../../Modals/hooks/useFlujo";
 
-
 const Mensajes: FunctionComponent<MensajesProps> = ({
   mensajes,
   sendMessageLoading,
@@ -14,7 +13,6 @@ const Mensajes: FunctionComponent<MensajesProps> = ({
   setFlujo,
   typedMessage,
   user,
-  typed,
 }): JSX.Element => {
   const { copiar, copiarFlujo, descargar } = useFlujo();
 
@@ -53,18 +51,18 @@ const Mensajes: FunctionComponent<MensajesProps> = ({
                   valor?.usuario !== Usuario.NewFlujo ? (
                     <div className="relative w-fit flex h-fit flex-col gap-2 items-start justify-start">
                       <div
-                        className={`relative w-fit p-2 rounded-md h-fit flex items-center justify-center`}
-                      >
-                        {indice ===
-                          mensajes?.filter(
-                            (me) => me?.usuario !== Usuario.Humano
-                          )?.length -
-                            1 &&
-                        typedMessage.trim() !== "" &&
-                        !typed
-                          ? typedMessage
-                          : valor?.contenido}
-                      </div>
+                        className={`relative w-fit p-2 rounded-md h-fit flex items-center justify-center whitespace-pre-line`}
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            indice ===
+                              mensajes?.filter(
+                                (me) => me?.usuario !== Usuario.Humano
+                              )?.length -
+                                1 && typedMessage.trim() !== ""
+                              ? typedMessage
+                              : valor?.contenido,
+                        }}
+                      ></div>
                       {valor?.action && (
                         <div className="relative text-xxs w-fit h-fit flex px-2.5 items-center justify-center rounded-full bg-ligero">
                           {valor?.action}

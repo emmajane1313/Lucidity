@@ -18,10 +18,10 @@ const useChat = (
 ) => {
   const [sendMessageLoading, setSendMessageLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<string>("");
-  const [typed, setTyped] = useState<boolean>(true);
   const [typedMessage, setTypedMessage] = useState("");
   const profileCache = new Map<string, Account>();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const lastMessageRef = useRef<string | null>(null);
 
   const handleSendMessage = async (
     mensajes: {
@@ -33,10 +33,10 @@ const useChat = (
     }[]
   ) => {
     let internal_prompt = prompt;
-    setPrompt("");
-    setTypedMessage("");
     if (internal_prompt?.trim() == "") return;
     setSendMessageLoading(true);
+    setPrompt("");
+    setTypedMessage("");
     try {
       let hilo = thread;
       if (!hilo) {
@@ -53,8 +53,6 @@ const useChat = (
         return;
       }
 
-      setTyped(false);
-
       const run_res = await fetch("/api/chat", {
         method: "POST",
         body: JSON.stringify({
@@ -65,7 +63,6 @@ const useChat = (
 
       const run_json = await run_res.json();
       if (run_json?.run) {
-    
         setMensajes([
           ...mensajes?.filter(
             (mensaje) => mensaje !== undefined && mensaje !== null
@@ -182,7 +179,9 @@ const useChat = (
                 )
               )) as Flujo[],
             } as any),
-        ]);
+        ]?.filter(
+          (mensaje) => mensaje !== undefined && mensaje !== null
+        ),);
       }
     } catch (err: any) {
       console.error(err.message);
@@ -200,34 +199,31 @@ const useChat = (
       const mensajesLimpiados = (mensajes || [])?.filter(
         (mensaje) => mensaje !== undefined && mensaje !== null
       );
+      const ultimoMensaje = mensajesLimpiados[mensajesLimpiados.length - 1];
 
       if (
         mensajesLimpiados?.length > 0 &&
         mensajesLimpiados[mensajesLimpiados?.length - 1]?.usuario ==
           Usuario.Maquina &&
-        mensajesLimpiados[mensajesLimpiados?.length - 1]?.contenido &&
-        typedMessage.trim() == ""
+        ultimoMensaje &&
+        lastMessageRef.current !== ultimoMensaje.contenido &&
+        typedMessage == ""
       ) {
-        const ultimoMensaje =
-          mensajesLimpiados[mensajesLimpiados?.length - 1]?.contenido;
+        lastMessageRef.current = ultimoMensaje.contenido;
         let i: number = 0;
         let mensajeEscribiendo = "";
 
-        setTypedMessage("");
-        setTyped(true);
-
         const interval = setInterval(() => {
-          if (i < ultimoMensaje.length) {
-            mensajeEscribiendo += ultimoMensaje[i];
+          if (i < ultimoMensaje.contenido.length) {
+            mensajeEscribiendo += ultimoMensaje.contenido[i];
             setTypedMessage(mensajeEscribiendo);
             i++;
           } else {
+            setTypedMessage("");
             clearInterval(interval);
-            setTyped(false);
           }
         }, 30);
 
-       
         return () => clearInterval(interval);
       }
     }
@@ -240,7 +236,6 @@ const useChat = (
     sendMessageLoading,
     messagesEndRef,
     typedMessage,
-    typed,
   };
 };
 
