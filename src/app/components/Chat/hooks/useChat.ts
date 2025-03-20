@@ -63,125 +63,127 @@ const useChat = (
 
       const run_json = await run_res.json();
       if (run_json?.run) {
-        setMensajes([
-          ...mensajes?.filter(
-            (mensaje) => mensaje !== undefined && mensaje !== null
-          ),
-          ...((
-            run_json?.run?.messages?.[0]?.content?.[0] as TextContentBlock
-          )?.text?.value?.includes("```json")
-            ? procesarMensaje(
-                (run_json?.run?.messages?.[0]?.content?.[0] as TextContentBlock)
-                  ?.text?.value
-              )
-            : [
-                {
-                  contenido: `${
-                    !mensajes?.find(
-                      (men) =>
-                        men.contenido ==
-                        (
-                          run_json?.run?.messages?.[1]
-                            ?.content?.[0] as TextContentBlock
-                        )?.text?.value
-                    ) &&
-                    (
-                      run_json?.run?.messages?.[1]
-                        ?.content?.[0] as TextContentBlock
-                    )?.text?.value
-                      ? `${
-                          (
-                            run_json?.run?.messages?.[1]
-                              ?.content?.[0] as TextContentBlock
-                          )?.text?.value
-                        }\n\n`
-                      : ""
-                  }${
-                    (
-                      run_json?.run?.messages?.[0]
-                        ?.content?.[0] as TextContentBlock
-                    )?.text?.value ?? ""
-                  }`,
-                  usuario: Usuario.Maquina,
-                  action: run_json?.run?.output?.[0]?.name,
-                },
-              ]),
-          run_json?.run?.output?.[0]?.output &&
-            ({
-              usuario: Usuario.Flujos,
-              flujos: (await Promise.all(
-                JSON.parse(run_json?.run?.output?.[0]?.output)?.map(
-                  async (item: {
-                    creator: string;
-                    counter: string;
-                    workflowMetadata: {
-                      workflow: string;
-                      name: string;
-                      tags: string;
-                      description: string;
-                      cover: string;
-                      setup: string;
-                      links: string[];
-                    };
-                  }) => {
-                    if (item.workflowMetadata?.workflow) {
-                      if (
-                        !profileCache.get(item?.creator) &&
-                        (lensClient || lensConnected?.sessionClient)
-                      ) {
-                        const result = await fetchAccountsAvailable(
-                          lensConnected?.sessionClient ?? lensClient,
-                          {
-                            managedBy: evmAddress(item?.creator),
-                            includeOwned: true,
-                          }
-                        );
+        const mensajeContenido0 =
+          (run_json?.run?.messages?.[0]?.content?.[0] as TextContentBlock)?.text
+            ?.value ?? "";
 
-                        if (result.isOk()) {
-                          const profile = result?.value.items[0]
-                            ?.account as Account;
-                          let picture = "";
-                          if (profile?.metadata?.picture) {
-                            const pictureKey =
-                              profile.metadata.picture.split("lens://")?.[1];
-                            const cadena = await fetch(
-                              `${STORAGE_NODE}/${pictureKey}`
+        const mensajeContenido1 =
+          (run_json?.run?.messages?.[1]?.content?.[0] as TextContentBlock)?.text
+            ?.value ?? "";
+
+        const mensajeExiste0 = mensajes?.some(
+          (mensaje) => mensaje.contenido === mensajeContenido0
+        );
+
+        const mensajeExiste1 = mensajeContenido1
+          ? mensajes?.some((mensaje) => mensaje.contenido === mensajeContenido1)
+          : true;
+
+        const nuevosMensajes = [];
+
+        if (!mensajeExiste1 && mensajeContenido1.trim() !== "") {
+          nuevosMensajes.push({
+            contenido: mensajeContenido1,
+            usuario: Usuario.Maquina,
+            action: run_json?.run?.output?.[0]?.name,
+          });
+        }
+
+        if (mensajeContenido0.includes("```json")) {
+          nuevosMensajes.push(...procesarMensaje(mensajeContenido0));
+        } else if (!mensajeExiste0 && mensajeContenido0.trim() !== "") {
+          nuevosMensajes.push({
+            contenido: mensajeContenido0,
+            usuario: Usuario.Maquina,
+            action: run_json?.run?.output?.[0]?.name,
+          });
+        }
+
+        if (nuevosMensajes.length > 0) {
+          setMensajes(
+            [
+              ...mensajes,
+              ...nuevosMensajes,
+              run_json?.run?.output?.[0]?.output &&
+                ({
+                  usuario: Usuario.Flujos,
+                  flujos: (await Promise.all(
+                    JSON.parse(run_json?.run?.output?.[0]?.output)?.map(
+                      async (item: {
+                        creator: string;
+                        counter: string;
+                        workflowMetadata: {
+                          workflow: string;
+                          name: string;
+                          tags: string;
+                          description: string;
+                          cover: string;
+                          setup: string;
+                          links: string[];
+                        };
+                      }) => {
+                        if (item.workflowMetadata?.workflow) {
+                          if (
+                            !profileCache.get(item?.creator) &&
+                            (lensClient || lensConnected?.sessionClient)
+                          ) {
+                            const result = await fetchAccountsAvailable(
+                              lensConnected?.sessionClient ?? lensClient,
+                              {
+                                managedBy: evmAddress(item?.creator),
+                                includeOwned: true,
+                              }
                             );
-                            const json = await cadena.json();
-                            picture = json.item;
+
+                            if (result.isOk()) {
+                              const profile = result?.value.items[0]
+                                ?.account as Account;
+                              let picture = "";
+                              if (profile?.metadata?.picture) {
+                                const pictureKey =
+                                  profile.metadata.picture.split(
+                                    "lens://"
+                                  )?.[1];
+                                const cadena = await fetch(
+                                  `${STORAGE_NODE}/${pictureKey}`
+                                );
+                                const json = await cadena.json();
+                                picture = json.item;
+                              }
+
+                              profileCache.set(item?.creator, {
+                                ...profile,
+                                metadata: {
+                                  ...profile?.metadata!,
+                                  picture,
+                                },
+                              });
+                            }
                           }
 
-                          profileCache.set(item?.creator, {
-                            ...profile,
-                            metadata: {
-                              ...profile?.metadata!,
-                              picture,
-                            },
-                          });
+                          return {
+                            creator: item.creator,
+                            counter: item.counter,
+                            tags: item.workflowMetadata?.tags?.split(", "),
+                            name: item.workflowMetadata?.name,
+                            description: item.workflowMetadata?.description,
+                            cover: item.workflowMetadata?.cover,
+                            workflow: JSON.parse(
+                              item.workflowMetadata?.workflow
+                            ),
+                            setup: item?.workflowMetadata?.setup?.split(", "),
+                            links: item?.workflowMetadata?.links,
+                            profile: profileCache.get(item?.creator),
+                          };
                         }
+                        return item;
                       }
-
-                      return {
-                        creator: item.creator,
-                        counter: item.counter,
-                        tags: item.workflowMetadata?.tags?.split(", "),
-                        name: item.workflowMetadata?.name,
-                        description: item.workflowMetadata?.description,
-                        cover: item.workflowMetadata?.cover,
-                        workflow: JSON.parse(item.workflowMetadata?.workflow),
-                        setup: item?.workflowMetadata?.setup?.split(", "),
-                        links: item?.workflowMetadata?.links,
-                        profile: profileCache.get(item?.creator),
-                      };
-                    }
-                    return item;
-                  }
-                )
-              )) as Flujo[],
-            } as any),
-        ]?.filter(
-          (mensaje) => mensaje !== undefined && mensaje !== null
-        ),);
+                    )
+                  )) as Flujo[],
+                } as any),
+            ]?.filter((mensaje) => mensaje !== undefined && mensaje !== null)
+          );
+        }
       }
     } catch (err: any) {
       console.error(err.message);
