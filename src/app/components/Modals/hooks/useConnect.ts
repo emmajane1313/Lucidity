@@ -20,7 +20,7 @@ const useConnect = (
 ) => {
   const [lensCargando, setLensCargando] = useState<boolean>(false);
 
-  const handleConnectarse = async () => {
+  const handleConectarse = async () => {
     if (!lensConectado?.address || !lensClient) return;
     setLensCargando(true);
     try {
@@ -147,7 +147,7 @@ const useConnect = (
   return {
     lensCargando,
     salir,
-    handleConnectarse,
+    handleConectarse,
   };
 };
 

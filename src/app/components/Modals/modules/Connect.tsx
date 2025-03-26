@@ -17,7 +17,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
 }): JSX.Element => {
   const { openProfile, openSwitchNetworks, openOnboarding } = useModal();
   const { isConnected, address, chainId } = useAccount();
-  const { lensCargando, salir, handleConnectarse } = useConnect(
+  const { lensCargando, salir, handleConectarse } = useConnect(
     lensConectado,
     clienteLens,
     setError!,
@@ -68,7 +68,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
             }`}
             onClick={() => {
               if (!lensConectado?.profile) {
-                handleConnectarse();
+                handleConectarse();
               } else {
                 salir();
               }
