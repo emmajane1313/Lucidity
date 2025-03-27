@@ -17,6 +17,7 @@ import pollResult from "@/app/lib/helpers/pollResult";
 import { Flujo } from "../../Modals/types/modals.types";
 import { immutable, StorageClient } from "@lens-chain/storage-client";
 import { chains } from "@lens-chain/sdk/viem";
+import { textOnly } from "@lens-protocol/metadata";
 
 const usePublicacion = (
   lensClient: PublicClient,
@@ -46,19 +47,10 @@ const usePublicacion = (
     setPostLoading(true);
     try {
       const acl = immutable(chains.testnet.id);
-      const { uri } = await storageClient.uploadAsJson(
-        {
-          $schema: "https://json-schemas.lens.dev/posts/text-only/3.0.0.json",
-          lens: {
-            mainContentFocus: MainContentFocus.TextOnly,
-            content: post,
-            id: uuidv4(),
-            locale: "en",
-          },
-        },
-        { acl }
-      );
-
+      const schema = textOnly({
+        content: texto,
+      });
+      const { uri } = await storageClient?.uploadAsJson(schema, { acl })!;
       const res = await createPost(lensConnected?.sessionClient!, {
         contentUri: uri,
         commentOn: {
@@ -104,19 +96,15 @@ const usePublicacion = (
     setPostLoading(true);
     try {
       const acl = immutable(chains.testnet.id);
-      const { uri } = await storageClient.uploadAsJson(
-        {
-          $schema: "https://json-schemas.lens.dev/posts/text-only/3.0.0.json",
-          lens: {
-            mainContentFocus: MainContentFocus.TextOnly,
-            content: post,
-            id: uuidv4(),
-            locale: "en",
-            tags: ["lucidity", flujo?.name, flujo?.counter]?.filter(Boolean),
-          },
-        },
-        { acl }
-      );
+
+      const schema = textOnly({
+        content: texto,
+        tags: ["lucidity", flujo?.name, flujo?.counter]?.filter(
+          Boolean
+        ) as string[],
+      });
+
+      const { uri } = await storageClient?.uploadAsJson(schema, { acl })!;
 
       const res = await createPost(lensConnected?.sessionClient!, {
         contentUri: uri,

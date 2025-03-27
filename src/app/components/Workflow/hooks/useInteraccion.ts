@@ -10,6 +10,7 @@ import pollResult from "@/app/lib/helpers/pollResult";
 import { v4 as uuidv4 } from "uuid";
 import { immutable, StorageClient } from "@lens-chain/storage-client";
 import { chains } from "@lens-chain/sdk/viem";
+import { textOnly } from "@lens-protocol/metadata";
 
 const useInteraccion = (
   lensConnected: LensConnected,
@@ -141,18 +142,11 @@ const useInteraccion = (
     });
     try {
       const acl = immutable(chains.testnet.id);
-      const { uri } = await storageClient.uploadAsJson(
-        {
-          $schema: "https://json-schemas.lens.dev/posts/text-only/3.0.0.json",
-          lens: {
-            mainContentFocus: MainContentFocus.TextOnly,
-            content: post,
-            id: uuidv4(),
-            locale: "en",
-          },
-        },
-        { acl }
-      );
+
+      const schema = textOnly({
+        content: texto,
+      });
+      const { uri } = await storageClient?.uploadAsJson(schema, { acl })!;
 
       const res = await createPost(lensConnected?.sessionClient!, {
         contentUri: uri,
