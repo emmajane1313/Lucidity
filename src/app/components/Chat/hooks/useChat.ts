@@ -3,7 +3,6 @@ import { Mensaje, Usuario } from "../types/chat.types";
 import { Flujo } from "../../Modals/types/modals.types";
 import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
 import { TextContentBlock } from "openai/resources/beta/threads/messages.mjs";
-import { STORAGE_NODE } from "@/app/lib/constants";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { LensConnected } from "../../Common/types/common.types";
 import { procesarMensaje } from "@/app/lib/helpers/procesarMensaje";
@@ -138,26 +137,8 @@ const useChat = (
                             if (result.isOk()) {
                               const profile = result?.value.items[0]
                                 ?.account as Account;
-                              let picture = "";
-                              if (profile?.metadata?.picture) {
-                                const pictureKey =
-                                  profile.metadata.picture.split(
-                                    "lens://"
-                                  )?.[1];
-                                const cadena = await fetch(
-                                  `${STORAGE_NODE}/${pictureKey}`
-                                );
-                                const json = await cadena.json();
-                                picture = json.item;
-                              }
-
-                              profileCache.set(item?.creator, {
-                                ...profile,
-                                metadata: {
-                                  ...profile?.metadata!,
-                                  picture,
-                                },
-                              });
+                              
+                              profileCache.set(item?.creator, profile);
                             }
                           }
 

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Flujo } from "../../Modals/types/modals.types";
 import { getAccountWorkflows } from "../../../../../graphql/queries/getAccountWorkflows";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
-import { STORAGE_NODE } from "@/app/lib/constants";
 
 const useCreator = (creator: string, lensClient: PublicClient) => {
   const [creadorCargando, setCreadorCargando] = useState<boolean>(false);
@@ -34,31 +33,8 @@ const useCreator = (creator: string, lensClient: PublicClient) => {
         return;
       }
 
-      let picture = "";
-
-      if (accounts.value.items?.[0]?.account?.metadata?.picture) {
-        const cadena = await fetch(
-          `${STORAGE_NODE}/${
-            accounts.value.items?.[0]?.account?.metadata?.picture?.split(
-              "lens://"
-            )?.[1]
-          }`
-        );
-
-        if (cadena) {
-          const json = await cadena.json();
-          picture = json.item;
-        }
-      }
-
       setCreador?.({
-        ...{
-          ...accounts.value.items?.[0]?.account,
-          metadata: {
-            ...accounts.value.items?.[0]?.account?.metadata!,
-            picture,
-          },
-        },
+        ...accounts.value.items?.[0]?.account,
         creador: creator,
       });
     } catch (err: any) {

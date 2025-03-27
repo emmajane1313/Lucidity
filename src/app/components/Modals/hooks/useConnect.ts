@@ -7,7 +7,6 @@ import { LensConnected } from "../../Common/types/common.types";
 import { createWalletClient, custom } from "viem";
 import { chains } from "@lens-chain/sdk/viem";
 import { evmAddress, PublicClient } from "@lens-protocol/client";
-import { STORAGE_NODE } from "@/app/lib/constants";
 
 const useConnect = (
   lensConectado: LensConnected,
@@ -57,34 +56,10 @@ const useConnect = (
 
         const sessionClient = authenticated.value;
 
-        let picture = "";
-
-        if (accounts.value.items?.[0]?.account?.metadata?.picture) {
-          const cadena = await fetch(
-            `${STORAGE_NODE}/${
-              accounts.value.items?.[0]?.account?.metadata?.picture?.split(
-                "lens://"
-              )?.[1]
-            }`
-          );
-
-          if (cadena) {
-            const json = await cadena.json();
-            picture = json.item;
-          }
-        }
-
         setLensConectado?.({
           address: lensConectado?.address,
-
           sessionClient,
-          profile: {
-            ...accounts.value.items?.[0]?.account,
-            metadata: {
-              ...accounts.value.items?.[0]?.account?.metadata!,
-              picture,
-            },
-          },
+          profile: accounts.value.items?.[0]?.account,
         });
       } else {
         const authenticatedOnboarding = await lensClient.login({

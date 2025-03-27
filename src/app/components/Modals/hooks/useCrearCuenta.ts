@@ -8,7 +8,6 @@ import {
   fetchAccount,
 } from "@lens-protocol/client/actions";
 import { LensConnected } from "../../Common/types/common.types";
-import { STORAGE_NODE } from "@/app/lib/constants";
 import pollResult from "@/app/lib/helpers/pollResult";
 import { immutable, StorageClient } from "@lens-chain/storage-client";
 
@@ -120,30 +119,9 @@ const useCrearCuenta = (
               });
 
             if (ownerSigner?.isOk()) {
-              let picture = "";
-
-              if (newAcc.value?.metadata?.picture) {
-                const cadena = await fetch(
-                  `${STORAGE_NODE}/${
-                    newAcc.value?.metadata?.picture?.split("lens://")?.[1]
-                  }`
-                );
-
-                if (cadena) {
-                  const json = await cadena.json();
-                  picture = json.item;
-                }
-              }
-
               setLensConnected?.({
                 ...lensConnected,
-                profile: {
-                  ...newAcc.value,
-                  metadata: {
-                    ...(newAcc.value?.metadata as any),
-                    picture,
-                  },
-                },
+                profile: newAcc.value,
                 sessionClient: ownerSigner?.value,
               });
               setCreateAccount(false);

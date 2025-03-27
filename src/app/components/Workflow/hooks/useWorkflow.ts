@@ -3,7 +3,6 @@ import { Flujo } from "../../Modals/types/modals.types";
 import { getWorkflow } from "../../../../../graphql/queries/getWorkflow";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { evmAddress, PublicClient } from "@lens-protocol/client";
-import { STORAGE_NODE } from "@/app/lib/constants";
 
 const useWorkflow = (counter: string, lensClient: PublicClient) => {
   const [flujo, setFlujo] = useState<Flujo>();
@@ -21,30 +20,7 @@ const useWorkflow = (counter: string, lensClient: PublicClient) => {
 
       let profile = undefined;
       if (accounts.isOk()) {
-        let picture = "";
-
-        if (accounts.value.items?.[0]?.account?.metadata?.picture) {
-          const cadena = await fetch(
-            `${STORAGE_NODE}/${
-              accounts.value.items?.[0]?.account?.metadata?.picture?.split(
-                "lens://"
-              )?.[1]
-            }`
-          );
-
-          if (cadena) {
-            const json = await cadena.json();
-            picture = json.item;
-          }
-        }
-
-        profile = {
-          ...accounts.value.items?.[0]?.account,
-          metadata: {
-            ...accounts.value.items?.[0]?.account?.metadata!,
-            picture,
-          },
-        };
+        profile = accounts.value.items?.[0]?.account;
       }
 
       setFlujo({

@@ -1,8 +1,7 @@
 import { SetStateAction, useEffect, useState } from "react";
-import { LensConnected, Pantalla } from "../types/common.types";
+import { LensConnected } from "../types/common.types";
 import { evmAddress, PublicClient } from "@lens-protocol/client";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
-import { STORAGE_NODE } from "@/app/lib/constants";
 
 const useBar = (
   lensConectado: LensConnected,
@@ -27,32 +26,10 @@ const useBar = (
           return;
         }
 
-        let picture = "";
-
-        if (accounts.value.items?.[0]?.account?.metadata?.picture) {
-          const cadena = await fetch(
-            `${STORAGE_NODE}/${
-              accounts.value.items?.[0]?.account?.metadata?.picture?.split(
-                "lens://"
-              )?.[1]
-            }`
-          );
-
-          if (cadena) {
-            const json = await cadena.json();
-            picture = json.item;
-          }
-        }
         setLensConectado?.({
           ...lensConectado,
 
-          profile: {
-            ...accounts.value.items?.[0]?.account,
-            metadata: {
-              ...accounts.value.items?.[0]?.account?.metadata!,
-              picture,
-            },
-          },
+          profile: accounts.value.items?.[0]?.account,
           sessionClient: resumed?.value,
         });
       }
