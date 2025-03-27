@@ -43,7 +43,7 @@ const useCrearCuenta = (
         account: lensConnected?.address,
       });
 
-      let picture = {};
+      let picture = undefined;
       const acl = immutable(chains.testnet.id);
       if (account?.pfp) {
         const res = await fetch("/api/ipfs", {
@@ -52,17 +52,7 @@ const useCrearCuenta = (
         });
         const json = await res.json();
 
-        const { uri } = await storageClient.uploadAsJson(
-          {
-            type: "image/png",
-            item: "ipfs://" + json?.cid,
-          },
-          { acl }
-        );
-
-        picture = {
-          picture: uri,
-        };
+        picture = "ipfs://" + json?.cid;
       }
 
       const { uri } = await storageClient.uploadAsJson(
@@ -72,7 +62,7 @@ const useCrearCuenta = (
             id: uuidv4(),
             name: account?.localname,
             bio: account?.bio,
-            ...picture,
+            picture,
           },
         },
         { acl }
