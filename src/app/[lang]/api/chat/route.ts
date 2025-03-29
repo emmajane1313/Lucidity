@@ -1,7 +1,7 @@
 import { ASSISTANT_ID } from "@/app/lib/constants";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-import { getWorkflows } from "../../../../graphql/queries/getWorkflows";
+import { getWorkflows } from "../../../../../graphql/queries/getWorkflows";
 
 const openAI = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 

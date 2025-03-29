@@ -37,6 +37,7 @@ const useChat = (
     setPrompt("");
     setTypedMessage("");
     try {
+
       let hilo = thread;
       if (!hilo) {
         const res = await fetch("/api/thread", {
@@ -46,7 +47,6 @@ const useChat = (
         hilo = json?.threadId;
         setThread(hilo);
       }
-
       if (!hilo) {
         setSendMessageLoading(false);
         return;
@@ -59,7 +59,6 @@ const useChat = (
           thread: hilo,
         }),
       });
-
       const run_json = await run_res.json();
       if (run_json?.run) {
         const mensajeContenido0 =
@@ -97,6 +96,7 @@ const useChat = (
             action: run_json?.run?.output?.[0]?.name,
           });
         }
+
 
         if (nuevosMensajes.length > 0) {
           setMensajes(
