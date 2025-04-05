@@ -36,7 +36,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative w-fit pb-3 h-fit flex items-center justify-center">
-          {dict?.Home?.connect}
+          {lensConectado?.profile ? dict.Home.disconnect : dict.Home.connect}
         </div>
         {lensConectado?.profile?.username?.localName ? (
           <div className="relative w-full h-fit flex items-center justify-center text-left">
@@ -55,7 +55,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
             onClick={() =>
               isConnected
                 ? openProfile?.()
-                : chainId !== 37111
+                : chainId !== 232
                 ? openSwitchNetworks?.()
                 : openOnboarding?.()
             }
@@ -67,7 +67,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
               !isConnected ? "opacity-60" : "active:scale-95 cursor-pointer"
             }`}
             onClick={() => {
-              if (!lensConectado?.profile) {
+              if (!lensConectado?.profile && lensConectado?.address) {
                 handleConectarse();
               } else {
                 salir();
@@ -86,7 +86,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
                   />
                 </div>
               </div>
-            ) : lensConectado?.profile && address ? (
+            ) : lensConectado?.profile && lensConectado?.address ? (
               dict.Home.lensOut
             ) : (
               dict.Home.lensSign

@@ -3,6 +3,7 @@ import { Flujo } from "../../Modals/types/modals.types";
 import { getWorkflow } from "../../../../../graphql/queries/getWorkflow";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { evmAddress, PublicClient } from "@lens-protocol/client";
+import { INFURA_GATEWAY } from "@/app/lib/constants";
 
 const useWorkflow = (counter: string, lensClient: PublicClient) => {
   const [flujo, setFlujo] = useState<Flujo>();
@@ -23,24 +24,33 @@ const useWorkflow = (counter: string, lensClient: PublicClient) => {
         profile = accounts.value.items?.[0]?.account;
       }
 
+      let metadata = data?.data?.workflowCreateds?.[0]?.workflowMetadata;
+
+      if (!metadata) {
+        const json = await fetch(
+          `${INFURA_GATEWAY}/ipfs/${
+            data?.data?.workflowCreateds?.[0]?.uri?.split("ipfs://")?.[1]
+          }`
+        );
+        metadata = await json.json();
+      }
+
       setFlujo({
-        tags: data?.data?.workflowCreateds?.[0]?.workflowMetadata?.tags?.split(
-          ", "
-        ),
+        tags: metadata?.tags
+          ?.replace(/, /g, ",")
+          ?.split(",")
+          ?.filter((item: string) => item.trim() !== ""),
         creator: data?.data?.workflowCreateds?.[0]?.creator,
         counter: data?.data?.workflowCreateds?.[0]?.counter,
-        name: data?.data?.workflowCreateds?.[0]?.workflowMetadata?.name,
-        description:
-          data?.data?.workflowCreateds?.[0]?.workflowMetadata?.description,
-        cover: data?.data?.workflowCreateds?.[0]?.workflowMetadata?.cover,
-        setup:
-          data?.data?.workflowCreateds?.[0]?.workflowMetadata?.setup?.split(
-            ", "
-          ),
-        links: data?.data?.workflowCreateds?.[0]?.workflowMetadata?.links,
-        workflow: JSON.parse(
-          data?.data?.workflowCreateds?.[0]?.workflowMetadata?.workflow
-        ),
+        name: metadata?.name,
+        description: metadata?.description,
+        cover: metadata?.cover,
+        setup: metadata?.setup
+          ?.replace(/, /g, ",")
+          ?.split(",")
+          ?.filter((item: string) => item.trim() !== ""),
+        links: metadata?.links,
+        workflow: JSON.parse(metadata?.workflow),
         profile,
       });
     } catch (err: any) {
@@ -50,10 +60,10 @@ const useWorkflow = (counter: string, lensClient: PublicClient) => {
   };
 
   useEffect(() => {
-    if (counter && !flujo) {
+    if (counter && !flujo && lensClient) {
       handleFlujo();
     }
-  }, [counter]);
+  }, [counter, lensClient]);
 
   return {
     flujo,

@@ -24,7 +24,7 @@ const useConnect = (
     setLensCargando(true);
     try {
       const signer = createWalletClient({
-        chain: chains.testnet,
+        chain: chains.mainnet,
         transport: custom(window.ethereum!),
         account: lensConectado?.address,
       });
@@ -56,11 +56,11 @@ const useConnect = (
 
         const sessionClient = authenticated.value;
 
-        setLensConectado?.({
-          address: lensConectado?.address,
+        setLensConectado?.((prev) => ({
+          ...prev,
           sessionClient,
           profile: accounts.value.items?.[0]?.account,
-        });
+        }));
       } else {
         const authenticatedOnboarding = await lensClient.login({
           onboardingUser: {
@@ -79,10 +79,10 @@ const useConnect = (
 
         const sessionClient = authenticatedOnboarding.value;
 
-        setLensConectado?.({
-          address: lensConectado?.address,
+        setLensConectado?.((prev) => ({
+          ...prev,
           sessionClient,
-        });
+        }));
 
         setCrearCuenta?.(true);
         setConnect?.(false);
@@ -97,15 +97,19 @@ const useConnect = (
   const salir = async () => {
     setLensCargando(true);
     try {
-      const auth = await lensConectado?.sessionClient?.getAuthenticatedUser();
+      const auth = lensConectado?.sessionClient?.getAuthenticatedUser();
 
       if (auth?.isOk()) {
         const res = await revokeAuthentication(lensConectado?.sessionClient!, {
           authenticationId: auth.value?.authenticationId,
         });
 
-        setLensConectado?.(undefined);
-        window.localStorage.removeItem("lens.testnet.credentials");
+        setLensConectado?.((prev) => ({
+          ...prev,
+          sessionClient: undefined,
+          profile: undefined,
+        }));
+        window.localStorage.removeItem("lens.mainnet.credentials");
       }
     } catch (err: any) {
       console.error(err.message);

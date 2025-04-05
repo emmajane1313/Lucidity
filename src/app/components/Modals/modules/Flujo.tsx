@@ -5,7 +5,7 @@ import { INFURA_GATEWAY } from "@/app/lib/constants";
 import useFlujo from "../hooks/useFlujo";
 import { IoMdDownload } from "react-icons/io";
 import { useRouter } from "next/navigation";
-import { PiArrowsOutSimpleDuotone } from "react-icons/pi";
+import { PiArrowsOutSimple } from "react-icons/pi";
 
 const Flujo: FunctionComponent<FlujoProps> = ({
   setFlujo,
@@ -15,17 +15,17 @@ const Flujo: FunctionComponent<FlujoProps> = ({
   const router = useRouter();
   const { copiar, copiarFlujo, descargar } = useFlujo();
   return (
-    <div className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden grid grid-flow-col auto-cols-auto w-full h-auto items-center justify-center text-white font-dep">
+    <div className="inset-0 justify-center fixed z-50 bg-opacity-50 backdrop-blur-sm overflow-y-hidden w-full h-auto items-center justify-center text-white font-dep">
       <div
         className="w-full h-screen text-sm flex items-center justify-center cursor-pointer"
         onClick={() => setFlujo(undefined)}
       >
         <div
-          className="relative w-3/5 border border-brillo flex rounded-md bg-black p-3 cursor-default h-fit max-h-96 overflow-y-scroll flex-col gap-6 items-center justify-start"
+          className="relative w-full sm:w-3/5 border border-brillo flex rounded-md bg-black p-3 cursor-default h-fit max-h-96 overflow-y-scroll flex-col gap-6 items-center justify-start"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="relative w-full h-fit items-end justify-end flex">
-            <PiArrowsOutSimpleDuotone
+            <PiArrowsOutSimple
               onClick={() => {
                 setFlujo(undefined);
                 router.push(`/workflow/${flujo.counter}`);
@@ -46,7 +46,7 @@ const Flujo: FunctionComponent<FlujoProps> = ({
                 router.push(`/creator/${flujo?.creator}`);
               }}
             >
-              {flujo?.profile?.metadata?.picture && (
+              {flujo?.profile?.metadata?.picture?.split("ipfs://")?.[1] && (
                 <div className="relative flex w-fit h-fit">
                   <div className={`relative flex w-8 h-8 rounded-full`}>
                     <Image
@@ -93,7 +93,7 @@ const Flujo: FunctionComponent<FlujoProps> = ({
           )}
           <div className="relative w-full h-fit flex justify-center">
             <div className="relative w-3/5 h-fit flex justify-center">
-              <div className="relative w-fit text-xs h-fit flex text-center max-h-40 overflow-y-scroll">
+              <div className="relative w-fit text-xs h-fit flex text-center max-h-40 overflow-y-scroll break-words">
                 {flujo.description}
               </div>
             </div>

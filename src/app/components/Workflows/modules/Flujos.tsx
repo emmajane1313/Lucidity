@@ -18,7 +18,7 @@ const Flujos: FunctionComponent<FlujosProps> = ({
 }): JSX.Element => {
 
   return (
-    <div className="relative w-full h-full overflow-y-scroll items-start justify-between flex">
+    <div className="relative w-full h-full overflow-y-scroll items-start justify-center lg:justify-between flex">
       {!flujosCargando && flujos?.length < 1 ? (
         <div
           className={`"relative w-full h-full flex items-center justify-center text-sm text-center text font-dep ${color ? "text-black" : "text-white"}`}
@@ -26,7 +26,7 @@ const Flujos: FunctionComponent<FlujosProps> = ({
           {texto}
         </div>
       ) : flujosCargando || otroCargando ? (
-        <div className="relative w-full h-full overflow-y-scroll items-start justify-between flex flex-wrap gap-6">
+        <div className="relative w-full h-full overflow-y-scroll items-start justify-center lg:justify-between flex flex-wrap gap-6">
           {Array.from({ length: 20 }).map((_, indice) => {
             return (
               <div key={indice} className="relative w-full sm:w-fit h-fit flex">

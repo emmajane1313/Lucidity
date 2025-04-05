@@ -118,29 +118,31 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
             />
             <div
               className={`relative w-fit h-full flex items-center justify-center ${
-                prompt?.trim() !== ""
+                prompt?.trim() !== "" && !sendMessageLoading
                   ? "cursor-pointer hover:opacity-70"
                   : "opacity-50"
               }`}
               onClick={() => {
-                contexto?.setMensajes([
-                  ...(contexto?.mensajes || [])?.filter(
-                    (mensaje) => mensaje !== undefined && mensaje !== null
-                  ),
-                  {
-                    contenido: prompt,
-                    usuario: Usuario.Humano,
-                  },
-                ]);
-                handleSendMessage([
-                  ...(contexto?.mensajes || [])?.filter(
-                    (mensaje) => mensaje !== undefined && mensaje !== null
-                  ),
-                  {
-                    contenido: prompt,
-                    usuario: Usuario.Humano,
-                  },
-                ]);
+                if (!sendMessageLoading) {
+                  contexto?.setMensajes([
+                    ...(contexto?.mensajes || [])?.filter(
+                      (mensaje) => mensaje !== undefined && mensaje !== null
+                    ),
+                    {
+                      contenido: prompt,
+                      usuario: Usuario.Humano,
+                    },
+                  ]);
+                  handleSendMessage([
+                    ...(contexto?.mensajes || [])?.filter(
+                      (mensaje) => mensaje !== undefined && mensaje !== null
+                    ),
+                    {
+                      contenido: prompt,
+                      usuario: Usuario.Humano,
+                    },
+                  ]);
+                }
               }}
             >
               <div className="relative w-5 h-5 flex">

@@ -120,7 +120,7 @@ const useInteraccion = (
         setInteractions?.({
           ...interactions,
           reposts: Number(post?.stats?.reposts) + 1,
-          hasUpvoted: true,
+          hasReposted: true,
         });
       } else {
         setError?.(dict.Home.error);
@@ -141,7 +141,7 @@ const useInteraccion = (
       comment: true,
     });
     try {
-      const acl = immutable(chains.testnet.id);
+      const acl = immutable(chains.mainnet.id);
 
       const schema = textOnly({
         content: texto,
@@ -188,6 +188,7 @@ const useInteraccion = (
     } catch (err: any) {
       console.error(err.message);
     }
+
     setInteractionLoading({
       ...interactionLoading,
       comment: false,

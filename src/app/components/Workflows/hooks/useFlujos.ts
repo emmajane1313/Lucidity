@@ -5,6 +5,7 @@ import { getWorkflows } from "../../../../../graphql/queries/getWorkflows";
 import { LensConnected } from "../../Common/types/common.types";
 import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
+import { INFURA_GATEWAY } from "@/app/lib/constants";
 
 const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
   const [flujosCargando, setFlujosCargando] = useState<boolean>(false);
@@ -62,16 +63,31 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
               }
             }
 
+            let metadata = flujo?.workflowMetadata;
+
+            if (!metadata) {
+              const json = await fetch(
+                `${INFURA_GATEWAY}/ipfs/${flujo?.uri?.split("ipfs://")?.[1]}`
+              );
+              metadata = await json.json();
+            }
+
             return {
-              tags: flujo?.workflowMetadata?.tags?.split(", "),
-              name: flujo?.workflowMetadata?.name,
+              tags: metadata?.tags
+                ?.replace(/, /g, ",")
+                ?.split(",")
+                ?.filter((item: string) => item.trim() !== ""),
+              name: metadata?.name,
               creator: flujo?.creator,
               counter: flujo?.counter,
-              description: flujo?.workflowMetadata?.description,
-              cover: flujo?.workflowMetadata?.cover,
-              workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
-              setup: flujo?.workflowMetadata?.setup?.split(", "),
-              links: flujo?.workflowMetadata?.links,
+              description: metadata?.description,
+              cover: metadata?.cover,
+              workflow: JSON.parse(metadata?.workflow),
+              setup: metadata?.setup
+                ?.replace(/, /g, ",")
+                ?.split(",")
+                ?.filter((item: string) => item.trim() !== ""),
+              links: metadata?.links,
               profile: profileCache.get(flujo?.creator),
             };
           })
@@ -115,16 +131,31 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
               }
             }
 
+            let metadata = flujo?.workflowMetadata;
+
+            if (!metadata) {
+              const json = await fetch(
+                `${INFURA_GATEWAY}/ipfs/${flujo?.uri?.split("ipfs://")?.[1]}`
+              );
+              metadata = await json.json();
+            }
+
             return {
-              tags: flujo?.workflowMetadata?.tags?.split(", "),
-              name: flujo?.workflowMetadata?.name,
+              tags: metadata?.tags
+                ?.replace(/, /g, ",")
+                ?.split(",")
+                ?.filter((item: string) => item.trim() !== ""),
+              name: metadata?.name,
               creator: flujo?.creator,
               counter: flujo?.counter,
-              description: flujo?.workflowMetadata?.description,
-              cover: flujo?.workflowMetadata?.cover,
-              workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
-              setup: flujo?.workflowMetadata?.setup?.split(", "),
-              links: flujo?.workflowMetadata?.links,
+              description: metadata?.description,
+              cover: metadata?.cover,
+              workflow: JSON.parse(metadata?.workflow),
+              setup: metadata?.setup
+                ?.replace(/, /g, ",")
+                ?.split(",")
+                ?.filter((item: string) => item.trim() !== ""),
+              links: metadata?.links,
               profile: profileCache.get(flujo?.creator),
             };
           })
@@ -140,7 +171,6 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
     setFlujosCargando(true);
     try {
       const datos = await getAllWorkflows(0);
-
       setHasMore({
         hasMore: datos?.data?.workflowCreateds?.length == 20 ? true : false,
         skip: datos?.data?.workflowCreateds?.length == 20 ? 20 : 0,
@@ -169,16 +199,31 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
               }
             }
 
+            let metadata = flujo?.workflowMetadata;
+
+            if (!metadata) {
+              const json = await fetch(
+                `${INFURA_GATEWAY}/ipfs/${flujo?.uri?.split("ipfs://")?.[1]}`
+              );
+              metadata = await json.json();
+            }
+
             return {
-              tags: flujo?.workflowMetadata?.tags?.split(", "),
-              name: flujo?.workflowMetadata?.name,
+              tags: metadata?.tags
+                ?.replace(/, /g, ",")
+                ?.split(",")
+                ?.filter((item: string) => item.trim() !== ""),
+              name: metadata?.name,
               creator: flujo?.creator,
               counter: flujo?.counter,
-              description: flujo?.workflowMetadata?.description,
-              cover: flujo?.workflowMetadata?.cover,
-              workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
-              setup: flujo?.workflowMetadata?.setup?.split(", "),
-              links: flujo?.workflowMetadata?.links,
+              description: metadata?.description,
+              cover: metadata?.cover,
+              workflow: JSON.parse(metadata?.workflow),
+              setup: metadata.setup
+                ?.replace(/, /g, ",")
+                ?.split(",")
+                ?.filter((item: string) => item.trim() !== ""),
+              links: metadata?.links,
               profile: profileCache.get(flujo?.creator),
             };
           })
@@ -192,10 +237,10 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
   };
 
   useEffect(() => {
-    if (flujos?.length < 1) {
+    if (flujos?.length < 1 && lensClient) {
       handleFlujos();
     }
-  }, []);
+  }, [lensClient]);
 
   return {
     flujosCargando,

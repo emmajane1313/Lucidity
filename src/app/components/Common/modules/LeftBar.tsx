@@ -119,11 +119,9 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
                   className="rounded-xl"
                   objectFit="cover"
                   src={`${INFURA_GATEWAY}/ipfs/${
-                    contexto?.lensConectado?.profile?.metadata?.picture
-                      ? contexto?.lensConectado?.profile?.metadata?.picture?.split(
-                          "ipfs://"
-                        )?.[1]
-                      : "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW"
+                    contexto?.lensConectado?.profile?.metadata?.picture?.split(
+                      "ipfs://"
+                    )?.[1] ?? "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW"
                   }`}
                 />
               </div>

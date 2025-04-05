@@ -41,9 +41,7 @@ const Publicacion: FunctionComponent<PublicacionProps> = ({
     >
       <div
         className={`relative w-full h-fit flex flex-row items-center gap-2 text-xxs ${
-          activity?.commentOn?.id 
-            ? "justify-between"
-            : "justify-end"
+          activity?.commentOn?.id ? "justify-between" : "justify-end"
         }`}
       >
         {activity?.commentOn?.id && (
@@ -69,11 +67,13 @@ const Publicacion: FunctionComponent<PublicacionProps> = ({
                 className="rounded-full"
                 draggable={false}
                 src={`${INFURA_GATEWAY}/ipfs/${
-                  activity?.author?.metadata?.picture?.split("ipfs://")?.[1]
+                  activity?.author?.metadata?.picture?.split("ipfs://")?.[1] ??
+                  "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW"
                 }`}
               />
             </div>
           </div>
+
           <div className="relative w-fit h-fit flex items-center justify-center text-xs">
             {activity?.author?.username?.localName}
           </div>
@@ -241,7 +241,7 @@ const Publicacion: FunctionComponent<PublicacionProps> = ({
       </div>
       {commentOpen && (
         <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
-          <div className="relative w-fit h-fit flex">
+          <div className="relative w-full h-fit flex">
             <textarea
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
@@ -264,7 +264,8 @@ const Publicacion: FunctionComponent<PublicacionProps> = ({
               handleComment()
             }
           >
-            <div className="relative w-full h-full flex items-center justify-center">
+            <div className="relative w-full h-fit flex items-center justify-center">
+              <div className="relative w-full h-10 flex items-center justify-center">
               {success ? (
                 "Success"
               ) : interactionLoading.comment ? (
@@ -282,6 +283,7 @@ const Publicacion: FunctionComponent<PublicacionProps> = ({
               ) : (
                 dict.Home.comment
               )}
+                  </div>
             </div>
           </div>
         </div>

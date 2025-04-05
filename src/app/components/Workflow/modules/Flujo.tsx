@@ -17,9 +17,28 @@ export default function Flujo({ dict }: { dict: any }) {
   const { copiarFlujo, copiar, descargar } = useFlujo();
   const { flujo } = useWorkflow(id?.id as string, contexto?.clienteLens!);
 
+  if (!flujo) {
+    return (
+      <div className="relative w-full flex p-2 sm:p-4 md:p-8 bg-black overflow-none h-[calc(100vh-0.5rem)]">
+        <div className="relative w-full h-full flex flex-col overflow-y-scroll items-start pt-5 pb-3 px-1 sm:px-6 bg-oscuro/20 border border-brillo rounded-md gap-5 text-white font-dep animate-pulse">
+          <div className="absolute flex w-full h-full top-0 right-0 rounded-md">
+            <Image
+              src={`${INFURA_GATEWAY}/ipfs/QmdDmGpnz28h8YXS2dzVaQmxsnzHbvUU4AqVNuGe9wR15i`}
+              layout="fill"
+              objectFit="cover"
+              draggable={false}
+              className="rounded-md"
+            />
+          </div>
+          <div className="absolute flex w-full h-full top-0 right-0 rounded-md bg-gris/70"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative w-full flex p-2 sm:p-4 md:p-8 bg-black overflow-none h-[calc(100vh-0.5rem)] h-[calc(100vh-1rem)] h-[calc(100vh-2rem)]">
-      <div className="relative w-full h-full flex flex-row justify-between items-start pt-5 pb-3 px-1 sm:px-6 bg-oscuro/20 border border-brillo rounded-md gap-5 text-white font-dep">
+    <div className="relative w-full flex p-2 sm:p-4 md:p-8 h-[calc(100vh-0.5rem)]">
+      <div className="relative w-full h-full flex flex-col items-start justify-start text-white font-nerdS pt-5 pb-3 px-1 sm:px-6 bg-oscuro/20 border border-brillo rounded-md">
         <div className="absolute flex w-full h-full top-0 right-0 rounded-md">
           <Image
             src={`${INFURA_GATEWAY}/ipfs/QmdDmGpnz28h8YXS2dzVaQmxsnzHbvUU4AqVNuGe9wR15i`}
@@ -30,7 +49,7 @@ export default function Flujo({ dict }: { dict: any }) {
           />
         </div>
         <div className="absolute flex w-full h-full top-0 right-0 rounded-md bg-gris/70"></div>
-        <div className="relative w-full h-full flex flex-col gap-3 items-center justify-start overflow-y-scroll">
+        <div className="relative w-full h-fit flex flex-col gap-3 items-center justify-start overflow-y-scroll">
           <div className="relative w-fit text-2xl h-fit flex items-center justify-center uppercase font-count">
             {flujo?.name}
           </div>
@@ -39,7 +58,7 @@ export default function Flujo({ dict }: { dict: any }) {
               className="relative w-fit h-fit flex flex-row gap-2 items-center justify-center cursor-pointer"
               onClick={() => router.push(`/creator/${flujo?.creator}`)}
             >
-              {flujo?.profile?.metadata?.picture && (
+              {flujo?.profile?.metadata?.picture?.split("ipfs://")?.[1] && (
                 <div className="relative flex w-fit h-fit">
                   <div className={`relative flex w-8 h-8 rounded-full`}>
                     <Image
@@ -126,26 +145,27 @@ export default function Flujo({ dict }: { dict: any }) {
               color="white"
             />
           </div>
-          <div className="relative w-full h-full flex items-start justify-start overflow-y-scroll overflow-x-auto bg-gris border border-ligero rounded-md p-2">
-            <div className="relative w-full text-sm">
-              <pre className="flex relative">
-                <code className="language-json">
+          <div className="relative w-[calc(100vw-6rem)] sm:w-full h-full min-h-[25rem] flex items-start justify-start overflow-y-scroll overflow-x-auto bg-gris border border-ligero rounded-md p-2">
+            <div className="relative w-full text-sm flex">
+              <pre className="flex relative w-full">
+                <code className="language-json whitespace-pre-wrap flex flex-wrap">
                   {JSON.stringify(flujo?.workflow, null, 2)}
                 </code>
               </pre>
             </div>
           </div>
+
+          <Interacciones
+            clienteLens={contexto?.clienteLens!}
+            lensConectado={contexto?.lensConectado!}
+            storageClient={contexto?.clienteAlmacenamiento!}
+            setError={contexto?.setError!}
+            setSignless={contexto?.setSignless!}
+            flujo={flujo}
+            router={router}
+            dict={dict}
+          />
         </div>
-        <Interacciones
-          clienteLens={contexto?.clienteLens!}
-          lensConectado={contexto?.lensConectado!}
-          storageClient={contexto?.clienteAlmacenamiento!}
-          setError={contexto?.setError!}
-          setSignless={contexto?.setSignless!}
-          flujo={flujo}
-          router={router}
-          dict={dict}
-        />
       </div>
     </div>
   );

@@ -70,7 +70,11 @@ const useCrear = (
     ) {
       setError(dict?.Home?.validTags);
       return;
-    } else if (detalles?.links?.filter((link) => !link.includes("https://"))) {
+    } else if (
+      Number(
+        detalles?.links?.filter((link) => !link.includes("https://"))?.length
+      ) > 0
+    ) {
       setError(dict?.Home?.validEnlaces);
       return;
     }
@@ -104,7 +108,7 @@ const useCrear = (
       const metadata = await responseDetalles.json();
 
       const clientWallet = createWalletClient({
-        chain: chains.testnet,
+        chain: chains.mainnet,
         transport: custom((window as any).ethereum),
       });
 
@@ -112,7 +116,7 @@ const useCrear = (
         address: LUCIDITY_WORKFLOWS_CONTRACT,
         abi: LucidityWorkflowsAbi,
         functionName: "createWorkflow",
-        chain: chains.testnet,
+        chain: chains.mainnet,
         args: ["ipfs://" + metadata?.cid],
         account: address,
       });
@@ -123,6 +127,14 @@ const useCrear = (
       });
 
       setError(dict?.Home?.created);
+      setEtiqueta("");
+      setDetalles({
+        links: [
+          "https://civitai.com/models/125907?modelVersionId=686204",
+          "https://huggingface.co/Kijai/sam2-safetensors/tree/main",
+        ],
+      });
+      setValido(false);
     } catch (err: any) {
       console.error(err.message);
     }
@@ -140,7 +152,7 @@ const useCrear = (
     valido,
     setupAbierto,
     setSetupAbierto,
-    setValido
+    setValido,
   };
 };
 

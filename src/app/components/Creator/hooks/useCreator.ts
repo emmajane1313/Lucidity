@@ -58,13 +58,19 @@ const useCreator = (creator: string, lensClient: PublicClient) => {
       setFlujos([
         ...flujos,
         ...datos?.data?.workflowCreateds?.map((flujo: any) => ({
-          tags: flujo?.workflowMetadata?.tags?.split(", "),
+          tags: flujo?.workflowMetadata?.tags
+            ?.replace(/, /g, ",")
+            ?.split(",")
+            ?.filter((item: string) => item.trim() !== ""),
           creator: flujo?.creator,
           counter: flujo?.counter,
           name: flujo?.workflowMetadata?.name,
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,
-          setup: flujo?.workflowMetadata?.setup?.split(", "),
+          setup: flujo?.workflowMetadata?.setup
+            ?.replace(/, /g, ",")
+            ?.split(",")
+            ?.filter((item: string) => item.trim() !== ""),
           links: flujo?.workflowMetadata?.links,
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
           profile: creador,
@@ -90,13 +96,19 @@ const useCreator = (creator: string, lensClient: PublicClient) => {
 
       setFlujos(
         datos?.data?.workflowCreateds?.map((flujo: any) => ({
-          tags: flujo?.workflowMetadata?.tags?.split(", "),
+          tags: flujo?.workflowMetadata?.tags
+            ?.replace(/, /g, ",")
+            ?.split(",")
+            ?.filter((item: string) => item.trim() !== ""),
           creator: flujo?.creator,
           counter: flujo?.counter,
           name: flujo?.workflowMetadata?.name,
           description: flujo?.workflowMetadata?.description,
           cover: flujo?.workflowMetadata?.cover,
-          setup: flujo?.workflowMetadata?.setup?.split(", "),
+          setup: flujo?.workflowMetadata?.setup
+            ?.replace(/, /g, ",")
+            ?.split(",")
+            ?.filter((item: string) => item.trim() !== ""),
           links: flujo?.workflowMetadata?.links,
           workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
           profile: creador,
@@ -116,10 +128,10 @@ const useCreator = (creator: string, lensClient: PublicClient) => {
   }, [creator, lensClient]);
 
   useEffect(() => {
-    if (flujos?.length < 1 && creador) {
+    if (flujos?.length < 1 && creador && lensClient) {
       handleFlujos();
     }
-  }, [creador]);
+  }, [creador, lensClient]);
 
   return {
     creadorCargando,

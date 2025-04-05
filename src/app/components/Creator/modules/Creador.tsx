@@ -21,8 +21,27 @@ export default function Creador({ dict }: { dict: any }) {
     creador,
   } = useCreator(id?.id as string, contexto?.clienteLens!);
 
+  if (!creador || creadorCargando) {
+    return (
+      <div className="relative w-full flex p-2 sm:p-4 md:p-8 bg-black overflow-none h-[calc(100vh-0.5rem)] animate-pulse">
+        <div className="relative w-full h-full flex items-start justify-center pt-5 pb-3 px-1 sm:px-6 bg-oscuro/20 border border-brillo rounded-md">
+          <div className="absolute flex w-full h-full top-0 right-0 rounded-md">
+            <Image
+              src={`${INFURA_GATEWAY}/ipfs/QmdDmGpnz28h8YXS2dzVaQmxsnzHbvUU4AqVNuGe9wR15i`}
+              layout="fill"
+              objectFit="cover"
+              draggable={false}
+              className="rounded-md"
+            />
+          </div>
+          <div className="absolute flex w-full h-full top-0 right-0 rounded-md bg-gris/70"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative w-full flex p-2 sm:p-4 md:p-8 bg-black overflow-none h-[calc(100vh-0.5rem)] h-[calc(100vh-1rem)] h-[calc(100vh-2rem)]">
+    <div className="relative w-full flex p-2 sm:p-4 md:p-8 bg-black overflow-none h-[calc(100vh-0.5rem)]">
       <div className="relative w-full h-full flex items-start justify-center pt-5 pb-3 px-1 sm:px-6 bg-oscuro/20 border border-brillo rounded-md">
         <div className="absolute flex w-full h-full top-0 right-0 rounded-md">
           <Image
@@ -85,7 +104,9 @@ export default function Creador({ dict }: { dict: any }) {
                   className={`relative w-24 h-8 flex items-center justify-center cursor-pointer`}
                   onClick={() => contexto?.setConnect(true)}
                 >
-                  {dict?.Home?.connect}
+                  {contexto?.lensConectado?.profile
+                    ? dict.Home.disconnect
+                    : dict.Home.connect}
                 </div>
               </div>
             </div>
@@ -98,7 +119,6 @@ export default function Creador({ dict }: { dict: any }) {
             setFlujo={contexto?.setFlujo!}
             texto={dict?.Home?.noFlujos}
             flujosCargando={flujosCargando || creadorCargando}
-            
           />
         </div>
       </div>

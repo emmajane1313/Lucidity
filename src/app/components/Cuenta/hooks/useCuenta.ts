@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Flujo } from "../../Modals/types/modals.types";
 import { getAccountWorkflows } from "../../../../../graphql/queries/getAccountWorkflows";
 import { LensConnected } from "../../Common/types/common.types";
+import { INFURA_GATEWAY } from "@/app/lib/constants";
 
 const useCuenta = (lensConectado: LensConnected) => {
   const [flujosCargando, setFlujosCargando] = useState<boolean>(false);
@@ -29,18 +30,37 @@ const useCuenta = (lensConectado: LensConnected) => {
 
       setFlujos([
         ...flujos,
-        ...datos?.data?.workflowCreateds?.map((flujo: any) => ({
-          tags: flujo?.workflowMetadata?.tags?.split(", "),
-          creator: flujo?.creator,
-          counter: flujo?.counter,
-          name: flujo?.workflowMetadata?.name,
-          description: flujo?.workflowMetadata?.description,
-          cover: flujo?.workflowMetadata?.cover,
-          setup: flujo?.workflowMetadata?.setup?.split(", "),
-          links: flujo?.workflowMetadata?.links,
-          workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
-          profile: lensConectado?.profile,
-        })),
+        ...(await Promise.all(
+          datos?.data?.workflowCreateds?.map(async (flujo: any) => {
+            let metadata = flujo?.workflowMetadata;
+
+            if (!metadata) {
+              const json = await fetch(
+                `${INFURA_GATEWAY}/ipfs/${flujo?.uri?.split("ipfs://")?.[1]}`
+              );
+              metadata = await json.json();
+            }
+
+            return {
+              tags: metadata?.tags
+                ?.replace(/, /g, ",")
+                ?.split(",")
+                ?.filter((item: string) => item.trim() !== ""),
+              creator: flujo?.creator,
+              counter: flujo?.counter,
+              name: metadata?.name,
+              description: metadata?.description,
+              cover: metadata?.cover,
+              setup: metadata?.setup
+                ?.replace(/, /g, ",")
+                ?.split(",")
+                ?.filter((item: string) => item.trim() !== ""),
+              links: metadata?.links,
+              workflow: JSON.parse(metadata?.workflow),
+              profile: lensConectado?.profile,
+            };
+          })
+        )),
       ]);
     } catch (err: any) {
       console.error(err.message);
@@ -61,18 +81,37 @@ const useCuenta = (lensConectado: LensConnected) => {
       });
 
       setFlujos(
-        datos?.data?.workflowCreateds?.map((flujo: any) => ({
-          tags: flujo?.workflowMetadata?.tags?.split(", "),
-          creator: flujo?.creator,
-          counter: flujo?.counter,
-          name: flujo?.workflowMetadata?.name,
-          description: flujo?.workflowMetadata?.description,
-          cover: flujo?.workflowMetadata?.cover,
-          setup: flujo?.workflowMetadata?.setup?.split(", "),
-          links: flujo?.workflowMetadata?.links,
-          workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
-          profile: lensConectado?.profile,
-        }))
+        await Promise.all(
+          datos?.data?.workflowCreateds?.map(async (flujo: any) => {
+            let metadata = flujo?.workflowMetadata;
+
+            if (!metadata) {
+              const json = await fetch(
+                `${INFURA_GATEWAY}/ipfs/${flujo?.uri?.split("ipfs://")?.[1]}`
+              );
+              metadata = await json.json();
+            }
+
+            return {
+              tags: metadata?.tags
+                ?.replace(/, /g, ",")
+                ?.split(",")
+                ?.filter((item: string) => item.trim() !== ""),
+              creator: flujo?.creator,
+              counter: flujo?.counter,
+              name: metadata?.name,
+              description: metadata?.description,
+              cover: metadata?.cover,
+              setup: metadata?.setup
+                ?.replace(/, /g, ",")
+                ?.split(",")
+                ?.filter((item: string) => item.trim() !== ""),
+              links: metadata?.links,
+              workflow: JSON.parse(metadata?.workflow),
+              profile: lensConectado?.profile,
+            };
+          })
+        )
       );
     } catch (err: any) {
       console.error(err.message);

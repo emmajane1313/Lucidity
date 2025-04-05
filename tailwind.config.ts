@@ -40,6 +40,9 @@ export default {
       fontSize: {
         xxs: "0.6rem",
       },
+      screens: {
+        preG: "377px",
+      },
     },
   },
   plugins: [],

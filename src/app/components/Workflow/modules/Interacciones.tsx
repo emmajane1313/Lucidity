@@ -107,11 +107,20 @@ const Interacciones: FunctionComponent<InteraccionesProps> = ({
             ? "cursor-pointer"
             : "opacity-70"
         }`}
-        onClick={() =>
-          !success && !postLoading && texto?.trim() !== "" && !post
-            ? handlePost()
-            : handleComment()
-        }
+        onClick={() => {
+          if (
+            !success &&
+            !postLoading &&
+            texto?.trim() !== "" &&
+            lensConectado?.profile
+          ) {
+            if (!post) {
+              handlePost();
+            } else {
+              handleComment();
+            }
+          }
+        }}
       >
         <div className="relative w-full h-10 flex items-center justify-center">
           {success ? (

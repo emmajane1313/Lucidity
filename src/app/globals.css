@@ -85,6 +85,27 @@ html::-webkit-scrollbar-thumb:active {
 }
 
 
+pre::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+pre::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+pre::-webkit-scrollbar-track:active {
+  background-color: transparent !important;
+  opacity: 0;
+}
+
+pre::-webkit-scrollbar-thumb:active {
+  background-color: transparent !important;
+}
+
 div::-webkit-scrollbar {
   width: 0;
   height: 0;

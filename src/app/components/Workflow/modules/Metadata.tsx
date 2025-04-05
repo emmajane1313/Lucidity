@@ -55,10 +55,10 @@ const Metadata: FunctionComponent<MetadataProps> = ({
     case "TextOnlyMetadata":
       return (
         <div
-          className={`relative w-full overflow-y-scroll p-1 items-start justify-start text-xs bg-pink rounded-md break-all h-full max-h-32`}
+          className={`relative w-full overflow-y-scroll items-start justify-start text-xs bg-pink rounded-md break-all h-full max-h-32`}
         >
           <div
-            className="relative w-full h-full flex p-1 items-start justify-start break-all rounded-md bg-black font-dep text-white min-h-20"
+            className="relative w-full h-full flex p-3 items-start justify-start break-all rounded-md bg-black font-dep text-white min-h-20"
             dangerouslySetInnerHTML={{
               __html: descripcionRegex(
                 (data as ImageMetadata)?.content as string,

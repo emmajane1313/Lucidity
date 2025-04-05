@@ -11,7 +11,7 @@ export default function Entry({ dict }: { dict: any }) {
   const contexto = useContext(ModalContext);
 
   return (
-    <div className="relative w-full flex p-2 sm:p-4 md:p-8 h-[calc(100vh-0.5rem)] h-[calc(100vh-1rem)] h-[calc(100vh-2rem)]">
+    <div className="relative w-full flex p-2 sm:p-4 md:p-8 h-[calc(100vh-0.5rem)]">
       <div className="relative w-full h-full flex items-start justify-center pt-5 pb-3 px-1 sm:px-6 bg-oscuro/20 border border-brillo rounded-md">
         <div className="absolute flex w-full h-full top-0 right-0 rounded-md">
           <Image

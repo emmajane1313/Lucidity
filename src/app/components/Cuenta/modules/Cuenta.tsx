@@ -22,7 +22,7 @@ const Cuenta: FunctionComponent<CambioElementoProps> = ({
       className={`relative w-full pb-10 h-full bg-white px-2 pt-2 rounded-sm flex flex-col gap-10 font-dep text-white`}
     >
       <div className={`relative w-full h-fit flex items-center justify-center`}>
-        <div className="relative w-full h-40 flex items-start justify-between bg-black rounded-md border border-brillo p-2 flex-col gap-3">
+        <div className="relative w-full h-fit sm:h-40 flex items-start justify-between bg-black rounded-md border border-brillo p-2 flex-col gap-3">
           {contexto?.lensConectado?.address && (
             <div className="relative w-full items-center justify-center h-fit text-center flex break-all font-goth">
               <div className="relative w-fit h-fit flex">
@@ -40,11 +40,9 @@ const Cuenta: FunctionComponent<CambioElementoProps> = ({
                     className="rounded-full"
                     objectFit="cover"
                     src={`${INFURA_GATEWAY}/ipfs/${
-                      contexto?.lensConectado?.profile?.metadata?.picture
-                        ? contexto?.lensConectado?.profile?.metadata?.picture?.split(
-                            "ipfs://"
-                          )?.[1]
-                        : "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW"
+                      contexto?.lensConectado?.profile?.metadata?.picture?.split(
+                        "ipfs://"
+                      )?.[1] ?? "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW"
                     }`}
                   />
                 </div>
@@ -65,7 +63,7 @@ const Cuenta: FunctionComponent<CambioElementoProps> = ({
             </div>
           )}
           <div
-            className={`absolute bottom-2 right-2 text-sm bg-black w-fit h-fit items-center justify-center flex font-dep uppercase border border-white rounded-md`}
+            className={`relative sm:absolute sm:bottom-2 sm:right-2 text-sm bg-black w-fit h-fit items-center justify-center flex font-dep uppercase border border-white rounded-md`}
           >
             <div
               className={`relative w-24 h-8 flex items-center justify-center cursor-pointer`}

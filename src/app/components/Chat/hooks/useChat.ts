@@ -37,7 +37,6 @@ const useChat = (
     setPrompt("");
     setTypedMessage("");
     try {
-
       let hilo = thread;
       if (!hilo) {
         const res = await fetch("/api/thread", {
@@ -97,7 +96,6 @@ const useChat = (
           });
         }
 
-
         if (nuevosMensajes.length > 0) {
           setMensajes(
             [
@@ -137,7 +135,7 @@ const useChat = (
                             if (result.isOk()) {
                               const profile = result?.value.items[0]
                                 ?.account as Account;
-                              
+
                               profileCache.set(item?.creator, profile);
                             }
                           }
@@ -145,14 +143,20 @@ const useChat = (
                           return {
                             creator: item.creator,
                             counter: item.counter,
-                            tags: item.workflowMetadata?.tags?.split(", "),
+                            tags: item.workflowMetadata?.tags
+                              ?.replace(/, /g, ",")
+                              ?.split(",")
+                              ?.filter((item: string) => item.trim() !== ""),
                             name: item.workflowMetadata?.name,
                             description: item.workflowMetadata?.description,
                             cover: item.workflowMetadata?.cover,
                             workflow: JSON.parse(
                               item.workflowMetadata?.workflow
                             ),
-                            setup: item?.workflowMetadata?.setup?.split(", "),
+                            setup: item?.workflowMetadata?.setup
+                              ?.replace(/, /g, ",")
+                              ?.split(",")
+                              ?.filter((item: string) => item.trim() !== ""),
                             links: item?.workflowMetadata?.links,
                             profile: profileCache.get(item?.creator),
                           };

@@ -5,7 +5,7 @@ import { RxCross1 } from "react-icons/rx";
 import { ModalContext } from "@/app/providers";
 import { TbChecklist } from "react-icons/tb";
 import Image from "next/legacy/image";
-import { INFURA_GATEWAY, SET_UP } from "@/app/lib/constants";
+import { INFURA_GATEWAY, SET_UP, SUGGESTED_TAGS } from "@/app/lib/constants";
 import { createPublicClient, http } from "viem";
 import { FaChevronDown } from "react-icons/fa";
 import { IoIosAddCircleOutline } from "react-icons/io";
@@ -15,8 +15,8 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
   dict,
 }): JSX.Element => {
   const publicClient = createPublicClient({
-    chain: chains.testnet,
-    transport: http("https://rpc.testnet.lens.dev"),
+    chain: chains.mainnet,
+    transport: http("https://rpc.lens.xyz"),
   });
   const contexto = useContext(ModalContext);
   const {
@@ -43,7 +43,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
       className={`relative overflow-y-scroll w-full pb-10 h-full flex flex-col gap-10 text-sm font-dep text-black bg-white p-2 rounded-sm`}
     >
       <div className="relative w-full h-fit items-center justify-center text-center flex-col flex gap-2">
-        <div className="relative text-5xl w-full h-fit items-center justify-center flex font-count uppercase">
+        <div className="relative text-xl sm:text-5xl w-full h-fit items-center justify-center flex font-count uppercase">
           {dict?.Home?.subir}
         </div>
         <div className="flex relative w-fit h-fit items-center justify-center">
@@ -55,9 +55,9 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
           <div className="relative w-fit h-fit flex text-sm font-dep uppercase">
             {dict?.Home?.cover}
           </div>
-          <div className="relative items-center justify-center flex w-fit h-fit">
+          <div className="relative items-center justify-center flex sm:w-fit w-full h-fit">
             <label
-              className="relative w-40 rounded-md h-40 flex items-center justify-center cursor-pointer bg-black"
+              className="relative w-full sm:w-40 rounded-md h-40 flex items-center justify-center cursor-pointer bg-black"
               onClick={(e) => {
                 e.stopPropagation();
               }}
@@ -92,7 +92,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
             </label>
           </div>
         </div>
-        <div className="relative w-full h-fit flex items-start justify-between gap-3 flex-row">
+        <div className="relative w-full h-fit flex items-start justify-between gap-3 flex-wrap sm:flex-nowrap flex-row">
           <div className="relative w-full h-fit flex flex-col gap-3 items-start justify-start">
             <div className="relative w-fit h-fit flex text-sm font-dep uppercase">
               {dict?.Home?.name}
@@ -125,8 +125,37 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   });
                 }
               }}
+              value={etiqueta}
               className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10 px-2 py-1"
             />
+            {etiqueta?.trim() !== "" &&
+              SUGGESTED_TAGS.filter((tag) =>
+                tag.toLowerCase().includes(etiqueta)
+              )?.length > 0 && (
+                <div className="absolute z-10 left-0 top-20 text-ama w-full rounded-md bg-black text-xs h-fit max-h-28 items-start flex-col gap-2 justify-start overflow-y-scroll">
+                  {SUGGESTED_TAGS.filter((tag) =>
+                    tag.toLowerCase().includes(etiqueta)
+                  )?.map((et, indice) => {
+                    return (
+                      <div
+                        className="relative px-2 py-1 items-center justify-center w-full h-fit flex hover:opacity-70 cursor-pointer"
+                        onClick={() => {
+                          if (!(detalles?.tags || []).includes(et.trim())) {
+                            setEtiqueta("");
+                            setDetalles({
+                              ...detalles!,
+                              tags: [...(detalles?.tags || []), et],
+                            });
+                          }
+                        }}
+                        key={indice}
+                      >
+                        {et}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             <div className="relative w-full h-fit flex flex-wrap gap-2 items-start justify-start">
               {detalles?.tags?.map((etiqueta, indice) => {
                 return (
@@ -143,7 +172,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                     <div className="relative w-fit h-fit flex items-center justify-center">
                       {etiqueta}
                     </div>
-                    <RxCross1 color="white" size={10} />
+                    <RxCross1 color="black" size={10} />
                   </div>
                 );
               })}
@@ -229,8 +258,8 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
             {dict?.Home?.flujo}
           </div>
           <div className="relative w-full h-fit flex items-start justify-start text-white">
-            <div className="relative w-full flex flex-row gap-3 items-start justify-between h-[25rem]">
-              <div className="relative flex-col flex w-full h-full items-start justify-between gap-4">
+            <div className="relative w-full flex flex-col sm:flex-row gap-3 items-start justify-between h-fit sm:h-[25rem]">
+              <div className="relative flex-col flex w-full h-[25rem] sm:h-full items-start justify-between gap-4">
                 <textarea
                   className="relative w-full h-full flex items-start justify-start overflow-auto break-all bg-gris border border-ligero rounded-md p-2 focus:outline-none"
                   style={{
@@ -247,9 +276,9 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   }}
                 ></textarea>
               </div>
-              <div className="relative w-full h-full flex items-start justify-start overflow-y-scroll bg-gris border border-ligero rounded-md p-2">
-                <div className="relative w-full h-full text-sm overfl">
-                  <pre className="flex relative h-full">
+              <div className="relative sm:w-full w-[calc(100vw-6rem)] h-[25rem] sm:h-full flex items-start justify-start overflow-y-scroll bg-gris border border-ligero rounded-md p-2">
+                <div className="relative h-full text-sm w-full overflow-hidden">
+                  <pre className="flex relative h-full overflow-scroll">
                     <code className="language-json whitespace-pre-wrap flex flex-wrap">
                       {valido &&
                         JSON.stringify(

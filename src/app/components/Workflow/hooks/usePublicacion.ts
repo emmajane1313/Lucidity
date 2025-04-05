@@ -1,5 +1,4 @@
 import {
-  MainContentFocus,
   PageSize,
   Post,
   PostReferenceType,
@@ -7,7 +6,6 @@ import {
 } from "@lens-protocol/client";
 import { LensConnected } from "../../Common/types/common.types";
 import { SetStateAction, useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import {
   post as createPost,
   fetchPostReferences,
@@ -36,7 +34,7 @@ const usePublicacion = (
   const [postLoading, setPostLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<{
     hasMore: boolean;
-    paginated: string | undefined;
+    paginated?: string | undefined;
   }>({
     hasMore: true,
     paginated: undefined,
@@ -46,7 +44,7 @@ const usePublicacion = (
     if (!post) return;
     setPostLoading(true);
     try {
-      const acl = immutable(chains.testnet.id);
+      const acl = immutable(chains.mainnet.id);
       const schema = textOnly({
         content: texto,
       });
@@ -79,6 +77,7 @@ const usePublicacion = (
         ) {
           setSuccess(true);
           setTexto("");
+          await handleComments();
         } else {
           setError?.(dict.Home.error);
         }
@@ -95,7 +94,7 @@ const usePublicacion = (
     if (texto?.trim() == "" || post?.id) return;
     setPostLoading(true);
     try {
-      const acl = immutable(chains.testnet.id);
+      const acl = immutable(chains.mainnet.id);
 
       const schema = textOnly({
         content: texto,
@@ -115,7 +114,6 @@ const usePublicacion = (
         setPostLoading(false);
         return;
       }
-
       if (
         (res.value as any)?.reason?.includes(
           "Signless experience is unavailable for this operation. You can continue by signing the sponsored request."
@@ -162,7 +160,7 @@ const usePublicacion = (
       }
       setHasMore({
         hasMore: data?.value?.items?.length == 10,
-        paginated: data?.value?.pageInfo?.next,
+        paginated: data?.value?.pageInfo?.next!,
       });
       setComments(data?.value?.items as Post[]);
     } catch (err: any) {
@@ -190,7 +188,7 @@ const usePublicacion = (
       }
       setHasMore({
         hasMore: data?.value?.items?.length == 10,
-        paginated: data?.value?.pageInfo?.next,
+        paginated: data?.value?.pageInfo?.next!,
       });
       setComments([...comments, ...(data?.value?.items as Post[])]);
     } catch (err: any) {
@@ -209,7 +207,8 @@ const usePublicacion = (
           filter: {
             metadata: {
               tags: {
-                all: ["lucidity", flujo?.name, flujo?.counter],
+                all: ["lucidity"],
+                // all: ["lucidity", flujo?.name, flujo?.counter],
               },
             },
           },
