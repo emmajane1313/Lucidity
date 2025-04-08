@@ -179,12 +179,13 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
       setFlujos(
         await Promise.all(
           datos?.data?.workflowCreateds?.map(async (flujo: any) => {
+           
             if (
               !profileCache.get(flujo?.creator) &&
-              lensConectado?.sessionClient
+              (lensConectado?.sessionClient || lensClient)
             ) {
               const result = await fetchAccountsAvailable(
-                lensConectado?.sessionClient,
+                lensConectado?.sessionClient ?? lensClient,
                 {
                   managedBy: evmAddress(flujo?.creator),
                   includeOwned: true,

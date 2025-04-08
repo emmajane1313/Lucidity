@@ -5,6 +5,7 @@ import Metadata from "./Metadata";
 import { PublicacionProps } from "../types/workflow.types";
 import moment from "moment";
 import useInteraccion from "../hooks/useInteraccion";
+import { handleProfilePicture } from "@/app/lib/helpers/handleProfilePicture";
 
 const Publicacion: FunctionComponent<PublicacionProps> = ({
   activity,
@@ -66,10 +67,7 @@ const Publicacion: FunctionComponent<PublicacionProps> = ({
                 objectFit="cover"
                 className="rounded-full"
                 draggable={false}
-                src={`${INFURA_GATEWAY}/ipfs/${
-                  activity?.author?.metadata?.picture?.split("ipfs://")?.[1] ??
-                  "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW"
-                }`}
+                src={handleProfilePicture(activity?.author?.metadata?.picture)}
               />
             </div>
           </div>
@@ -266,24 +264,24 @@ const Publicacion: FunctionComponent<PublicacionProps> = ({
           >
             <div className="relative w-full h-fit flex items-center justify-center">
               <div className="relative w-full h-10 flex items-center justify-center">
-              {success ? (
-                "Success"
-              ) : interactionLoading.comment ? (
-                <svg
-                  fill="none"
-                  className="size-4 animate-spin"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M13 2h-2v6h2V2zm0 14h-2v6h2v-6zm9-5v2h-6v-2h6zM8 13v-2H2v2h6zm7-6h2v2h-2V7zm4-2h-2v2h2V5zM9 7H7v2h2V7zM5 5h2v2H5V5zm10 12h2v2h2v-2h-2v-2h-2v2zm-8 0v-2h2v2H7v2H5v-2h2z"
-                    fill="white"
-                  />{" "}
-                </svg>
-              ) : (
-                dict.Home.comment
-              )}
-                  </div>
+                {success ? (
+                  "Success"
+                ) : interactionLoading.comment ? (
+                  <svg
+                    fill="none"
+                    className="size-4 animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M13 2h-2v6h2V2zm0 14h-2v6h2v-6zm9-5v2h-6v-2h6zM8 13v-2H2v2h6zm7-6h2v2h-2V7zm4-2h-2v2h2V5zM9 7H7v2h2V7zM5 5h2v2H5V5zm10 12h2v2h2v-2h-2v-2h-2v2zm-8 0v-2h2v2H7v2H5v-2h2z"
+                      fill="white"
+                    />{" "}
+                  </svg>
+                ) : (
+                  dict.Home.comment
+                )}
+              </div>
             </div>
           </div>
         </div>

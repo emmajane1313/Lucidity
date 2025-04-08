@@ -9,6 +9,7 @@ import useBar from "../hooks/useBar";
 import { useAccount } from "wagmi";
 import { ModalContext } from "@/app/providers";
 import { useRouter } from "next/navigation";
+import { handleProfilePicture } from "@/app/lib/helpers/handleProfilePicture";
 
 const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
   const contexto = useContext(ModalContext);
@@ -118,11 +119,9 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
                   layout="fill"
                   className="rounded-xl"
                   objectFit="cover"
-                  src={`${INFURA_GATEWAY}/ipfs/${
-                    contexto?.lensConectado?.profile?.metadata?.picture?.split(
-                      "ipfs://"
-                    )?.[1] ?? "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW"
-                  }`}
+                  src={handleProfilePicture(
+                    contexto?.lensConectado?.profile?.metadata?.picture
+                  )}
                 />
               </div>
               <div className="absolute top-0 right-0 flex w-full h-full">

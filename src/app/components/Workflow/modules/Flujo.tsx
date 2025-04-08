@@ -9,6 +9,7 @@ import { IoMdDownload } from "react-icons/io";
 import useFlujo from "../../Modals/hooks/useFlujo";
 import useWorkflow from "../hooks/useWorkflow";
 import Interacciones from "./Interacciones";
+import { handleProfilePicture } from "@/app/lib/helpers/handleProfilePicture";
 
 export default function Flujo({ dict }: { dict: any }) {
   const id = useParams();
@@ -58,21 +59,20 @@ export default function Flujo({ dict }: { dict: any }) {
               className="relative w-fit h-fit flex flex-row gap-2 items-center justify-center cursor-pointer"
               onClick={() => router.push(`/creator/${flujo?.creator}`)}
             >
-              {flujo?.profile?.metadata?.picture?.split("ipfs://")?.[1] && (
-                <div className="relative flex w-fit h-fit">
-                  <div className={`relative flex w-8 h-8 rounded-full`}>
-                    <Image
-                      draggable={false}
-                      layout="fill"
-                      className="rounded-full"
-                      objectFit="cover"
-                      src={`${INFURA_GATEWAY}/ipfs/${
-                        flujo?.profile?.metadata?.picture?.split("ipfs://")?.[1]
-                      }`}
-                    />
-                  </div>
+              <div className="relative flex w-fit h-fit">
+                <div className={`relative flex w-8 h-8 rounded-full`}>
+                  <Image
+                    draggable={false}
+                    layout="fill"
+                    className="rounded-full"
+                    objectFit="cover"
+                    src={handleProfilePicture(
+                      flujo?.profile?.metadata?.picture
+                    )}
+                  />
                 </div>
-              )}
+              </div>
+
               <div className="relative flex w-fit h-fit text-xs">
                 {flujo?.profile?.username?.localName}
               </div>

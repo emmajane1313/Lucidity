@@ -5,6 +5,7 @@ import Flujos from "../../Workflows/modules/Flujos";
 import useCuenta from "../hooks/useCuenta";
 import Image from "next/legacy/image";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
+import { handleProfilePicture } from "@/app/lib/helpers/handleProfilePicture";
 
 const Cuenta: FunctionComponent<CambioElementoProps> = ({
   dict,
@@ -39,11 +40,9 @@ const Cuenta: FunctionComponent<CambioElementoProps> = ({
                     layout="fill"
                     className="rounded-full"
                     objectFit="cover"
-                    src={`${INFURA_GATEWAY}/ipfs/${
-                      contexto?.lensConectado?.profile?.metadata?.picture?.split(
-                        "ipfs://"
-                      )?.[1] ?? "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW"
-                    }`}
+                    src={handleProfilePicture(
+                      contexto?.lensConectado?.profile?.metadata?.picture
+                    )}
                   />
                 </div>
               </div>

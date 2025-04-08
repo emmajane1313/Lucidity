@@ -6,6 +6,7 @@ import useFlujo from "../hooks/useFlujo";
 import { IoMdDownload } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { PiArrowsOutSimple } from "react-icons/pi";
+import { handleProfilePicture } from "@/app/lib/helpers/handleProfilePicture";
 
 const Flujo: FunctionComponent<FlujoProps> = ({
   setFlujo,
@@ -46,21 +47,18 @@ const Flujo: FunctionComponent<FlujoProps> = ({
                 router.push(`/creator/${flujo?.creator}`);
               }}
             >
-              {flujo?.profile?.metadata?.picture?.split("ipfs://")?.[1] && (
-                <div className="relative flex w-fit h-fit">
-                  <div className={`relative flex w-8 h-8 rounded-full`}>
-                    <Image
-                      draggable={false}
-                      layout="fill"
-                      className="rounded-full"
-                      objectFit="cover"
-                      src={`${INFURA_GATEWAY}/ipfs/${
-                        flujo?.profile?.metadata?.picture?.split("ipfs://")?.[1]
-                      }`}
-                    />
-                  </div>
+              <div className="relative flex w-fit h-fit">
+                <div className={`relative flex w-8 h-8 rounded-full`}>
+                  <Image
+                    draggable={false}
+                    layout="fill"
+                    className="rounded-full"
+                    objectFit="cover"
+                    src={handleProfilePicture(flujo?.profile?.metadata?.picture)}
+                  />
                 </div>
-              )}
+              </div>
+
               <div className="relative flex w-fit h-fit text-xs">
                 {flujo?.profile?.username?.localName}
               </div>

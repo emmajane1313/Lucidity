@@ -1,4 +1,5 @@
 export const INFURA_GATEWAY: string = "https://thedial.infura-ipfs.io";
+export const GROVE_GATEWAY: string = "https://api.grove.storage/";
 
 export const IPFS_REGEX: RegExp = /\b(Qm[1-9A-Za-z]{44}|ba[A-Za-z2-7]{57})\b/;
 export const LUCIDITY_WORKFLOWS_CONTRACT: `0x${string}` =
@@ -10,7 +11,7 @@ export const SET_UP: string[] = [
   "Intel",
   "AMD",
   "Apple Silicon",
-  " RTX 4090",
+  "RTX 4090",
   "RTX 4080",
   "RX 7900 XTX",
   "NVIDIA",
