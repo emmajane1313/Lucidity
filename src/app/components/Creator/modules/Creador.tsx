@@ -7,6 +7,7 @@ import Flujos from "@/app/components/Workflows/modules/Flujos";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
 import Image from "next/legacy/image";
 import { useParams } from "next/navigation";
+import { handleProfilePicture } from "@/app/lib/helpers/handleProfilePicture";
 
 export default function Creador({ dict }: { dict: any }) {
   const id = useParams();
@@ -80,11 +81,7 @@ export default function Creador({ dict }: { dict: any }) {
                         layout="fill"
                         className="rounded-full"
                         objectFit="cover"
-                        src={`${INFURA_GATEWAY}/ipfs/${
-                          creador?.metadata?.picture
-                            ? creador?.metadata?.picture?.split("ipfs://")?.[1]
-                            : "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW"
-                        }`}
+                        src={handleProfilePicture(creador?.metadata?.picture)}
                       />
                     </div>
                   </div>
