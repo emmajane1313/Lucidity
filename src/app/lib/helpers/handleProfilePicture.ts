@@ -9,5 +9,5 @@ export const handleProfilePicture = (pic: string): string => {
     return `${GROVE_GATEWAY}${pic?.split("lens://")?.[1]}`;
   }
 
-  return "QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW";
+  return `${INFURA_GATEWAY}/ipfs/QmX5Uk9WeqsVHoNQhUP3fzTasv3J6zuat4L5L6zmaTVzBW`;
 };
