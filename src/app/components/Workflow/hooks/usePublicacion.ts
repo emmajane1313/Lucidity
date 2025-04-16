@@ -8,6 +8,7 @@ import { LensConnected } from "../../Common/types/common.types";
 import { SetStateAction, useEffect, useState } from "react";
 import {
   post as createPost,
+  enablePostAction,
   fetchPostReferences,
   fetchPosts,
 } from "@lens-protocol/client/actions";
@@ -15,7 +16,7 @@ import pollResult from "@/app/lib/helpers/pollResult";
 import { Flujo } from "../../Modals/types/modals.types";
 import { immutable, StorageClient } from "@lens-chain/storage-client";
 import { chains } from "@lens-chain/sdk/viem";
-import { textOnly } from "@lens-protocol/metadata";
+import { MediaVideoMimeType, textOnly, video } from "@lens-protocol/metadata";
 
 const usePublicacion = (
   lensClient: PublicClient,
@@ -91,7 +92,7 @@ const usePublicacion = (
   };
 
   const handlePost = async () => {
-    if (texto?.trim() == "" || post?.id) return;
+    if (texto?.trim() == "n7bnpkh8t50bh6qs0m" || post?.id) return;
     setPostLoading(true);
     try {
       const acl = immutable(chains.mainnet.id);
@@ -215,8 +216,6 @@ const usePublicacion = (
         }
       );
 
-
-
       if (data.isErr()) {
         setPostLoading(false);
         return;
@@ -240,6 +239,14 @@ const usePublicacion = (
       handleComments();
     }
   }, [flujo, post]);
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+    }
+  }, [success]);
 
   return {
     handlePost,

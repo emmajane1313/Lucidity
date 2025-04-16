@@ -11,9 +11,9 @@
   "dependencies": {
     "@apollo/client": "^3.13.1",
     "@formatjs/intl-localematcher": "^0.5.10",
-    "@lens-chain/sdk": "^0.0.0-canary-20250401091809",
-    "@lens-chain/storage-client": "^0.0.0-next-20250303153545",
-    "@lens-protocol/client": "^0.0.0-canary-20250403160407",
+    "@lens-chain/sdk": "^1.0.3",
+    "@lens-chain/storage-client": "^1.0.4",
+    "@lens-protocol/client": "^0.0.0-canary-20250415114943",
     "@lens-protocol/metadata": "^2.0.0-next.7",
     "@tanstack/react-query": "^5.67.1",
     "connectkit": "^1.8.2",
