@@ -1,5 +1,6 @@
 export const INFURA_GATEWAY: string = "https://thedial.infura-ipfs.io";
 export const GROVE_GATEWAY: string = "https://api.grove.storage/";
+export const LOCALES: string[] = ["en", "es"];
 
 export const IPFS_REGEX: RegExp = /\b(Qm[1-9A-Za-z]{44}|ba[A-Za-z2-7]{57})\b/;
 export const LUCIDITY_WORKFLOWS_CONTRACT: `0x${string}` =
