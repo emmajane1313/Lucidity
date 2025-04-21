@@ -4,7 +4,7 @@ import { LOCALES } from "../lib/constants";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     {
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}`,
       alternates: Object.fromEntries(
         LOCALES.map((lang) => [
           lang,
@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ),
     },
     {
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/info/`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/info`,
       alternates: Object.fromEntries(
         LOCALES.map((lang) => [
           lang,
