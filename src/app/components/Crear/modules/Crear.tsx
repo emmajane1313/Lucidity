@@ -104,6 +104,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   name: e.target.value,
                 })
               }
+              value={detalles?.name}
               className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-10 px-2 py-1"
             />
           </div>
@@ -119,6 +120,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
                   etiqueta?.trim() !== "" &&
                   !(detalles?.tags || []).includes(etiqueta.trim())
                 ) {
+                  setEtiqueta("");
                   setDetalles({
                     ...detalles!,
                     tags: [...(detalles?.tags || []), etiqueta],
@@ -248,6 +250,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
               })
             }
             className="text-ama focus:outline-none relative w-full rounded-md bg-black placeholder:text-ama h-40 overflow-y-scroll px-2 py-1"
+            value={detalles?.description}
             style={{
               resize: "none",
             }}
