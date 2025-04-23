@@ -16,7 +16,13 @@ import pollResult from "@/app/lib/helpers/pollResult";
 import { Flujo } from "../../Modals/types/modals.types";
 import { immutable, StorageClient } from "@lens-chain/storage-client";
 import { chains } from "@lens-chain/sdk/viem";
-import { MediaVideoMimeType, textOnly, video } from "@lens-protocol/metadata";
+import {
+  image,
+  MediaImageMimeType,
+  MediaVideoMimeType,
+  textOnly,
+  video,
+} from "@lens-protocol/metadata";
 
 const usePublicacion = (
   lensClient: PublicClient,
@@ -97,8 +103,12 @@ const usePublicacion = (
     try {
       const acl = immutable(chains.mainnet.id);
 
-      const schema = textOnly({
-        content: texto,
+      const schema = image({
+        content: `${texto}\n\nhttps://lucidity.agentmeme.xyz/en/workflow/${flujo?.counter}/`,
+        image: {
+          item: flujo?.cover as string,
+          type: MediaImageMimeType.PNG,
+        },
         tags: ["lucidity", flujo?.name, flujo?.counter]?.filter(
           Boolean
         ) as string[],

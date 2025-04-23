@@ -40,7 +40,7 @@ const Metadata: FunctionComponent<MetadataProps> = ({
             className={`relative w-full overflow-y-scroll p-1 items-start justify-start text-xs bg-brillo rounded-md break-all h-full`}
           >
             <div
-              className="relative w-full h-full flex p-1 items-start justify-start break-all rounded-md bg-black font-dep text-white min-h-20"
+              className="relative w-full h-full flex p-3 items-start justify-start break-all rounded-md bg-black font-dep text-white min-h-20"
               dangerouslySetInnerHTML={{
                 __html: descripcionRegex(
                   (data as ImageMetadata)?.content as string,
