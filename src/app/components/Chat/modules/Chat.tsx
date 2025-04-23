@@ -6,11 +6,13 @@ import { INFURA_GATEWAY } from "@/app/lib/constants";
 import { ModalContext } from "@/app/providers";
 import { CambioElementoProps } from "../../Common/types/common.types";
 import Mensajes from "./Mensajes";
+import { useAccount } from "wagmi";
 
 const Chat: FunctionComponent<CambioElementoProps> = ({
   dict,
 }): JSX.Element => {
   const contexto = useContext(ModalContext);
+  const { address } = useAccount();
   const {
     prompt,
     setPrompt,
@@ -52,8 +54,8 @@ const Chat: FunctionComponent<CambioElementoProps> = ({
                     6
                   ) + "..."
                 : contexto?.lensConectado?.profile?.username?.localName
-              : contexto?.lensConectado?.address
-              ? contexto?.lensConectado?.address?.slice(0, 6) + "..."
+              : address
+              ? address?.slice(0, 6) + "..."
               : undefined
           }
         />

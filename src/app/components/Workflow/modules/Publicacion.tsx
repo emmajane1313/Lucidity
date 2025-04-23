@@ -38,21 +38,8 @@ const Publicacion: FunctionComponent<PublicacionProps> = ({
   );
   return (
     <div
-      className={`relative w-full gap-3 flex-col flex flex shadow-lg item-start p-2 h-fit justify-start`}
+      className={`relative w-full sm:w-1/2 gap-3 flex-col flex flex shadow-lg item-start p-2 h-fit justify-start`}
     >
-      <div
-        className={`relative w-full h-fit flex flex-row items-center gap-2 text-xxs ${
-          activity?.commentOn?.id ? "justify-between" : "justify-end"
-        }`}
-      >
-        {activity?.commentOn?.id && (
-          <div className="relative w-fit h-fit flex">
-            {`${dict.Home.commentOn} ${(
-              activity?.commentOn?.metadata as any
-            )?.content?.slice(0, 10)}`}
-          </div>
-        )}
-      </div>
       <div className="relative w-full h-fit px-1.5 py-1 flex items-start justify-between flex-row gap-2 sm:flex-nowrap flex-wrap">
         <div
           className="relative w-fit h-fit flex flex-row gap-1  items-center justify-center cursor-pointer"

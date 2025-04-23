@@ -19,6 +19,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
   const { isConnected, address, chainId } = useAccount();
   const { lensCargando, salir, handleConectarse } = useConnect(
     lensConectado,
+    address,
     clienteLens,
     setError!,
     setLensConectado!,
@@ -43,9 +44,9 @@ const Connect: FunctionComponent<ConnectProps> = ({
             {lensConectado?.profile?.username?.localName?.slice(0, 20) + " ..."}
           </div>
         ) : (
-          lensConectado?.address && (
+          address && (
             <div className="relative w-full h-fit flex items-center justify-center text-left">
-              {lensConectado?.address?.slice(0, 20) + "..."}
+              {address?.slice(0, 20) + "..."}
             </div>
           )
         )}
@@ -67,7 +68,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
               !isConnected ? "opacity-60" : "active:scale-95 cursor-pointer"
             }`}
             onClick={() => {
-              if (!lensConectado?.profile && lensConectado?.address) {
+              if (!lensConectado?.profile && address) {
                 handleConectarse();
               } else {
                 salir();
@@ -86,7 +87,7 @@ const Connect: FunctionComponent<ConnectProps> = ({
                   />
                 </div>
               </div>
-            ) : lensConectado?.profile && lensConectado?.address ? (
+            ) : lensConectado?.profile && address ? (
               dict.Home.lensOut
             ) : (
               dict.Home.lensSign

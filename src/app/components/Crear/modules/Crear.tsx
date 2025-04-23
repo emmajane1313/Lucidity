@@ -10,6 +10,7 @@ import { createPublicClient, http } from "viem";
 import { FaChevronDown } from "react-icons/fa";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { chains } from "@lens-chain/sdk/viem";
+import { useAccount } from "wagmi";
 
 const Crear: FunctionComponent<CambioElementoProps> = ({
   dict,
@@ -18,6 +19,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
     chain: chains.mainnet,
     transport: http("https://rpc.lens.xyz"),
   });
+  const { address } = useAccount();
   const contexto = useContext(ModalContext);
   const {
     detalles,
@@ -34,7 +36,7 @@ const Crear: FunctionComponent<CambioElementoProps> = ({
   } = useCrear(
     dict,
     contexto?.setError!,
-    contexto?.lensConectado?.address,
+    address,
     contexto?.setConnect!,
     publicClient
   );

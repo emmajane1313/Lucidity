@@ -4,7 +4,6 @@ import { Account, SessionClient } from "@lens-protocol/client";
 export interface LensConnected {
   profile?: Account;
   sessionClient?: SessionClient;
-  address?: `0x${string}`;
 }
 
 

@@ -10,6 +10,7 @@ import { evmAddress, PublicClient } from "@lens-protocol/client";
 
 const useConnect = (
   lensConectado: LensConnected,
+  address: `0x${string}` | undefined,
   lensClient: PublicClient,
   setError: (e: SetStateAction<string | undefined>) => void,
   setLensConectado: (e: SetStateAction<LensConnected | undefined>) => void,
@@ -20,13 +21,13 @@ const useConnect = (
   const [lensCargando, setLensCargando] = useState<boolean>(false);
 
   const handleConectarse = async () => {
-    if (!lensConectado?.address || !lensClient) return;
+    if (!address || !lensClient) return;
     setLensCargando(true);
     try {
       const signer = createWalletClient({
         chain: chains.mainnet,
         transport: custom(window.ethereum!),
-        account: lensConectado?.address,
+        account: address,
       });
       const accounts = await fetchAccountsAvailable(lensClient, {
         managedBy: evmAddress(signer.account.address),
@@ -118,10 +119,10 @@ const useConnect = (
   };
 
   useEffect(() => {
-    if (!lensConectado?.address && lensConectado?.profile && lensClient) {
+    if (!address && lensConectado?.profile && lensClient) {
       salir();
     }
-  }, [lensConectado?.address]);
+  }, [address]);
 
   return {
     lensCargando,

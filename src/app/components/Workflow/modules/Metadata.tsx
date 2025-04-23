@@ -4,38 +4,34 @@ import Image from "next/legacy/image";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
 import descripcionRegex from "@/app/lib/helpers/descripcionRegex";
 import { MetadataProps } from "../types/workflow.types";
+import { handleProfilePicture } from "@/app/lib/helpers/handleProfilePicture";
 
 const Metadata: FunctionComponent<MetadataProps> = ({
   metadata,
   data,
 }): JSX.Element => {
+  console.log({ data });
   switch (metadata) {
     case "ImageMetadata":
       return (
         <div
-          className={`relative w-full flex flex-col gap-2 items-start justify-start h-full`}
+          className={`relative w-full flex flex-col gap-2 items-center justify-center h-full`}
         >
           <div
-            className={`relative w-full flex items-center justify-center h-full`}
+            className={`relative w-fit flex items-center justify-center h-fit`}
           >
             <div
-              className={`relative flex items-start justify-start w-full h-60`}
-            
+              className={`relative flex items-start justify-start w-full sm:w-60 h-60`}
             >
               <Image
                 layout="fill"
                 className="rounded-sm"
-                src={`${INFURA_GATEWAY}/ipfs/${
-                  ((data as ImageMetadata)?.image?.item as string)?.split(
-                    "ipfs://"
-                  )?.[1]
-                }`}
+                src={handleProfilePicture((data as ImageMetadata)?.image?.item)}
                 objectFit="cover"
                 draggable={false}
               />
             </div>
           </div>
-
           <div
             className={`relative w-full overflow-y-scroll p-1 items-start justify-start text-xs bg-brillo rounded-md break-all h-full`}
           >

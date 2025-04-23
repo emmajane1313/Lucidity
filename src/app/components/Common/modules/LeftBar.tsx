@@ -150,7 +150,7 @@ const LeftBar: FunctionComponent<{ dict: any }> = ({ dict }): JSX.Element => {
                           10
                         ) + "..."
                       : contexto?.lensConectado?.profile?.username?.localName
-                    : contexto?.lensConectado?.profile?.address?.slice(0, 10) +
+                    : address?.slice(0, 10) +
                       "..."
                   : `<< ${dict?.Home.Cuenta} >>`}
               </div>

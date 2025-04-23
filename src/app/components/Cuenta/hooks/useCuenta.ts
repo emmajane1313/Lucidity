@@ -4,7 +4,10 @@ import { getAccountWorkflows } from "../../../../../graphql/queries/getAccountWo
 import { LensConnected } from "../../Common/types/common.types";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
 
-const useCuenta = (lensConectado: LensConnected) => {
+const useCuenta = (
+  lensConectado: LensConnected,
+  address: `0x${string}` | undefined
+) => {
   const [flujosCargando, setFlujosCargando] = useState<boolean>(false);
   const [masFlujosCargando, setMasFlujosCargando] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<{ hasMore: boolean; skip: number }>({
@@ -14,12 +17,12 @@ const useCuenta = (lensConectado: LensConnected) => {
   const [flujos, setFlujos] = useState<Flujo[]>([]);
 
   const handleMasFlujos = async () => {
-    if (!lensConectado?.address) return;
+    if (!address) return;
 
     setMasFlujosCargando(true);
     try {
       const datos = await getAccountWorkflows(
-        lensConectado?.address,
+        address,
         hasMore.skip
       );
 
@@ -69,11 +72,11 @@ const useCuenta = (lensConectado: LensConnected) => {
   };
 
   const handleFlujos = async () => {
-    if (!lensConectado?.address) return;
+    if (!address) return;
 
     setFlujosCargando(true);
     try {
-      const datos = await getAccountWorkflows(lensConectado?.address, 0);
+      const datos = await getAccountWorkflows(address, 0);
 
       setHasMore({
         hasMore: datos?.data?.workflowCreateds?.length == 20 ? true : false,

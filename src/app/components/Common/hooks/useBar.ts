@@ -18,7 +18,7 @@ const useBar = (
 
       if (resumed?.isOk()) {
         const accounts = await fetchAccountsAvailable(lensClient!, {
-          managedBy: evmAddress(lensConectado?.address!),
+          managedBy: evmAddress(address!),
           includeOwned: true,
         });
 
@@ -40,19 +40,10 @@ const useBar = (
   };
 
   useEffect(() => {
-    if (isConnected && !lensConectado?.address && address) {
-      setLensConectado({
-        ...lensConectado,
-        address: address,
-      });
-    }
-  }, [isConnected, address]);
-
-  useEffect(() => {
-    if (lensConectado?.address && lensClient && !lensConectado?.profile) {
+    if (address && lensClient && !lensConectado?.profile) {
       resumeLensSession();
     }
-  }, [lensConectado?.address, lensClient]);
+  }, [address, lensClient]);
 
   return {
     abrirBar,

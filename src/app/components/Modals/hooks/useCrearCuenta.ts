@@ -13,6 +13,7 @@ import { immutable, StorageClient } from "@lens-chain/storage-client";
 
 const useCrearCuenta = (
   lensConnected: LensConnected | undefined,
+  address: `0x${string}` | undefined,
   setLensConnected:
     | ((e: SetStateAction<LensConnected | undefined>) => void)
     | undefined,
@@ -33,13 +34,13 @@ const useCrearCuenta = (
   const [accountLoading, setAccountLoading] = useState<boolean>(false);
 
   const handleCreateAccount = async () => {
-    if (!lensConnected?.address || !lensConnected?.sessionClient) return;
+    if (!address || !lensConnected?.sessionClient) return;
     setAccountLoading(true);
     try {
       const signer = createWalletClient({
         chain: chains.mainnet,
         transport: custom(window.ethereum!),
-        account: lensConnected?.address,
+        account: address,
       });
 
       let picture = undefined;
