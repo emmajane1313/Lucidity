@@ -10,7 +10,6 @@ const Metadata: FunctionComponent<MetadataProps> = ({
   metadata,
   data,
 }): JSX.Element => {
-  console.log({ data });
   switch (metadata) {
     case "ImageMetadata":
       return (
