@@ -2,6 +2,7 @@ import Image from "next/legacy/image";
 import { FunctionComponent, JSX } from "react";
 import { CrearCuentaProps } from "../types/modals.types";
 import useCrearCuenta from "../hooks/useCrearCuenta";
+import { useAccount } from "wagmi";
 
 const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
   lensConnected,
@@ -9,11 +10,13 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
   setCreateAccount,
   storageClient,
   setNotification,
-  dict
+  dict,
 }): JSX.Element => {
+  const { address } = useAccount();
   const { account, accountLoading, setAccount, handleCreateAccount } =
     useCrearCuenta(
       lensConnected,
+      address,
       setLensConnected,
       setCreateAccount,
       storageClient,
@@ -70,7 +73,10 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
           </div>
           <div className="relative w-full h-fit flex items-start justify-between flex-row gap-3">
             <div className="relative w-full h-fit flex flex-col gap-1.5 items-start justify-start">
-              <div className="relative w-fit h-fit flex"> {dict.Home.username}</div>
+              <div className="relative w-fit h-fit flex">
+                {" "}
+                {dict.Home.username}
+              </div>
               <input
                 disabled={accountLoading}
                 onChange={(e) =>
@@ -84,7 +90,9 @@ const CrearCuenta: FunctionComponent<CrearCuentaProps> = ({
               />
             </div>
             <div className="relative w-full h-fit flex flex-col gap-1.5 items-start justify-start">
-              <div className="relative w-fit h-fit flex">{dict.Home.localname}</div>
+              <div className="relative w-fit h-fit flex">
+                {dict.Home.localname}
+              </div>
               <input
                 disabled={accountLoading}
                 onChange={(e) =>
