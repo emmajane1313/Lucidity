@@ -46,7 +46,6 @@
     "start": "Start Thread",
     "like": "Like",
     "mirror": "Repost",
-    "commentOn": "Comment On",
     "info1": "Comfy workflows transform video in real-time.",
     "info2": "After countless experiments and discoveries, they're scattered across Discord threads, buried in forums, lost in random repos. \n\nWe built AI agents to help sort through it. Not magic AGI brains - just tools that match what you're trying to create against what the community's already figured out. Tell them what you're after, they'll show you workflows that work.\n\nSkip digging through forum posts from 2022. No more 'did anyone solve this?' threads that died without answers. Agents map paths other creators carved. Dealing through traffic to get you to workflows that do everything you need.",
     "agent": "Agent: Pixel",

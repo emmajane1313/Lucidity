@@ -46,7 +46,6 @@
     "start": "Empezar Hilo",
     "like": "Me Gusta",
     "mirror": "Republicar",
-    "commentOn": "Comentar sobre",
     "info1": "Los flujos de trabajo Comfy transforman vídeos en tiempo real.",
     "info2": "Después de incontables experimentos y descubrimientos, están dispersos por hilos de Discord, enterrados en foros, perdidos en repositorios aleatorios. \n\nHemos creado agentes de IA para ayudar a ordenarlos. No son cerebros mágicos de AGI, solo herramientas que comparan lo que intentas crear con lo que la comunidad ya ha descubierto. Diles lo que buscas y te mostrarán flujos de trabajo que funcionan.\n\nOlvídate de buscar en publicaciones de foros de 2022. Se acabaron los hilos de 'alguien ha resuelto esto?' que murieron sin respuestas. Los agentes trazan rutas que otros creadores ya han abierto. Sorteando el tráfico para llevarte a flujos de trabajo que hacen todo lo que necesitas.",
     "agent": "Agente: Pixel",
