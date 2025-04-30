@@ -25,6 +25,7 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/_next") ||
     pathname.startsWith("/images") ||
     pathname.startsWith("/fonts") ||
+    pathname.startsWith("/opengraph_image.png") ||
     pathname.startsWith("/favicon.ico") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/sitemap.xml")
@@ -51,5 +52,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|images|fonts|favicon.ico|api|sitemap).*)"],
+  matcher: ["/((?!_next|images|fonts|opengraph_image.png|favicon.ico|api|sitemap).*)"],
 };
