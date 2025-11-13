@@ -1,10 +1,19 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
+const getLucidityUri = () => {
+  if (typeof window === "undefined") {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    return `${baseUrl}/api/graphql/lucidity`;
+  }
+  return "/api/graphql/lucidity";
+};
+
+const httpLinkLucidity = new HttpLink({
+  uri: getLucidityUri(),
+});
+
 export const lucidityClient = new ApolloClient({
-  link: new HttpLink({
-    uri: `https://gateway.thegraph.com/api/${process.env.NEXT_PUBLIC_GRAPH_KEY}/subgraphs/id/69Y3tNegVngQu4V89UotXB8Z7fPC3TLsPnCVWWvhQpF5`,
-  }),
+  link: httpLinkLucidity,
 
   cache: new InMemoryCache(),
 });
-
