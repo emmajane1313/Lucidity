@@ -1,4 +1,4 @@
-export const INFURA_GATEWAY: string = "https://thedial.infura-ipfs.io";
+export const INFURA_GATEWAY: string = "https://cdn.digitalax.xyz";
 export const GROVE_GATEWAY: string = "https://api.grove.storage/";
 export const LOCALES: string[] = ["en", "es"];
 
