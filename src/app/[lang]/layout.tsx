@@ -4,9 +4,10 @@ import Providers from "../providers";
 import ModalsEntry from "../components/Modals/modules/ModalsEntry";
 import { tParams } from "./[...notFound]/page";
 import LeftBarEntry from "../components/Common/modules/LeftBarEntry";
+import { BASE_URL } from "../lib/constants";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.lucidity.agentmeme.xyz"),
+  metadataBase: new URL(BASE_URL),
   title: "Lucidity",
   description: "Agentic ComfyStream Search.",
   robots: {

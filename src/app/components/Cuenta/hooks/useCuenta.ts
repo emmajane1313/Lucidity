@@ -3,6 +3,7 @@ import { Flujo } from "../../Modals/types/modals.types";
 import { getAccountWorkflows } from "../../../../../graphql/queries/getAccountWorkflows";
 import { LensConnected } from "../../Common/types/common.types";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
+import parseWorkflow from "@/app/lib/helpers/parseWorkflow";
 
 const useCuenta = (
   lensConectado: LensConnected,
@@ -28,7 +29,8 @@ const useCuenta = (
 
       setHasMore({
         hasMore: datos?.data?.workflowCreateds?.length == 20 ? true : false,
-        skip: datos?.data?.workflowCreateds?.length == 20 ? 20 : 0,
+        skip:
+          datos?.data?.workflowCreateds?.length == 20 ? hasMore.skip + 20 : 0,
       });
 
       setFlujos([
@@ -59,7 +61,7 @@ const useCuenta = (
                 ?.split(",")
                 ?.filter((item: string) => item.trim() !== ""),
               links: metadata?.links,
-              workflow: JSON.parse(metadata?.workflow),
+              workflow: parseWorkflow(metadata?.workflow),
               profile: lensConectado?.profile,
             };
           })
@@ -110,7 +112,7 @@ const useCuenta = (
                 ?.split(",")
                 ?.filter((item: string) => item.trim() !== ""),
               links: metadata?.links,
-              workflow: JSON.parse(metadata?.workflow),
+              workflow: parseWorkflow(metadata?.workflow),
               profile: lensConectado?.profile,
             };
           })

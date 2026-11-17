@@ -10,6 +10,7 @@ import useFlujo from "../../Modals/hooks/useFlujo";
 import useWorkflow from "../hooks/useWorkflow";
 import Interacciones from "./Interacciones";
 import { handleProfilePicture } from "@/app/lib/helpers/handleProfilePicture";
+import abrirEnlace from "@/app/lib/helpers/abrirEnlace";
 
 export default function Flujo({ dict }: { dict: any }) {
   const id = useParams();
@@ -124,7 +125,7 @@ export default function Flujo({ dict }: { dict: any }) {
                   <div
                     key={indice}
                     className="relative flex items-center break-all justify-center text-center cursor-pointer text-[#0000FF] w-fit h-fit"
-                    onClick={() => window.open(enlace)}
+                    onClick={() => abrirEnlace(enlace)}
                   >
                     {enlace.length > 20 ? enlace.slice(0, 20) + "..." : enlace}
                   </div>

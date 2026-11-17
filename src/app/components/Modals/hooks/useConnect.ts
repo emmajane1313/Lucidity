@@ -4,9 +4,9 @@ import {
 } from "@lens-protocol/client/actions";
 import { SetStateAction, useEffect, useState } from "react";
 import { LensConnected } from "../../Common/types/common.types";
-import { createWalletClient, custom } from "viem";
-import { chains } from "@lens-chain/sdk/viem";
+import { useConfig } from "wagmi";
 import { evmAddress, PublicClient } from "@lens-protocol/client";
+import obtenerCartera from "@/app/lib/helpers/obtenerCartera";
 
 const useConnect = (
   lensConectado: LensConnected,
@@ -18,17 +18,14 @@ const useConnect = (
   setConnect: (e: SetStateAction<boolean>) => void,
   dict: any
 ) => {
+  const config = useConfig();
   const [lensCargando, setLensCargando] = useState<boolean>(false);
 
   const handleConectarse = async () => {
     if (!address || !lensClient) return;
     setLensCargando(true);
     try {
-      const signer = createWalletClient({
-        chain: chains.mainnet,
-        transport: custom(window.ethereum!),
-        account: address,
-      });
+      const signer = await obtenerCartera(config, false);
       const accounts = await fetchAccountsAvailable(lensClient, {
         managedBy: evmAddress(signer.account.address),
         includeOwned: true,

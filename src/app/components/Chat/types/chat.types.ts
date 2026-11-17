@@ -18,6 +18,18 @@ export type MensajesProps = {
   user?: string;
 };
 
+export type TextoSeguroProps = {
+  texto: string | undefined;
+};
+
+export interface ChatRun {
+  message: string;
+  output: {
+    name: string;
+    output: string;
+  }[];
+}
+
 export interface Mensaje {
   contenido: string;
   usuario: Usuario;

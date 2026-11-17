@@ -7,6 +7,7 @@ import { IoMdDownload } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { PiArrowsOutSimple } from "react-icons/pi";
 import { handleProfilePicture } from "@/app/lib/helpers/handleProfilePicture";
+import abrirEnlace from "@/app/lib/helpers/abrirEnlace";
 
 const Flujo: FunctionComponent<FlujoProps> = ({
   setFlujo,
@@ -115,7 +116,7 @@ const Flujo: FunctionComponent<FlujoProps> = ({
                   <div
                     key={indice}
                     className="relative flex items-center break-all justify-center text-center cursor-pointer text-[#0000FF] w-fit h-fit"
-                    onClick={() => window.open(enlace)}
+                    onClick={() => abrirEnlace(enlace)}
                   >
                     {enlace.length > 20 ? enlace.slice(0, 20) + "..." : enlace}
                   </div>

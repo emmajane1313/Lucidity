@@ -1,6 +1,5 @@
 import { SetStateAction, useState } from "react";
 import { evmAddress } from "@lens-protocol/client";
-import { createWalletClient, custom } from "viem";
 import { chains } from "@lens-chain/sdk/viem";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -37,12 +36,6 @@ const useCrearCuenta = (
     if (!address || !lensConnected?.sessionClient) return;
     setAccountLoading(true);
     try {
-      const signer = createWalletClient({
-        chain: chains.mainnet,
-        transport: custom(window.ethereum!),
-        account: address,
-      });
-
       let picture = undefined;
       const acl = immutable(chains.mainnet.id);
       if (account?.pfp) {
@@ -70,7 +63,7 @@ const useCrearCuenta = (
       const accountResponse = await createAccountWithUsername(
         lensConnected?.sessionClient,
         {
-          accountManager: [evmAddress(signer.account.address)],
+          accountManager: [evmAddress(address)],
           username: {
             localName: account?.username,
           },

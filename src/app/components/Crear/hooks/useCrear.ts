@@ -2,7 +2,10 @@ import { chains } from "@lens-chain/sdk/viem";
 import { SetStateAction, useState } from "react";
 import LucidityWorkflowsAbi from "@abis/LucidityWorkflows.json";
 import { LUCIDITY_WORKFLOWS_CONTRACT } from "@/app/lib/constants";
-import { createWalletClient, custom, PublicClient } from "viem";
+import { PublicClient } from "viem";
+import { useConfig } from "wagmi";
+import obtenerCartera from "@/app/lib/helpers/obtenerCartera";
+import safeExternalUrl from "@/app/lib/helpers/safeExternalUrl";
 
 const useCrear = (
   dict: any,
@@ -11,6 +14,7 @@ const useCrear = (
   setConnect: (e: SetStateAction<boolean>) => void,
   publicClient: PublicClient
 ) => {
+  const config = useConfig();
   const [crearCargando, setCrearCargando] = useState<boolean>(false);
   const [setupAbierto, setSetupAbierto] = useState<boolean>(false);
   const [detalles, setDetalles] = useState<{
@@ -72,7 +76,11 @@ const useCrear = (
       return;
     } else if (
       Number(
-        detalles?.links?.filter((link) => !link.includes("https://"))?.length
+        detalles?.links?.filter(
+          (link) =>
+            !link?.trim()?.startsWith("https://") ||
+            !safeExternalUrl(link, true)
+        )?.length
       ) > 0
     ) {
       setError(dict?.Home?.validEnlaces);
@@ -107,10 +115,13 @@ const useCrear = (
       });
       const metadata = await responseDetalles.json();
 
-      const clientWallet = createWalletClient({
-        chain: chains.mainnet,
-        transport: custom((window as any).ethereum),
-      });
+      if (!imagen.ok || !cover?.cid || !responseDetalles.ok || !metadata?.cid) {
+        setError(dict?.Home?.error);
+        setCrearCargando(false);
+        return;
+      }
+
+      const clientWallet = await obtenerCartera(config, true);
 
       const { request } = await publicClient.simulateContract({
         address: LUCIDITY_WORKFLOWS_CONTRACT,

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Flujo } from "../../Modals/types/modals.types";
 import { getAccountWorkflows } from "../../../../../graphql/queries/getAccountWorkflows";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
+import parseWorkflow from "@/app/lib/helpers/parseWorkflow";
 
 const useCreator = (creator: string, lensClient: PublicClient) => {
   const [creadorCargando, setCreadorCargando] = useState<boolean>(false);
@@ -52,7 +53,8 @@ const useCreator = (creator: string, lensClient: PublicClient) => {
 
       setHasMore({
         hasMore: datos?.data?.workflowCreateds?.length == 20 ? true : false,
-        skip: datos?.data?.workflowCreateds?.length == 20 ? 20 : 0,
+        skip:
+          datos?.data?.workflowCreateds?.length == 20 ? hasMore.skip + 20 : 0,
       });
 
       setFlujos([
@@ -72,7 +74,7 @@ const useCreator = (creator: string, lensClient: PublicClient) => {
             ?.split(",")
             ?.filter((item: string) => item.trim() !== ""),
           links: flujo?.workflowMetadata?.links,
-          workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
+          workflow: parseWorkflow(flujo?.workflowMetadata?.workflow),
           profile: creador,
         })),
       ]);
@@ -110,7 +112,7 @@ const useCreator = (creator: string, lensClient: PublicClient) => {
             ?.split(",")
             ?.filter((item: string) => item.trim() !== ""),
           links: flujo?.workflowMetadata?.links,
-          workflow: JSON.parse(flujo?.workflowMetadata?.workflow),
+          workflow: parseWorkflow(flujo?.workflowMetadata?.workflow),
           profile: creador,
         }))
       );

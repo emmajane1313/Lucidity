@@ -2,10 +2,11 @@ import { SetStateAction, useEffect, useRef, useState } from "react";
 import { Mensaje, Usuario } from "../types/chat.types";
 import { Flujo } from "../../Modals/types/modals.types";
 import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
-import { TextContentBlock } from "openai/resources/beta/threads/messages.mjs";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { LensConnected } from "../../Common/types/common.types";
 import { procesarMensaje } from "@/app/lib/helpers/procesarMensaje";
+import parseWorkflow from "@/app/lib/helpers/parseWorkflow";
+import { MAX_PROMPT_LENGTH } from "@/app/lib/constants";
 
 const useChat = (
   setMensajes: (e: SetStateAction<Mensaje[]>) => void,
@@ -31,7 +32,7 @@ const useChat = (
       action?: string;
     }[]
   ) => {
-    let internal_prompt = prompt;
+    let internal_prompt = prompt?.slice(0, MAX_PROMPT_LENGTH);
     if (internal_prompt?.trim() == "") return;
     setSendMessageLoading(true);
     setPrompt("");
@@ -53,42 +54,29 @@ const useChat = (
 
       const run_res = await fetch("/api/chat", {
         method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
         body: JSON.stringify({
           prompt: internal_prompt,
           thread: hilo,
         }),
       });
       const run_json = await run_res.json();
+      if (run_json?.expired) {
+        setThread(undefined);
+      }
       if (run_json?.run) {
         const mensajeContenido0 =
-          (run_json?.run?.messages?.[0]?.content?.[0] as TextContentBlock)?.text
-            ?.value ?? "";
-
-        const mensajeContenido1 =
-          (run_json?.run?.messages?.[1]?.content?.[0] as TextContentBlock)?.text
-            ?.value ?? "";
-
-        const mensajeExiste0 = mensajes?.some(
-          (mensaje) => mensaje.contenido === mensajeContenido0
-        );
-
-        const mensajeExiste1 = mensajeContenido1
-          ? mensajes?.some((mensaje) => mensaje.contenido === mensajeContenido1)
-          : true;
+          typeof run_json?.run?.message === "string"
+            ? run_json?.run?.message
+            : "";
 
         const nuevosMensajes = [];
 
-        if (!mensajeExiste1 && mensajeContenido1.trim() !== "") {
-          nuevosMensajes.push({
-            contenido: mensajeContenido1,
-            usuario: Usuario.Maquina,
-            action: run_json?.run?.output?.[0]?.name,
-          });
-        }
-
         if (mensajeContenido0.includes("```json")) {
           nuevosMensajes.push(...procesarMensaje(mensajeContenido0));
-        } else if (!mensajeExiste0 && mensajeContenido0.trim() !== "") {
+        } else if (mensajeContenido0.trim() !== "") {
           nuevosMensajes.push({
             contenido: mensajeContenido0,
             usuario: Usuario.Maquina,
@@ -150,7 +138,7 @@ const useChat = (
                             name: item.workflowMetadata?.name,
                             description: item.workflowMetadata?.description,
                             cover: item.workflowMetadata?.cover,
-                            workflow: JSON.parse(
+                            workflow: parseWorkflow(
                               item.workflowMetadata?.workflow
                             ),
                             setup: item?.workflowMetadata?.setup

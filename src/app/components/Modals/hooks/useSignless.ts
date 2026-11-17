@@ -1,12 +1,16 @@
 import { SetStateAction, useState } from "react";
 import { enableSignless } from "@lens-protocol/client/actions";
 import { ethers } from "ethers";
+import { useConfig } from "wagmi";
 import { LensConnected } from "../../Common/types/common.types";
+import isValidLensTx from "@/app/lib/helpers/isValidLensTx";
+import obtenerCartera from "@/app/lib/helpers/obtenerCartera";
 
 const useSignless = (
   lensConnected: LensConnected | undefined,
   setSigner: (e: SetStateAction<boolean>) => void
 ) => {
+  const config = useConfig();
   const [signlessLoading, setSignlessLoading] = useState<boolean>(false);
 
   const handleSignless = async () => {
@@ -17,10 +21,21 @@ const useSignless = (
 
       if (res.isErr()) {
         console.error(res.error);
+      } else if (
+        !isValidLensTx(
+          (res.value as any)?.raw,
+          lensConnected?.profile?.address
+        )
+      ) {
+        console.error("Invalid transaction request");
       } else {
-        const provider = new ethers.BrowserProvider(window.ethereum);
+        const cartera = await obtenerCartera(config, true);
+        const provider = new ethers.BrowserProvider({
+          request: (args: { method: string; params?: any }) =>
+            cartera.request(args as any),
+        } as ethers.Eip1193Provider);
 
-        const signer = await provider.getSigner();
+        const signer = await provider.getSigner(cartera.account.address);
 
         const tx = {
           chainId: (res.value as any)?.raw?.chainId,

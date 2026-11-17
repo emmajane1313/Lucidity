@@ -13,6 +13,7 @@ import {
   fetchPosts,
 } from "@lens-protocol/client/actions";
 import pollResult from "@/app/lib/helpers/pollResult";
+import { BASE_URL } from "@/app/lib/constants";
 import { Flujo } from "../../Modals/types/modals.types";
 import { immutable, StorageClient } from "@lens-chain/storage-client";
 import { chains } from "@lens-chain/sdk/viem";
@@ -104,7 +105,7 @@ const usePublicacion = (
       const acl = immutable(chains.mainnet.id);
 
       const schema = image({
-        content: `${texto}\n\nhttps://lucidity.agentmeme.xyz/en/workflow/${flujo?.counter}/`,
+        content: `${texto}\n\n${BASE_URL}/en/workflow/${flujo?.counter}/`,
         image: {
           item: flujo?.cover as string,
           type: MediaImageMimeType.PNG,
@@ -209,7 +210,9 @@ const usePublicacion = (
   };
 
   const handleFindThread = async () => {
-    if (!flujo) return;
+    if (!flujo || flujo?.counter === undefined || flujo?.counter === null) {
+      return;
+    }
     setPostLoading(true);
     try {
       const data = await fetchPosts(
@@ -218,8 +221,7 @@ const usePublicacion = (
           filter: {
             metadata: {
               tags: {
-                all: ["lucidity"],
-                // all: ["lucidity", flujo?.name, flujo?.counter],
+                all: ["lucidity", String(flujo?.counter)],
               },
             },
           },
@@ -231,7 +233,16 @@ const usePublicacion = (
         return;
       }
 
-      setPost(data?.value?.items?.[0] as Post);
+      const candidatos = (data?.value?.items ?? []) as Post[];
+      const delCreador = flujo?.profile?.address
+        ? candidatos.find(
+            (item) =>
+              item?.author?.address?.toLowerCase() ===
+              flujo?.profile?.address?.toLowerCase()
+          )
+        : undefined;
+
+      setPost(delCreador ?? candidatos[0]);
     } catch (err: any) {
       console.error(err.message);
     }

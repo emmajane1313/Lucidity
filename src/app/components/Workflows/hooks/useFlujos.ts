@@ -6,6 +6,7 @@ import { LensConnected } from "../../Common/types/common.types";
 import { Account, evmAddress, PublicClient } from "@lens-protocol/client";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
+import parseWorkflow from "@/app/lib/helpers/parseWorkflow";
 
 const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
   const [flujosCargando, setFlujosCargando] = useState<boolean>(false);
@@ -82,7 +83,7 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
               counter: flujo?.counter,
               description: metadata?.description,
               cover: metadata?.cover,
-              workflow: JSON.parse(metadata?.workflow),
+              workflow: parseWorkflow(metadata?.workflow),
               setup: metadata?.setup
                 ?.replace(/, /g, ",")
                 ?.split(",")
@@ -107,7 +108,8 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
 
       setHasMore({
         hasMore: datos?.data?.workflowCreateds?.length == 20 ? true : false,
-        skip: datos?.data?.workflowCreateds?.length == 20 ? 20 : 0,
+        skip:
+          datos?.data?.workflowCreateds?.length == 20 ? hasMore.skip + 20 : 0,
       });
 
       setFlujos([
@@ -150,7 +152,7 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
               counter: flujo?.counter,
               description: metadata?.description,
               cover: metadata?.cover,
-              workflow: JSON.parse(metadata?.workflow),
+              workflow: parseWorkflow(metadata?.workflow),
               setup: metadata?.setup
                 ?.replace(/, /g, ",")
                 ?.split(",")
@@ -219,7 +221,7 @@ const useFlujos = (lensConectado: LensConnected, lensClient: PublicClient) => {
               counter: flujo?.counter,
               description: metadata?.description,
               cover: metadata?.cover,
-              workflow: JSON.parse(metadata?.workflow),
+              workflow: parseWorkflow(metadata?.workflow),
               setup: metadata.setup
                 ?.replace(/, /g, ",")
                 ?.split(",")

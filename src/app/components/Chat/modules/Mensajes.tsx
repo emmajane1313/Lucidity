@@ -4,6 +4,7 @@ import { FunctionComponent, JSX } from "react";
 import { MensajesProps, Usuario } from "../types/chat.types";
 import { IoMdDownload } from "react-icons/io";
 import useFlujo from "../../Modals/hooks/useFlujo";
+import TextoSeguro from "./TextoSeguro";
 
 const Mensajes: FunctionComponent<MensajesProps> = ({
   mensajes,
@@ -54,17 +55,19 @@ const Mensajes: FunctionComponent<MensajesProps> = ({
                       <div className="relative w-fit flex h-fit flex-col gap-2 items-start justify-start">
                         <div
                           className={`relative w-fit p-2 rounded-md h-fit flex items-center justify-center whitespace-pre-line break-all`}
-                          dangerouslySetInnerHTML={{
-                            __html:
+                        >
+                          <TextoSeguro
+                            texto={
                               indice ===
                                 mensajes?.filter(
                                   (me) => me?.usuario !== Usuario.Humano
                                 )?.length -
                                   1 && typedMessage.trim() !== ""
                                 ? typedMessage
-                                : valor?.contenido,
-                          }}
-                        ></div>
+                                : valor?.contenido
+                            }
+                          />
+                        </div>
                         {valor?.action && (
                           <div className="relative text-xxs w-fit h-fit flex px-2.5 items-center justify-center rounded-full bg-ligero">
                             {valor?.action}

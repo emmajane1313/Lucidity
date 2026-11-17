@@ -4,6 +4,7 @@ import { getWorkflow } from "../../../../../graphql/queries/getWorkflow";
 import { fetchAccountsAvailable } from "@lens-protocol/client/actions";
 import { evmAddress, PublicClient } from "@lens-protocol/client";
 import { INFURA_GATEWAY } from "@/app/lib/constants";
+import parseWorkflow from "@/app/lib/helpers/parseWorkflow";
 
 const useWorkflow = (counter: string, lensClient: PublicClient) => {
   const [flujo, setFlujo] = useState<Flujo>();
@@ -50,7 +51,7 @@ const useWorkflow = (counter: string, lensClient: PublicClient) => {
           ?.split(",")
           ?.filter((item: string) => item.trim() !== ""),
         links: metadata?.links,
-        workflow: JSON.parse(metadata?.workflow),
+        workflow: parseWorkflow(metadata?.workflow),
         profile,
       });
     } catch (err: any) {
